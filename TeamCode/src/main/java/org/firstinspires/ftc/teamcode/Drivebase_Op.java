@@ -17,13 +17,17 @@ public class Drivebase_Op extends OpMode {
     }
     @Override
     public void init() {
-        robot = new Callisto(RobotMode.TELEOP, hardwareMap, gamepad1, gamepad2);
+        try {
+            robot = new Callisto(RobotMode.TELEOP, hardwareMap, gamepad1, gamepad2, telemetry);
+        }
+        catch (Exception ex){
+            telemetry.addData("Error:", ex.getMessage());
+        }
     }
 
     @Override
     public void loop() {
         robot.run();
-
     }
 
 }
