@@ -27,6 +27,7 @@ public class DefaultDrive extends CommandBase {
     @Override
     public void execute() {
         m_drive.drive(m_strafe.getAsDouble(), -m_forward.getAsDouble(), m_rotation.getAsDouble());
+        m_drive.updatePosition();
     }
 
 }
