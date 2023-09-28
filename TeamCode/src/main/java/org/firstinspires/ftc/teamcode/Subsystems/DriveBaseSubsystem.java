@@ -63,4 +63,12 @@ public class DriveBaseSubsystem extends SubsystemBase {
     public void updatePosition(){
         odometrySubsystem.update();;
     }
+    public void resetEncoders(){
+        odo_right.reset();
+        odo_left.reset();
+        odo_rear.reset();
+    }
+    public double getOdometryDistance(){
+           return (odo_left.getDistance()+odo_right.getDistance())/2;
+    }
 }
