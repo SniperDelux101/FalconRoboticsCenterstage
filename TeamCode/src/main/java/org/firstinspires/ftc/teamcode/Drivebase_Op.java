@@ -20,7 +20,7 @@ public class Drivebase_Op extends OpMode {
     @Override
     public void init() {
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
-        robot = new Callisto(RobotMode.TELEOP, hardwareMap, gamepad1, gamepad2, telemetry);
+        robot = new Callisto(RobotMode.AUTO, hardwareMap, gamepad1, gamepad2, telemetry);
     }
 
     @Override

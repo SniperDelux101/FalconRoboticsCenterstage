@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.Commands.AutonomouseDriveForward;
 import org.firstinspires.ftc.teamcode.Commands.DefaultDrive;
 import org.firstinspires.ftc.teamcode.Subsystems.DriveBaseSubsystem;
 
@@ -14,6 +15,8 @@ public class Callisto extends Robot {
 
     GamepadEx driverGamepad, utilityGamepad;
     DriveBaseSubsystem driveBaseSubsystem;
+
+
 
     DefaultDrive driveCommand;
     Telemetry telemetry;
@@ -40,7 +43,7 @@ public class Callisto extends Robot {
     }
 
     private void initAuto() {
-
+        schedule(new AutonomouseDriveForward(driveBaseSubsystem, 5.0, 0.5));
     }
 
     @Override

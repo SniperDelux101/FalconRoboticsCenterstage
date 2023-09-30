@@ -18,7 +18,7 @@ public class DriveBaseSubsystem extends SubsystemBase {
     private final Motor leftFront, rightFront, leftRear, rightRear;
     //private final MotorEx odo_left, odo_right, odo_rear;
     private Motor.Encoder odo_left, odo_right, odo_rear;
-    private final double distance_per_pulse = Math.PI * Configuration.WHEEL_DIAMETER / Configuration.TICKS_PER_REV;
+
 
     public DriveBaseSubsystem(HardwareMap hMap) {
         leftFront = new Motor(hMap, "Left_Front_Wheel", Motor.GoBILDA.RPM_435);
@@ -26,19 +26,9 @@ public class DriveBaseSubsystem extends SubsystemBase {
         leftRear =  new Motor(hMap, "Left_Rear_Wheel", Motor.GoBILDA.RPM_435);
         rightRear = new Motor(hMap, "Right_Rear_Wheel", Motor.GoBILDA.RPM_435);
 
-//        odo_left = new MotorEx(hMap, "Left_Front_Wheel");
-//        odo_right = new MotorEx(hMap, "Right_Front_Wheel");
-//        odo_rear = new MotorEx(hMap, "Left_Rear_Wheel");
-//
-//
-//        odo_left.setDistancePerPulse(Configuration.TICKS_TO_INCHES);
-//
-//        odo_right.setDistancePerPulse(Configuration.TICKS_TO_INCHES);
-//        odo_rear.setDistancePerPulse(Configuration.TICKS_TO_INCHES);
-
-        odo_left = leftFront.encoder.setDistancePerPulse(distance_per_pulse);
-        odo_right = rightFront.encoder.setDistancePerPulse(distance_per_pulse);
-        odo_rear = leftRear.encoder.setDistancePerPulse(distance_per_pulse);
+        odo_left = leftFront.encoder.setDistancePerPulse(Configuration.DISTANCE_PER_PULSE);
+        odo_right = rightFront.encoder.setDistancePerPulse(Configuration.DISTANCE_PER_PULSE);
+        odo_rear = leftRear.encoder.setDistancePerPulse(Configuration.DISTANCE_PER_PULSE);
 
         odo_right.setDirection(Motor.Direction.REVERSE);
 
@@ -71,4 +61,17 @@ public class DriveBaseSubsystem extends SubsystemBase {
     public double getOdometryDistance(){
            return (odo_left.getDistance()+odo_right.getDistance())/2;
     }
+
+    public double getAverageEncoderDistance() {
+        return (getLeftEncoderDistance() + getRightEncoderDistance()) / 2.0;
+    }
+
+    public double getLeftEncoderDistance() {
+        return odo_left.getDistance();
+    }
+
+    public double getRightEncoderDistance() {
+        return odo_right.getDistance();
+    }
+
 }

@@ -7,29 +7,25 @@ import org.firstinspires.ftc.teamcode.Subsystems.DriveBaseSubsystem;
 public class AutonomouseDriveForward extends CommandBase {
 
     private final DriveBaseSubsystem driveBaseSubsystem;
-    private final double forward, speed;
+    private final double distance, speed;
 
-    public AutonomouseDriveForward(DriveBaseSubsystem driveBase, double fwd, double spd) {
+    public AutonomouseDriveForward(DriveBaseSubsystem driveBase, double dist, double spd) {
         driveBaseSubsystem = driveBase;
-        forward = fwd;
+        distance = dist;
         if(spd > 1)
             spd = 1;
         else if (spd <=0)
             spd = 0.1;
         speed = spd;
+        addRequirements(driveBaseSubsystem);
     }
 
     @Override
     public void initialize() {
         super.initialize();
+        driveBaseSubsystem.resetEncoders();
         driveBaseSubsystem.drive(0.0, speed, 0.0);
     }
-
-   @Override
-   public void execute(){
-        super.execute();
-        driveBaseSubsystem.drive(0.0, speed, 0.0);
-   }
 
     @Override
     public void end(boolean interrupted) {
@@ -39,6 +35,6 @@ public class AutonomouseDriveForward extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return (driveBaseSubsystem.getOdometryDistance() >= forward);
+        return Math.abs(driveBaseSubsystem.getAverageEncoderDistance()) >= distance;
     }
 }
