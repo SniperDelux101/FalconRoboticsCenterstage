@@ -24,7 +24,11 @@ public class AutonomouseDriveForward extends CommandBase {
     public void initialize() {
         super.initialize();
         driveBaseSubsystem.resetEncoders();
-        driveBaseSubsystem.drive(0.0, speed, 0.0);
+    }
+
+    @Override
+    public void execute(){
+        driveBaseSubsystem.drive(0.0, -speed, 0.0);
     }
 
     @Override

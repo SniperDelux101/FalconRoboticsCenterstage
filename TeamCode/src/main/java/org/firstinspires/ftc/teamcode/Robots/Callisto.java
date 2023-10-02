@@ -1,7 +1,11 @@
 package org.firstinspires.ftc.teamcode.Robots;
 
+import com.arcrobotics.ftclib.command.PurePursuitCommand;
 import com.arcrobotics.ftclib.command.Robot;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
+import com.arcrobotics.ftclib.purepursuit.waypoints.EndWaypoint;
+import com.arcrobotics.ftclib.purepursuit.waypoints.GeneralWaypoint;
+import com.arcrobotics.ftclib.purepursuit.waypoints.StartWaypoint;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
@@ -43,7 +47,13 @@ public class Callisto extends Robot {
     }
 
     private void initAuto() {
-        schedule(new AutonomouseDriveForward(driveBaseSubsystem, 5.0, 0.5));
+        //schedule(new AutonomouseDriveForward(driveBaseSubsystem, 24.0, 0.25));
+        PurePursuitCommand pp = new PurePursuitCommand(driveBaseSubsystem.getMecanumDrive(), driveBaseSubsystem.getOdometrySubsystem(),
+                new StartWaypoint(0,0),
+                new GeneralWaypoint(10,10,.25,.25,30),
+                new EndWaypoint(0,0,0,.25,.25,30,.8,.1)
+                );
+        pp.schedule();
     }
 
     @Override
@@ -52,6 +62,9 @@ public class Callisto extends Robot {
         telemetry.addData("Odometry Y", driveBaseSubsystem.getPosition().getY());
         telemetry.addData("Odometry Rotation", driveBaseSubsystem.getPosition().getRotation());
         telemetry.addData("Odometry Heading", driveBaseSubsystem.getPosition().getHeading());
+        telemetry.addData("Odometry Distance", driveBaseSubsystem.getAverageEncoderDistance());
+        telemetry.addData("Left Odo ", driveBaseSubsystem.getLeftEncoderDistance());
+        telemetry.addData("Right Odo ", driveBaseSubsystem.getRightEncoderDistance());
         telemetry.update();
         super.run();
     }

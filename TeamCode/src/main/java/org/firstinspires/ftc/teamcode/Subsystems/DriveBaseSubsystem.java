@@ -30,7 +30,7 @@ public class DriveBaseSubsystem extends SubsystemBase {
         odo_right = rightFront.encoder.setDistancePerPulse(Configuration.DISTANCE_PER_PULSE);
         odo_rear = leftRear.encoder.setDistancePerPulse(Configuration.DISTANCE_PER_PULSE);
 
-        odo_right.setDirection(Motor.Direction.REVERSE);
+//        odo_right.setDirection(Motor.Direction.REVERSE);
 
         holonomicOdometry = new HolonomicOdometry(
                 odo_left::getDistance,
@@ -44,6 +44,12 @@ public class DriveBaseSubsystem extends SubsystemBase {
         m_drive = new MecanumDrive(true, leftFront, rightFront, leftRear, rightRear);
     }
 
+    public MecanumDrive getMecanumDrive() { return m_drive;}
+
+    public OdometrySubsystem getOdometrySubsystem() {
+        return odometrySubsystem;
+    }
+
     public void drive(double strafe, double forward, double rotate) {
         m_drive.driveRobotCentric(strafe, forward, rotate);
     }
@@ -51,17 +57,13 @@ public class DriveBaseSubsystem extends SubsystemBase {
         return odometrySubsystem.getPose();
     }
     public void updatePosition(){
-        odometrySubsystem.update();;
+        odometrySubsystem.update();
     }
     public void resetEncoders(){
         odo_right.reset();
         odo_left.reset();
         odo_rear.reset();
     }
-    public double getOdometryDistance(){
-           return (odo_left.getDistance()+odo_right.getDistance())/2;
-    }
-
     public double getAverageEncoderDistance() {
         return (getLeftEncoderDistance() + getRightEncoderDistance()) / 2.0;
     }
@@ -73,5 +75,6 @@ public class DriveBaseSubsystem extends SubsystemBase {
     public double getRightEncoderDistance() {
         return odo_right.getDistance();
     }
+    public double getRearEncoderDistance(){ return odo_rear.getDistance();}
 
 }
