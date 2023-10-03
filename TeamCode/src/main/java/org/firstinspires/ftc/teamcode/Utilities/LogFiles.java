@@ -84,11 +84,11 @@ public final class LogFiles {
         public double tankHeadingI = SampleTankDrive.HEADING_PID.kI;
         public double tankHeadingD = SampleTankDrive.HEADING_PID.kD;
 
-        public double trackingTicksPerRev = StandardTrackingWheelLocalizer.TICKS_PER_REV;
-        public double trackingWheelRadius = StandardTrackingWheelLocalizer.WHEEL_RADIUS;
-        public double trackingGearRatio = StandardTrackingWheelLocalizer.GEAR_RATIO;
-        public double trackingLateralDistance = StandardTrackingWheelLocalizer.LATERAL_DISTANCE;
-        public double trackingForwardOffset = StandardTrackingWheelLocalizer.FORWARD_OFFSET;
+        public double trackingTicksPerRev = Configuration.TICKS_PER_REV;
+        public double trackingWheelRadius = Configuration.WHEEL_RADIUS;
+        public double trackingGearRatio = Configuration.GEAR_RATIO;
+        public double trackingLateralDistance = Configuration.LATERAL_DISTANCE;
+        public double trackingForwardOffset = Configuration.FORWARD_OFFSET;
 
         public RevHubOrientationOnRobot.LogoFacingDirection LOGO_FACING_DIR = Configuration.LOGO_FACING_DIR;
         public RevHubOrientationOnRobot.UsbFacingDirection USB_FACING_DIR = Configuration.USB_FACING_DIR;

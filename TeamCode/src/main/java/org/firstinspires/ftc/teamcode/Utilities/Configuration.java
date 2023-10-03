@@ -6,10 +6,14 @@ import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 
 @Config
 public class Configuration {
+
+    // TRACKWIDTH is the distance between mecanum wheels
     public static double TRACKWIDTH = 11.61695216;
+
+    public static double FORWARD_OFFSET = -5.983669448819;
     public static double CENTER_WHEEL_OFSET= 5.983669448819;
 
-    //public static double LATERAL_DISTANCE = 11.61695216; // in; distance between the left and right wheels
+    public static double LATERAL_DISTANCE = 10.261811024; // in; distance between the left and right wheels
     //public static double FORWARD_OFFSET = 5.983669448819; // in; offset of the lateral wheel (original : 6.25)
     public static double WHEEL_DIAMETER =  1.49606;
     public static double WHEEL_RADIUS = 1.49606;
@@ -47,8 +51,8 @@ public class Configuration {
      * small and gradually increase them later after everything is working. All distance units are
      * inches.
      */
-    public static double MAX_VEL = 30;
-    public static double MAX_ACCEL = 30;
+    public static double MAX_VEL = 6;
+    public static double MAX_ACCEL = 6;
     public static double MAX_ANG_VEL = Math.toRadians(180);
     public static double MAX_ANG_ACCEL = Math.toRadians(180);
 

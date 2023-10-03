@@ -8,6 +8,7 @@ import com.acmerobotics.roadrunner.localization.ThreeTrackingWheelLocalizer;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.teamcode.Utilities.Encoder;
+import org.firstinspires.ftc.teamcode.Utilities.Configuration;
 
 import java.util.Arrays;
 import java.util.List;
@@ -27,12 +28,12 @@ import java.util.List;
  */
 @Config
 public class StandardTrackingWheelLocalizer extends ThreeTrackingWheelLocalizer {
-    public static double TICKS_PER_REV = 0;
-    public static double WHEEL_RADIUS = 2; // in
-    public static double GEAR_RATIO = 1; // output (wheel) speed / input (encoder) speed
-
-    public static double LATERAL_DISTANCE = 10; // in; distance between the left and right wheels
-    public static double FORWARD_OFFSET = 4; // in; offset of the lateral wheel
+//    public static double TICKS_PER_REV = 8192;
+//    public static double WHEEL_RADIUS = 1.49606; // in
+//    public static double GEAR_RATIO = 1; // output (wheel) speed / input (encoder) speed
+//
+//    public static double LATERAL_DISTANCE = 11.61695216; // in; distance between the left and right wheels
+//    public static double FORWARD_OFFSET = 5.983669448819; // in; offset of the lateral wheel
 
     private Encoder leftEncoder, rightEncoder, frontEncoder;
 
@@ -40,23 +41,25 @@ public class StandardTrackingWheelLocalizer extends ThreeTrackingWheelLocalizer 
 
     public StandardTrackingWheelLocalizer(HardwareMap hardwareMap, List<Integer> lastTrackingEncPositions, List<Integer> lastTrackingEncVels) {
         super(Arrays.asList(
-                new Pose2d(0, LATERAL_DISTANCE / 2, 0), // left
-                new Pose2d(0, -LATERAL_DISTANCE / 2, 0), // right
-                new Pose2d(FORWARD_OFFSET, 0, Math.toRadians(90)) // front
+                new Pose2d(0, Configuration.TRACKWIDTH / 2, 0), // left
+                new Pose2d(0, -Configuration.TRACKWIDTH / 2, 0), // right
+                new Pose2d(Configuration.FORWARD_OFFSET, 0, Math.toRadians(90)) // front
         ));
 
         lastEncPositions = lastTrackingEncPositions;
         lastEncVels = lastTrackingEncVels;
 
-        leftEncoder = new Encoder(hardwareMap.get(DcMotorEx.class, "leftEncoder"));
-        rightEncoder = new Encoder(hardwareMap.get(DcMotorEx.class, "rightEncoder"));
-        frontEncoder = new Encoder(hardwareMap.get(DcMotorEx.class, "frontEncoder"));
+        leftEncoder = new Encoder(hardwareMap.get(DcMotorEx.class, "Left_Front_Wheel"));
+        rightEncoder = new Encoder(hardwareMap.get(DcMotorEx.class, "Right_Front_Wheel"));
+        frontEncoder = new Encoder(hardwareMap.get(DcMotorEx.class, "Left_Rear_Wheel"));
+
+        leftEncoder.setDirection(Encoder.Direction.REVERSE);
 
         // TODO: reverse any encoders using Encoder.setDirection(Encoder.Direction.REVERSE)
     }
 
     public static double encoderTicksToInches(double ticks) {
-        return WHEEL_RADIUS * 2 * Math.PI * GEAR_RATIO * ticks / TICKS_PER_REV;
+        return Configuration.WHEEL_RADIUS * 2 * Math.PI * Configuration.GEAR_RATIO * ticks / Configuration.TICKS_PER_REV;
     }
 
     @NonNull
