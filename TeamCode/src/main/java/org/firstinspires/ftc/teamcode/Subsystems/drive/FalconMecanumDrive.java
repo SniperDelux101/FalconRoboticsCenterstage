@@ -94,10 +94,10 @@ public class FalconMecanumDrive extends MecanumDrive {
         }
 
         // TODO: adjust the names of the following hardware devices to match your configuration
-        imu = hardwareMap.get(IMU.class, "imu");
-        IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
-                Configuration.LOGO_FACING_DIR, Configuration.USB_FACING_DIR));
-        imu.initialize(parameters);
+//        imu = hardwareMap.get(IMU.class, "imu");
+//        IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
+//                Configuration.LOGO_FACING_DIR, Configuration.USB_FACING_DIR));
+//        imu.initialize(parameters);
 
         leftFront = hardwareMap.get(DcMotorEx.class, "Left_Front_Wheel");
         leftRear = hardwareMap.get(DcMotorEx.class, "Left_Rear_Wheel");
@@ -293,12 +293,12 @@ public class FalconMecanumDrive extends MecanumDrive {
 
     @Override
     public double getRawExternalHeading() {
-        return imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
+        return 0;
     }
 
     @Override
     public Double getExternalHeadingVelocity() {
-        return (double) imu.getRobotAngularVelocity(AngleUnit.RADIANS).zRotationRate;
+        return (double) 0.0;
     }
 
     public static TrajectoryVelocityConstraint getVelocityConstraint(double maxVel, double maxAngularVel, double trackWidth) {
