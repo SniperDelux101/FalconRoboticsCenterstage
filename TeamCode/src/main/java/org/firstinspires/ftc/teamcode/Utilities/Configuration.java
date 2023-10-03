@@ -17,6 +17,8 @@ public class Configuration {
     //public static double FORWARD_OFFSET = 5.983669448819; // in; offset of the lateral wheel (original : 6.25)
     public static double WHEEL_DIAMETER =  1.49606;
     public static double WHEEL_RADIUS = 1.49606;
+    public static double X_MULTIPLIER = 0.5749647;
+    public static double Y_MULTIPLIER = 0.53651414;
     public static double TICKS_PER_REV = 8192;
     public static double DISTANCE_PER_PULSE = Math.PI * Configuration.WHEEL_DIAMETER / Configuration.TICKS_PER_REV;
     public static double GEAR_RATIO = 1; // output (wheel) speed / input (motor) speed
