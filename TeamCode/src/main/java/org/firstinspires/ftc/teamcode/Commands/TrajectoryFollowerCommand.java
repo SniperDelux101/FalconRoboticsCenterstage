@@ -19,7 +19,7 @@ public class TrajectoryFollowerCommand extends CommandBase {
 
     @Override
     public void initialize() {
-        drive.followTrajectory(trajectory);
+        drive.followTrajectoryAsync(trajectory);
     }
 
     @Override

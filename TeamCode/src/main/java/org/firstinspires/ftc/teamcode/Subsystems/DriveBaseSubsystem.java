@@ -5,7 +5,6 @@ import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.drivebase.MecanumDrive;
 import com.arcrobotics.ftclib.geometry.Pose2d;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
-import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.arcrobotics.ftclib.kinematics.HolonomicOdometry;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
@@ -75,6 +74,5 @@ public class DriveBaseSubsystem extends SubsystemBase {
     public double getRightEncoderDistance() {
         return odo_right.getDistance();
     }
-    public double getRearEncoderDistance(){ return odo_rear.getDistance();}
 
 }

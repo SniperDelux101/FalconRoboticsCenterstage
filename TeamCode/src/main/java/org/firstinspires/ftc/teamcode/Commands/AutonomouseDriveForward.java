@@ -1,15 +1,18 @@
 package org.firstinspires.ftc.teamcode.Commands;
 
+import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.arcrobotics.ftclib.command.CommandBase;
 
-import org.firstinspires.ftc.teamcode.Subsystems.DriveBaseSubsystem;
+
+import org.firstinspires.ftc.teamcode.Subsystems.MecanumDriveSubsystem;
 
 public class AutonomouseDriveForward extends CommandBase {
 
-    private final DriveBaseSubsystem driveBaseSubsystem;
+    private final MecanumDriveSubsystem driveBaseSubsystem;
     private final double distance, speed;
+    Trajectory trajectory;
 
-    public AutonomouseDriveForward(DriveBaseSubsystem driveBase, double dist, double spd) {
+    public AutonomouseDriveForward(MecanumDriveSubsystem driveBase, double dist, double spd) {
         driveBaseSubsystem = driveBase;
         distance = dist;
         if(spd > 1)
@@ -23,22 +26,26 @@ public class AutonomouseDriveForward extends CommandBase {
     @Override
     public void initialize() {
         super.initialize();
-        driveBaseSubsystem.resetEncoders();
+
+        trajectory = driveBaseSubsystem.trajectoryBuilder(new com.acmerobotics.roadrunner.geometry.Pose2d())
+                .forward(distance)
+                .build();
+
     }
 
     @Override
     public void execute(){
-        driveBaseSubsystem.drive(0.0, -speed, 0.0);
+        driveBaseSubsystem.followTrajectoryAsync(trajectory);
     }
 
     @Override
     public void end(boolean interrupted) {
         super.end(interrupted);
-        driveBaseSubsystem.drive(0.0,0.0,0.0);
+        driveBaseSubsystem.stop();
     }
 
     @Override
     public boolean isFinished() {
-        return Math.abs(driveBaseSubsystem.getAverageEncoderDistance()) >= distance;
+        return !driveBaseSubsystem.isBusy();
     }
 }

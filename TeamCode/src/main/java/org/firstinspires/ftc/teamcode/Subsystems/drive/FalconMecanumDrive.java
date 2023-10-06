@@ -311,4 +311,9 @@ public class FalconMecanumDrive extends MecanumDrive {
     public static TrajectoryAccelerationConstraint getAccelerationConstraint(double maxAccel) {
         return new ProfileAccelerationConstraint(maxAccel);
     }
+
+    public void resetEncoders()
+    {
+        lastEncPositions.clear();
+    }
 }

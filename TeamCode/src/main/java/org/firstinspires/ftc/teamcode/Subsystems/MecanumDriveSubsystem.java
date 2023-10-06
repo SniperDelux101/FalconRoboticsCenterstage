@@ -10,14 +10,11 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 
 import org.firstinspires.ftc.teamcode.Subsystems.drive.FalconMecanumDrive;
+import org.firstinspires.ftc.teamcode.Subsystems.drive.TrajectorySequence.TrajectorySequence;
+import org.firstinspires.ftc.teamcode.Utilities.Configuration;
 
 import java.util.List;
 
-/**
- * A subsystem that uses the {@link SampleMecanumDrive} class.
- * This periodically calls {@link SampleMecanumDrive#update()} which runs the internal
- * state machine for the mecanum drive. All movement/following is async to fit the paradigm.
- */
 public class MecanumDriveSubsystem extends SubsystemBase {
 
     private final FalconMecanumDrive drive;
@@ -57,9 +54,9 @@ public class MecanumDriveSubsystem extends SubsystemBase {
 
         drive.setWeightedDrivePower(
                 new Pose2d(
-                        input.getX(),
-                        input.getY(),
-                        -rightX
+                        input.getX() * Configuration.DrivePower,
+                        input.getY() * Configuration.DrivePower,
+                        -rightX * Configuration.DrivePower
                 )
         );
     }
@@ -85,7 +82,15 @@ public class MecanumDriveSubsystem extends SubsystemBase {
     }
 
     public void followTrajectory(Trajectory trajectory) {
+        drive.followTrajectory(trajectory);
+    }
+
+    public void followTrajectoryAsync(Trajectory trajectory){
         drive.followTrajectoryAsync(trajectory);
+    }
+
+    public void followTrajectorySequenceAsync(TrajectorySequence sequence) {
+        drive.followTrajectorySequenceAsync(sequence);
     }
 
     public boolean isBusy() {
@@ -110,6 +115,11 @@ public class MecanumDriveSubsystem extends SubsystemBase {
 
     public Localizer getLocalizer() {
         return drive.getLocalizer();
+    }
+
+    public void resetEncoders()
+    {
+        drive.resetEncoders();
     }
 
 }
