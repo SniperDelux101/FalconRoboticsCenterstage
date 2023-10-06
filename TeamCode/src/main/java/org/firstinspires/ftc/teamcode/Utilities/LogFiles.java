@@ -87,7 +87,7 @@ public final class LogFiles {
         public double trackingTicksPerRev = Configuration.TICKS_PER_REV;
         public double trackingWheelRadius = Configuration.WHEEL_RADIUS;
         public double trackingGearRatio = Configuration.GEAR_RATIO;
-        public double trackingLateralDistance = Configuration.LATERAL_DISTANCE;
+        public double trackingLateralDistance = Configuration.TRACKWIDTH;
         public double trackingForwardOffset = Configuration.FORWARD_OFFSET;
 
         public RevHubOrientationOnRobot.LogoFacingDirection LOGO_FACING_DIR = Configuration.LOGO_FACING_DIR;

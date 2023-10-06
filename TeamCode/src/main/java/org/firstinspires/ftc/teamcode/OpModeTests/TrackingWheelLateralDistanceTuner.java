@@ -97,7 +97,7 @@ public class TrackingWheelLateralDistanceTuner extends LinearOpMode {
         boolean tuningFinished = false;
 
         while (!isStopRequested() && !tuningFinished) {
-            Pose2d vel = new Pose2d(0, 0, -gamepad1.right_stick_x);
+            Pose2d vel = new Pose2d(0, 0, -gamepad1.right_stick_x*Configuration.LATERAL_LIMITER);
             drive.setDrivePower(vel);
 
             drive.update();
@@ -122,7 +122,7 @@ public class TrackingWheelLateralDistanceTuner extends LinearOpMode {
         telemetry.clearAll();
         telemetry.addLine("Localizer's total heading: " + Math.toDegrees(headingAccumulator) + "°");
         telemetry.addLine("Effective LATERAL_DISTANCE: " +
-                (headingAccumulator / (NUM_TURNS * Math.PI * 2)) * Configuration.LATERAL_DISTANCE);
+                (headingAccumulator / (NUM_TURNS * Math.PI * 2)) * Configuration.TRACKWIDTH);
 
         telemetry.update();
 
