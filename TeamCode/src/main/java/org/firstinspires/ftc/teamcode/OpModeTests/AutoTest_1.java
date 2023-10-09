@@ -21,14 +21,17 @@ public class AutoTest_1 extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
 
+        Pose2d StartPos = new Pose2d(71.72, 24.05, Math.toRadians(180.00));
+
         drive = new FalconMecanumDrive(hardwareMap);
-        TrajectorySequence Test_1 = drive.trajectorySequenceBuilder(new Pose2d(-0.28, -69.05, Math.toRadians(90.00)))
-                .splineTo(new Vector2d(-0.28, 0.14), Math.toRadians(90.00))
-                .splineTo(new Vector2d(0.00, 23.20), Math.toRadians(89.30))
-                .splineTo(new Vector2d(-30.37, 16.31), Math.toRadians(192.78))
-                .splineTo(new Vector2d(-58.08, 15.47), Math.toRadians(181.34))
+
+         drive.setPoseEstimate(StartPos);
+
+        TrajectorySequence Test_1 = drive.trajectorySequenceBuilder(new Pose2d(71.72, 24.05, Math.toRadians(180.00)))
+                .UNSTABLE_addTemporalMarkerOffset(1.29,() -> {})
+                .splineTo(new Vector2d(24.47, 24.05), Math.toRadians(180.00))
+                .splineTo(new Vector2d(0.00, -48.09), Math.toRadians(-90))
                 .build();
-        drive.setPoseEstimate(Test_1.start());
 
         waitForStart();
 

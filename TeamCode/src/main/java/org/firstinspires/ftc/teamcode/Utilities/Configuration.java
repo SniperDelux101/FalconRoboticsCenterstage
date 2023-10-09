@@ -8,22 +8,25 @@ import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 public class Configuration {
 
     // TRACKWIDTH is the distance between mecanum wheels
-    public static double TRACKWIDTH = 10.28240769;
+    public static double TRACKWIDTH = 13.03142345;
 
     public static double FORWARD_OFFSET = -5.983669448819;
     public static double CENTER_WHEEL_OFSET= 5.983669448819;
 
     //public static double FORWARD_OFFSET = 5.983669448819; // in; offset of the lateral wheel (original : 6.25)
-    public static double WHEEL_DIAMETER =  1.49606;
-    public static double WHEEL_RADIUS = 1.49606;
-    public static double X_MULTIPLIER = 0.5020750224;
-    public static double Y_MULTIPLIER = 0.50072191;
+
+//    public static double WHEEL_DIAMETER =  1.49606;
+
+//    public static double WHEEL_RADIUS = 1.49606;
+    public static double WHEEL_RADIUS = 1.8898;
+    public static double X_MULTIPLIER = 0.1359763488;
+    public static double Y_MULTIPLIER = 0.136020665;
     public static double TICKS_PER_REV = 8192;
-    public static double DISTANCE_PER_PULSE = Math.PI * Configuration.WHEEL_DIAMETER / Configuration.TICKS_PER_REV;
-    public static double GEAR_RATIO = 3.7; // output (wheel) speed / input (motor) speed
+    public static double DISTANCE_PER_PULSE = Math.PI * Configuration.WHEEL_RADIUS / Configuration.TICKS_PER_REV;
+    public static double GEAR_RATIO = 3.7; // output (wheel) speed / input (motor) speed [Should be 4.5 or 0.2222222]
     public static final double MAX_RPM = 1620;
 
-    public static final double LATERAL_LIMITER = 0.1;
+    public static double LATERAL_LIMITER = 0.3;
 
     public static final double DrivePower = .75;
 
