@@ -81,4 +81,18 @@ public class Configuration {
     public static RevHubOrientationOnRobot.LogoFacingDirection LOGO_FACING_DIR = RevHubOrientationOnRobot.LogoFacingDirection.DOWN;
     public static RevHubOrientationOnRobot.UsbFacingDirection USB_FACING_DIR = RevHubOrientationOnRobot.UsbFacingDirection.BACKWARD;
 
+    //****************************************************************************************************************//
+    //Servo Config Values For Odometry
+
+    public static double ODO_MIN_ANGLE = 0;
+    public static double ODO_MAX_ANGLE = 180;
+    public static double ODO_DROP_POSITION = 0;
+    public static double ODO_RETRACT_POSITION = 0;
+
+
+
+    public static double ODOMETRY_SERVO_POSITION = 0;
+    public static double ODO_SERVO_MULTIPLIER = 5;
+    
+
 }
