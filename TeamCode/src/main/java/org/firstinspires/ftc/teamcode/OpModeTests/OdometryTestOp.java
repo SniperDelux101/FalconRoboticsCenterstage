@@ -1,16 +1,20 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.OpModeTests;
 
 
 import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.Robots.Callisto;
-import org.firstinspires.ftc.teamcode.Robots.RobotMode;
 import org.firstinspires.ftc.teamcode.Subsystems.OdometryControlSubsystem;
 import org.firstinspires.ftc.teamcode.Utilities.Configuration;
 
-public class Test_Op extends OpMode {
+
+@Config
+@TeleOp(group = "subsystems test")
+public class OdometryTestOp extends OpMode {
 
     private OdometryControlSubsystem odometryControlSubsystem;
 

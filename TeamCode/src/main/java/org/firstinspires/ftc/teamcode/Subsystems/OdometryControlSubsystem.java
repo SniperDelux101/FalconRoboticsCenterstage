@@ -24,16 +24,17 @@ public class OdometryControlSubsystem extends SubsystemBase {
 
     }
 
-    public void retract() {
-        servoLeft.setPosition(Configuration.ODO_RETRACT_POSITION);
-        servoRight.setPosition(Configuration.ODO_RETRACT_POSITION);
-        servoRear.setPosition(Configuration.ODO_RETRACT_POSITION);
-    }
 
     public void drop() {
         servoLeft.setPosition(Configuration.ODO_DROP_POSITION);
         servoRight.setPosition(Configuration.ODO_DROP_POSITION);
         servoRear.setPosition(Configuration.ODO_DROP_POSITION);
+    }
+
+    public void retract() {
+        servoLeft.setPosition(Configuration.ODO_RETRACT_POSITION);
+        servoRight.setPosition(Configuration.ODO_RETRACT_POSITION);
+        servoRear.setPosition(Configuration.ODO_RETRACT_POSITION);
     }
 
 }

@@ -93,6 +93,9 @@ public class Configuration {
 
     public static double ODOMETRY_SERVO_POSITION = 0;
     public static double ODO_SERVO_MULTIPLIER = 5;
-    
 
+    //****************************************************************************************************************//
+    //Intake Motor Values / Percentages
+
+    public static double INTAKE_MOTOR_POWER = 0.10;
 }
