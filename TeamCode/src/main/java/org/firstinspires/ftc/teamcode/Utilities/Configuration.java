@@ -86,16 +86,22 @@ public class Configuration {
 
     public static double ODO_MIN_ANGLE = 0;
     public static double ODO_MAX_ANGLE = 180;
-    public static double ODO_DROP_POSITION = 0;
-    public static double ODO_RETRACT_POSITION = 0;
+    public static double LEFT_ODO_DROP_POSITION = 0.019999999999999858;
+    public static double LEFT_ODO_RETRACT_POSITION = 0.3800000000000001;
 
+    public static double REAR_ODO_DROP_POSITION = 0.6700000000000005;
+    public static double REAR_ODO_RETRACT_POSITION = 7.289999999999889;
 
+    public static double RIGHT_ODO_DROP_POSITION = 0.4600000000000004;
+    public static double RIGHT_ODO_RETRACT_POSITION = 0.7200000000000005;
 
-    public static double ODOMETRY_SERVO_POSITION = 0;
-    public static double ODO_SERVO_MULTIPLIER = 5;
+    public static double ODO_SERVO_MULTIPLIER = 0.01;
 
     //****************************************************************************************************************//
     //Intake Motor Values / Percentages
 
     public static double INTAKE_MOTOR_POWER = 0.10;
+
+    public static boolean ODO_SERVO_TRUE = true;
+    public static boolean ODO_SERVO_FALSE = false;
 }
