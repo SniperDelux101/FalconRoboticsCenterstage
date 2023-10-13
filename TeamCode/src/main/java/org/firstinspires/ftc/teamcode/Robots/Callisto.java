@@ -41,6 +41,8 @@ public class Callisto extends Robot {
         driverGamepad = new GamepadEx(gamepad1);
         utilityGamepad = new GamepadEx(gamepad2);
 
+        odometryControlSubsystem.retract();
+
 //        driveCommand = new DefaultDrive(driveBaseSubsystem, driverGamepad::getLeftX, driverGamepad::getLeftY, driverGamepad::getRightX);
 //        register(driveBaseSubsystem);
 //        driveBaseSubsystem.setDefaultCommand(driveCommand);
@@ -49,10 +51,13 @@ public class Callisto extends Robot {
     private void initAuto() {
         //TODO: Add code for autonomous driving
 
+
+        odometryControlSubsystem.drop();
     }
 
     @Override
     public void run() {
+
         telemetry.addData("x", driveBaseSubsystem.getPoseEstimate().getX());
         telemetry.addData("y", driveBaseSubsystem.getPoseEstimate().getY());
         telemetry.addData("heading", driveBaseSubsystem.getPoseEstimate().getHeading());
