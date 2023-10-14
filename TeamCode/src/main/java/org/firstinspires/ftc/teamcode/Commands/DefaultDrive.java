@@ -1,33 +1,28 @@
 package org.firstinspires.ftc.teamcode.Commands;
 
 import com.arcrobotics.ftclib.command.CommandBase;
-import com.arcrobotics.ftclib.command.OdometrySubsystem;
-import com.arcrobotics.ftclib.geometry.Pose2d;
-import com.arcrobotics.ftclib.kinematics.Odometry;
-
 import java.util.function.DoubleSupplier;
-import org.firstinspires.ftc.teamcode.Subsystems.DriveBaseSubsystem;
+import org.firstinspires.ftc.teamcode.Subsystems.MecanumDriveSubsystem;
 
 public class DefaultDrive extends CommandBase {
-    private final DriveBaseSubsystem m_drive;
-    private DoubleSupplier m_forward;
-    private DoubleSupplier m_rotation;
+    private final MecanumDriveSubsystem m_drive;
+    private DoubleSupplier m_LeftX;
+    private DoubleSupplier m_LeftY;
 
-    private DoubleSupplier m_strafe;
+    private DoubleSupplier m_RightX;
 
-    public DefaultDrive(DriveBaseSubsystem subsystem, DoubleSupplier strafe, DoubleSupplier forward, DoubleSupplier rotation) {
+    public DefaultDrive(MecanumDriveSubsystem subsystem, DoubleSupplier leftX, DoubleSupplier leftY, DoubleSupplier rightX) {
         m_drive = subsystem;
-        m_forward = forward;
-        m_rotation = rotation;
-        m_strafe = strafe;
+        m_LeftX = leftX;
+        m_LeftY = leftY;
+        m_RightX = rightX;
         addRequirements(m_drive);
-
     }
 
     @Override
     public void execute() {
-        m_drive.drive(m_strafe.getAsDouble(), -m_forward.getAsDouble(), m_rotation.getAsDouble());
-        m_drive.updatePosition();
+        m_drive.drive(m_LeftY.getAsDouble(), m_LeftX.getAsDouble(), m_RightX.getAsDouble());
+        m_drive.update();
     }
 
 }
