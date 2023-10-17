@@ -30,22 +30,37 @@ package org.firstinspires.ftc.teamcode.Tests;
  */
 
 
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.util.Size;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.function.Consumer;
+import org.firstinspires.ftc.robotcore.external.function.Continuation;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDirection;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.Camera;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.CameraControl;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.PtzControl;
+import org.firstinspires.ftc.robotcore.external.stream.CameraStreamSource;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
+import org.firstinspires.ftc.robotcore.internal.camera.calibration.CameraCalibration;
+import org.firstinspires.ftc.teamcode.Utilities.Configuration;
 import org.firstinspires.ftc.vision.VisionPortal;
+import org.firstinspires.ftc.vision.VisionProcessor;
 import org.firstinspires.ftc.vision.tfod.TfodProcessor;
+import org.opencv.android.Utils;
+import org.opencv.core.Mat;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 /*
  * This OpMode illustrates the basics of TensorFlow Object Detection,
@@ -55,24 +70,21 @@ import java.util.List;
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list.
  */
 @TeleOp(name = "Concept: TensorFlow Object Detection", group = "Concept")
-
 public class ConceptTensorFlowObjectDetection extends LinearOpMode {
 
     private static final boolean USE_WEBCAM = true;  // true for webcam, false for phone camera
 
     // TFOD_MODEL_ASSET points to a model file stored in the project Asset location,
     // this is only used for Android Studio when using models in Assets.
-    private static final String TFOD_MODEL_ASSET = "model_unquant.tflite";
-    // TFOD_MODEL_FILE points to a model file stored onboard the Robot Controller's storage,
+    //private static final String TFOD_MODEL_ASSET = "model_20231015_183624.tflite";
+    //TFOD_MODEL_FILE points to a model file stored onboard the Robot Controller's storage,
     // this is used when uploading models directly to the RC using the model upload interface.
-    private static final String TFOD_MODEL_FILE = "/sdcard/FIRST/tflitemodels/myCustomModel.tflite";
+    private static final String TFOD_MODEL_FILE = "/sdcard/FIRST/tflitemodels/model_20231015_183624.tflite";
     // Define the labels recognized in the model for TFOD (must be in training order!)
     private static final String[] LABELS = {
-            "yellow pix",
-            "purple pix",
-            "white pix",
-            "green pix",
-            "team prop"
+            "TeamProp",
+            "PixelStack",
+            "Pixel"
     };
 
     /**
@@ -84,6 +96,33 @@ public class ConceptTensorFlowObjectDetection extends LinearOpMode {
      * The variable to store our instance of the vision portal.
      */
     private VisionPortal visionPortal;
+
+    public static class CameraStreamProcessor implements VisionProcessor, CameraStreamSource {
+        private final AtomicReference<Bitmap> lastFrame = new AtomicReference<>(Bitmap.createBitmap(1, 1, Bitmap.Config.RGB_565));
+
+        @Override
+        public void init(int width, int height, CameraCalibration calibration) {
+            lastFrame.set(Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565));
+        }
+
+        @Override
+        public Object processFrame(Mat frame, long captureTimeNanos) {
+            Bitmap b = Bitmap.createBitmap(frame.width(), frame.height(), Bitmap.Config.RGB_565);
+            Utils.matToBitmap(frame, b);
+            lastFrame.set(b);
+            return null;
+        }
+
+        @Override
+        public void onDrawFrame(Canvas canvas, int onscreenWidth, int onscreenHeight, float scaleBmpPxToCanvasPx, float scaleCanvasDensity, Object userContext) {
+            // do nothing
+        }
+
+        @Override
+        public void getFrameBitmap(Continuation<? extends Consumer<Bitmap>> continuation) {
+            continuation.dispatch(bitmapConsumer -> bitmapConsumer.accept(lastFrame.get()));
+        }
+    }
 
     @Override
     public void runOpMode() {
@@ -113,7 +152,7 @@ public class ConceptTensorFlowObjectDetection extends LinearOpMode {
                 }
 
                 // Share the CPU.
-                sleep(20);
+                sleep(100L);
             }
         }
 
@@ -127,6 +166,10 @@ public class ConceptTensorFlowObjectDetection extends LinearOpMode {
      */
     private void initTfod() {
 
+        //share camera stream
+        //ConceptTensorFlowObjectDetectionEasy.CameraStreamProcessor processor = new ConceptTensorFlowObjectDetectionEasy.CameraStreamProcessor();
+
+
         // Create the TensorFlow processor by using a builder.
         tfod = new TfodProcessor.Builder()
 
@@ -135,8 +178,8 @@ public class ConceptTensorFlowObjectDetection extends LinearOpMode {
                 // choose one of the following:
                 //   Use setModelAssetName() if the custom TF Model is built in as an asset (AS only).
                 //   Use setModelFileName() if you have downloaded a custom team model to the Robot Controller.
-                .setModelAssetName(TFOD_MODEL_ASSET)
-                //.setModelFileName(TFOD_MODEL_FILE)
+                //.setModelAssetName(TFOD_MODEL_ASSET)
+                .setModelFileName(TFOD_MODEL_FILE)
 
                 // The following default settings are available to un-comment and edit as needed to
                 // set parameters for custom models.
@@ -154,6 +197,15 @@ public class ConceptTensorFlowObjectDetection extends LinearOpMode {
         // Set the camera (webcam vs. built-in RC phone camera).
         if (USE_WEBCAM) {
             builder.setCamera(hardwareMap.get(WebcamName.class, "Webcam 1"));
+//            final CameraStreamProcessor processor = new CameraStreamProcessor();
+
+//            new VisionPortal.Builder()
+//                    .addProcessor(processor)
+//                    .setCamera(hardwareMap.get(WebcamName.class, "Webcam 1"))
+//                    .build();
+//
+//            FtcDashboard.getInstance().startCameraStream(processor, 0);
+
         } else {
             builder.setCamera(BuiltinCameraDirection.BACK);
         }
@@ -165,12 +217,12 @@ public class ConceptTensorFlowObjectDetection extends LinearOpMode {
         builder.enableLiveView(true);
 
         // Set the stream format; MJPEG uses less bandwidth than default YUY2.
-        builder.setStreamFormat(VisionPortal.StreamFormat.YUY2);
+        builder.setStreamFormat(VisionPortal.StreamFormat.MJPEG);
 
         // Choose whether or not LiveView stops if no processors are enabled.
         // If set "true", monitor shows solid orange screen if no processors enabled.
         // If set "false", monitor shows camera view without annotations.
-        builder.setAutoStopLiveView(false);
+        builder.setAutoStopLiveView(true);
 
         // Set and enable the processor.
         builder.addProcessor(tfod);
@@ -179,7 +231,7 @@ public class ConceptTensorFlowObjectDetection extends LinearOpMode {
         visionPortal = builder.build();
 
         // Set confidence threshold for TFOD recognitions, at any time.
-        //tfod.setMinResultConfidence(0.75f);
+        tfod.setMinResultConfidence((float)Configuration.CONFIDENCE_SCORE);
 
         // Disable or re-enable the TFOD processor at any time.
         visionPortal.setProcessorEnabled(tfod, true);

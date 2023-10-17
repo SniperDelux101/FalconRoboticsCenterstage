@@ -98,4 +98,9 @@ public class Configuration {
     //Intake Motor Values / Percentages
 
     public static double INTAKE_MOTOR_POWER = 0.10;
+
+
+    //****************************************************************************************************************//
+    // Tensor Flow Config values
+    public static double CONFIDENCE_SCORE = .4;
 }
