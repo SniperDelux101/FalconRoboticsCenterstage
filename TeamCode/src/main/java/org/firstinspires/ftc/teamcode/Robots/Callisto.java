@@ -52,6 +52,7 @@ public class Callisto extends Robot {
         //TODO: Add code for autonomous driving
 
 
+        odometryControlSubsystem.retract();
         odometryControlSubsystem.drop();
     }
 

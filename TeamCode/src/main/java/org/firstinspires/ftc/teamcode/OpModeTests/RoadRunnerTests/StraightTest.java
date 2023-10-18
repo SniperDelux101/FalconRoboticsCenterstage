@@ -21,7 +21,7 @@ import org.firstinspires.ftc.teamcode.Utilities.Configuration;;
 public class StraightTest extends CommandOpMode {
 
     public static double DISTANCE = 12; // in
-    public static double SLOWVELOCITY = 5;
+    public static double SLOWVELOCITY = 4;
 
     private MecanumDriveSubsystem drive;
     private TrajectoryFollowerCommand straightFollower;
