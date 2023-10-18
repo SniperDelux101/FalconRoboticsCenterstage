@@ -79,7 +79,7 @@ public class ConceptTensorFlowObjectDetection extends LinearOpMode {
     //private static final String TFOD_MODEL_ASSET = "model_20231015_183624.tflite";
     //TFOD_MODEL_FILE points to a model file stored onboard the Robot Controller's storage,
     // this is used when uploading models directly to the RC using the model upload interface.
-    private static final String TFOD_MODEL_FILE = "/sdcard/FIRST/tflitemodels/model_20231015_183624.tflite";
+    private static final String TFOD_MODEL_FILE = "/sdcard/FIRST/tflitemodels/model_20231017_212515.tflite";
     // Define the labels recognized in the model for TFOD (must be in training order!)
     private static final String[] LABELS = {
             "TeamProp",
@@ -158,7 +158,6 @@ public class ConceptTensorFlowObjectDetection extends LinearOpMode {
 
         // Save more CPU resources when camera is no longer needed.
         visionPortal.close();
-
     }   // end runOpMode()
 
     /**
@@ -167,7 +166,7 @@ public class ConceptTensorFlowObjectDetection extends LinearOpMode {
     private void initTfod() {
 
         //share camera stream
-        //ConceptTensorFlowObjectDetectionEasy.CameraStreamProcessor processor = new ConceptTensorFlowObjectDetectionEasy.CameraStreamProcessor();
+        ConceptTensorFlowObjectDetectionEasy.CameraStreamProcessor processor = new ConceptTensorFlowObjectDetectionEasy.CameraStreamProcessor();
 
 
         // Create the TensorFlow processor by using a builder.
@@ -197,7 +196,6 @@ public class ConceptTensorFlowObjectDetection extends LinearOpMode {
         // Set the camera (webcam vs. built-in RC phone camera).
         if (USE_WEBCAM) {
             builder.setCamera(hardwareMap.get(WebcamName.class, "Webcam 1"));
-//            final CameraStreamProcessor processor = new CameraStreamProcessor();
 
 //            new VisionPortal.Builder()
 //                    .addProcessor(processor)
