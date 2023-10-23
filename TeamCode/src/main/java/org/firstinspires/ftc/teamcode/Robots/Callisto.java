@@ -41,7 +41,7 @@ public class Callisto extends Robot {
         driverGamepad = new GamepadEx(gamepad1);
         utilityGamepad = new GamepadEx(gamepad2);
 
-        odometryControlSubsystem.retract();
+//        odometryControlSubsystem.retract();
 
 //        driveCommand = new DefaultDrive(driveBaseSubsystem, driverGamepad::getLeftX, driverGamepad::getLeftY, driverGamepad::getRightX);
 //        register(driveBaseSubsystem);

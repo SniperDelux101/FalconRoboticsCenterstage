@@ -9,6 +9,7 @@ import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.checkerframework.checker.units.qual.C;
 import org.firstinspires.ftc.teamcode.Subsystems.drive.FalconMecanumDrive;
 import org.firstinspires.ftc.teamcode.Subsystems.drive.TrajectorySequence.TrajectorySequence;
 
@@ -21,22 +22,28 @@ public class AutoTest_1 extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
 
-        Pose2d StartPos = new Pose2d(71.72, 24.05, Math.toRadians(180.00));
+        Pose2d StartPos = new Pose2d(-36.00, -70.00, Math.toRadians(90.00));
 
-        drive = new FalconMecanumDrive(hardwareMap);
-
+         drive = new FalconMecanumDrive(hardwareMap);
          drive.setPoseEstimate(StartPos);
 
-        TrajectorySequence Test_1 = drive.trajectorySequenceBuilder(new Pose2d(71.72, 24.05, Math.toRadians(180.00)))
-                .UNSTABLE_addTemporalMarkerOffset(1.29,() -> {})
-                .splineTo(new Vector2d(24.47, 24.05), Math.toRadians(180.00))
-                .splineTo(new Vector2d(0.00, -48.09), Math.toRadians(-90))
+        TrajectorySequence Test_One = drive.trajectorySequenceBuilder(new Pose2d(-36.00, -70.00, Math.toRadians(90.00)))
+                .splineTo(new Vector2d(-36.00, -50.00), Math.toRadians(0.00))
+                .splineTo(new Vector2d(-36.00, -24.00), Math.toRadians(0.00))
+                .splineTo(new Vector2d(-36.00, -12.00), Math.toRadians(0.00))
+                .splineTo(new Vector2d(-0.00, -12.00), Math.toRadians(0.00))
+                .splineTo(new Vector2d(30.00, -12.00), Math.toRadians(0.00))
+                .splineTo(new Vector2d(36.00, -24.00), Math.toRadians(0.00))
+                .splineTo(new Vector2d(42.00, -36.00), Math.toRadians(0.00))
+                .splineTo(new Vector2d(48.00, -60.00), Math.toRadians(0.00))
+                .splineTo(new Vector2d(60.00, -60.00), Math.toRadians(0.00))
                 .build();
+
 
         waitForStart();
 
         if (isStopRequested()) return;
 
-        drive.followTrajectorySequence(Test_1);
+        drive.followTrajectorySequence(Test_One);
     }
 }

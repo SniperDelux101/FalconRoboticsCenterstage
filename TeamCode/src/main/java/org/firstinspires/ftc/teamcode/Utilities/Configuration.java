@@ -8,11 +8,12 @@ import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 public class Configuration {
 
     // TRACKWIDTH is the distance between mecanum wheels
-    public static double TRACKWIDTH = 13.03656277;
+    public static double TRACKWIDTH = 2.54; //11.6003937; //5.33
 
     public static double TRACKTURN = 2.7705;
 
-    public static double FORWARD_OFFSET = -5.983669448819;
+    public static double FORWARD_OFFSET = -5.00; //-5.983669448819
+    public static double LATERAL_DISTANCE = 10.281731791974025;
     public static double CENTER_WHEEL_OFSET= 5.983669448819;
 
     //public static double FORWARD_OFFSET = 5.983669448819; // in; offset of the lateral wheel (original : 6.25)
@@ -21,16 +22,16 @@ public class Configuration {
 
 //    public static double WHEEL_RADIUS = 1.49606;
     public static double WHEEL_RADIUS = 1.8898;
-    public static double X_MULTIPLIER = 0.1085485156;
-    public static double Y_MULTIPLIER = 0.1081264908;
+    public static double X_MULTIPLIER = 0.1073685635;
+    public static double Y_MULTIPLIER = .1075361015;
     public static double TICKS_PER_REV = 8192;
     public static double DISTANCE_PER_PULSE = Math.PI * Configuration.WHEEL_RADIUS / Configuration.TICKS_PER_REV;
     public static double GEAR_RATIO = 3.7; // output (wheel) speed / input (motor) speed [Should be 4.5 or 0.2222222]
-    public static final double MAX_RPM = 1620;
+    public static double MAX_RPM = 1620;
 
     public static double LATERAL_LIMITER = 0.3;
 
-    public static final double DrivePower = .75;
+    public static double DrivePower = 0.25;
 
     /*
      * Set RUN_USING_ENCODER to true to enable built-in hub velocity control using drive encoders.
@@ -50,9 +51,9 @@ public class Configuration {
      * motor encoders or have elected not to use them for velocity control, these values should be
      * empirically tuned.
      */
-    public static double kV = 0.03470;   //1.0 / rpmToVelocity(MAX_RPM);
-    public static double kA = 0.00178;
-    public static double kStatic = 0.15923;
+    public static double kV = 0.04086;   //1.0 / rpmToVelocity(MAX_RPM);
+    public static double kA = 0.00189;
+    public static double kStatic = 0.15552;
 
     /*
      * These values are used to generate the trajectories for you robot. To ensure proper operation,
@@ -61,9 +62,9 @@ public class Configuration {
      * small and gradually increase them later after everything is working. All distance units are
      * inches.
      */
-    public static double MAX_VEL = 86.2372776302014; //0.07703451419276926
+    public static double MAX_VEL = 66.3358551600406; //0.07703451419276926
     public static double MAX_ACCEL = 60;
-    public static double MAX_ANG_VEL = Math.toRadians(328.57972425768406); // Or the value should be 5.734798043591667
+    public static double MAX_ANG_VEL = Math.toRadians(429.46415917726625); // Or the value should be 7.995426528314827
     public static double MAX_ANG_ACCEL = Math.toRadians(240);
 
 
@@ -91,7 +92,7 @@ public class Configuration {
     public static double LEFT_ODO_DROP_POSITION = 0.019999999999999858;
     public static double LEFT_ODO_RETRACT_POSITION = 0.3800000000000001;
 
-    public static double REAR_ODO_DROP_POSITION = 0.6700000000000005;
+    public static double REAR_ODO_DROP_POSITION = 0.7400000000000005;
     public static double REAR_ODO_RETRACT_POSITION = 7.289999999999889;
 
     public static double RIGHT_ODO_DROP_POSITION = 0.46000000000000004;
@@ -110,6 +111,17 @@ public class Configuration {
     //****************************************************************************************************************//
     // Tuning Values for BackAndForth
 
+    public static double BACK_AND_FORTH_kP_HEADING = 10;
+    public static double BACK_AND_FORTH_kP_TRANSLATION = 12;
+    public static double BACK_AND_FORTH_kI_Heading = 0;
+    public static double BACK_AND_FORTH_kI_TRANSLATION = 0;
+    public static double BACK_AND_FORTH_kD_Heading = 0;
+    public static double BACK_AND_FORTH_kD_TRANSLATION = 0;
 
+
+
+    public static double OMEGA_WEIGHT = 0.1;
+    public static double VX_WEIGHT = 0.1;
+    public static double VY_WEIGHT = 0.1;
 
 }

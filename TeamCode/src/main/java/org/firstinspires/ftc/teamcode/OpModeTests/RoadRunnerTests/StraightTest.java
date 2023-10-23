@@ -20,7 +20,7 @@ import org.firstinspires.ftc.teamcode.Utilities.Configuration;;
 @Autonomous(group = "drive")
 public class StraightTest extends CommandOpMode {
 
-    public static double DISTANCE = 12; // in
+    public static double DISTANCE = 60; // in
     public static double SLOWVELOCITY = 4;
 
     private MecanumDriveSubsystem drive;
