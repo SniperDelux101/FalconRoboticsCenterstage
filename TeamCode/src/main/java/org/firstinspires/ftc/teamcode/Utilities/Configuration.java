@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 public class Configuration {
 
     // TRACKWIDTH is the distance between mecanum wheels
-    public static double TRACKWIDTH = 2.54; //11.6003937; //5.33
+    public static double TRACKWIDTH = 10.281731791974025; //11.6003937; //5.33
 
     public static double TRACKTURN = 2.7705;
 
@@ -51,9 +51,9 @@ public class Configuration {
      * motor encoders or have elected not to use them for velocity control, these values should be
      * empirically tuned.
      */
-    public static double kV = 0.04086;   //1.0 / rpmToVelocity(MAX_RPM);
-    public static double kA = 0.00189;
-    public static double kStatic = 0.15552;
+    public static double kV = 0.01;   //1.0 / rpmToVelocity(MAX_RPM);
+    public static double kA = 0.009005;
+    public static double kStatic = 0.0020;
 
     /*
      * These values are used to generate the trajectories for you robot. To ensure proper operation,
@@ -64,7 +64,7 @@ public class Configuration {
      */
     public static double MAX_VEL = 66.3358551600406; //0.07703451419276926
     public static double MAX_ACCEL = 60;
-    public static double MAX_ANG_VEL = Math.toRadians(429.46415917726625); // Or the value should be 7.995426528314827
+    public static double MAX_ANG_VEL = Math.toRadians(283.45147911747597); // Or the value should be 7.995426528314827
     public static double MAX_ANG_ACCEL = Math.toRadians(240);
 
 
@@ -110,15 +110,6 @@ public class Configuration {
 
     //****************************************************************************************************************//
     // Tuning Values for BackAndForth
-
-    public static double BACK_AND_FORTH_kP_HEADING = 10;
-    public static double BACK_AND_FORTH_kP_TRANSLATION = 12;
-    public static double BACK_AND_FORTH_kI_Heading = 0;
-    public static double BACK_AND_FORTH_kI_TRANSLATION = 0;
-    public static double BACK_AND_FORTH_kD_Heading = 0;
-    public static double BACK_AND_FORTH_kD_TRANSLATION = 0;
-
-
 
     public static double OMEGA_WEIGHT = 0.1;
     public static double VX_WEIGHT = 0.1;

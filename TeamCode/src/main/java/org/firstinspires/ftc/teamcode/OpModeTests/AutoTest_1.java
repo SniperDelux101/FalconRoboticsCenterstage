@@ -27,23 +27,28 @@ public class AutoTest_1 extends LinearOpMode {
          drive = new FalconMecanumDrive(hardwareMap);
          drive.setPoseEstimate(StartPos);
 
-        TrajectorySequence Test_One = drive.trajectorySequenceBuilder(new Pose2d(-36.00, -70.00, Math.toRadians(90.00)))
-                .splineTo(new Vector2d(-36.00, -50.00), Math.toRadians(0.00))
-                .splineTo(new Vector2d(-36.00, -24.00), Math.toRadians(0.00))
-                .splineTo(new Vector2d(-36.00, -12.00), Math.toRadians(0.00))
-                .splineTo(new Vector2d(-0.00, -12.00), Math.toRadians(0.00))
-                .splineTo(new Vector2d(30.00, -12.00), Math.toRadians(0.00))
-                .splineTo(new Vector2d(36.00, -24.00), Math.toRadians(0.00))
-                .splineTo(new Vector2d(42.00, -36.00), Math.toRadians(0.00))
-                .splineTo(new Vector2d(48.00, -60.00), Math.toRadians(0.00))
-                .splineTo(new Vector2d(60.00, -60.00), Math.toRadians(0.00))
+        TrajectorySequence NewTest_Four = drive.trajectorySequenceBuilder(new Pose2d(-36.00, -64.00, Math.toRadians(90.00)))
+                .splineTo(new Vector2d(-36.00, -32.00), Math.toRadians(90.00))
+                .splineTo(new Vector2d(-54.00, -12.00), Math.toRadians(90.00))
+                .splineTo(new Vector2d(-54.00, 32.00), Math.toRadians(90.00))
+                .splineTo(new Vector2d(-54.00, 58.00), Math.toRadians(0.00))
+                .splineTo(new Vector2d(-40.00, 58.00), Math.toRadians(0.00))
+                .splineTo(new Vector2d(-35.00, 36.00), Math.toRadians(-90.00))
+                .splineTo(new Vector2d(-35.00, 12.00), Math.toRadians(270.00))
+                .splineTo(new Vector2d(-12.00, 12.00), Math.toRadians(0.00))
+                .splineTo(new Vector2d(12.00, 12.00), Math.toRadians(0.00))
+                .splineTo(new Vector2d(30.00, 12.00), Math.toRadians(0.00))
+                .splineTo(new Vector2d(32.00, -12.00), Math.toRadians(270.00))
+                .splineTo(new Vector2d(12.00, -12.00), Math.toRadians(180.00))
+                .splineTo(new Vector2d(-12.00, -12.00), Math.toRadians(180.00))
+                .splineTo(new Vector2d(-32.00, -12.00), Math.toRadians(180.00))
+                .splineTo(new Vector2d(-36.00, -58.00), Math.toRadians(270.00))
                 .build();
-
 
         waitForStart();
 
         if (isStopRequested()) return;
 
-        drive.followTrajectorySequence(Test_One);
+        drive.followTrajectorySequence(NewTest_Four);
     }
 }

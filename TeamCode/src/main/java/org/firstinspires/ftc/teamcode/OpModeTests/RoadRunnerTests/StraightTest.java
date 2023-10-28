@@ -20,8 +20,7 @@ import org.firstinspires.ftc.teamcode.Utilities.Configuration;;
 @Autonomous(group = "drive")
 public class StraightTest extends CommandOpMode {
 
-    public static double DISTANCE = 60; // in
-    public static double SLOWVELOCITY = 4;
+    public static double DISTANCE = 50; // in
 
     private MecanumDriveSubsystem drive;
     private TrajectoryFollowerCommand straightFollower;
@@ -31,8 +30,7 @@ public class StraightTest extends CommandOpMode {
         drive = new MecanumDriveSubsystem(new FalconMecanumDrive(hardwareMap), false);
         straightFollower = new TrajectoryFollowerCommand(drive,
                 drive.trajectoryBuilder(new Pose2d())
-                        .forward(DISTANCE,FalconMecanumDrive.getVelocityConstraint(SLOWVELOCITY, Configuration.MAX_ANG_VEL, Configuration.TRACKWIDTH),
-                                FalconMecanumDrive.getAccelerationConstraint(Configuration.MAX_ACCEL))
+                        .forward(DISTANCE)
                         .build()
         );
         schedule(new WaitUntilCommand(this::isStarted).andThen(straightFollower.whenFinished(() -> {

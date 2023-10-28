@@ -53,8 +53,8 @@ import static org.firstinspires.ftc.teamcode.Utilities.Configuration.kV;
  */
 @Config
 public class FalconMecanumDrive extends MecanumDrive {
-    public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(Configuration.BACK_AND_FORTH_kP_TRANSLATION, Configuration.BACK_AND_FORTH_kI_TRANSLATION, Configuration.BACK_AND_FORTH_kD_TRANSLATION);
-    public static PIDCoefficients HEADING_PID = new PIDCoefficients(Configuration.BACK_AND_FORTH_kP_HEADING, Configuration.BACK_AND_FORTH_kI_Heading, Configuration.BACK_AND_FORTH_kD_Heading);
+    public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(18, 0, 4);
+    public static PIDCoefficients HEADING_PID = new PIDCoefficients(70, 0, 0);
 
     public static double LATERAL_MULTIPLIER = 1;
 
