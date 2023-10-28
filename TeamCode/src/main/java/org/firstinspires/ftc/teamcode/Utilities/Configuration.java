@@ -14,13 +14,13 @@ public class Configuration {
 
     public static double FORWARD_OFFSET = -5.00; //-5.983669448819
     public static double LATERAL_DISTANCE = 10.281731791974025;
-    public static double CENTER_WHEEL_OFSET= 5.983669448819;
+    public static double CENTER_WHEEL_OFSET = 5.983669448819;
 
     //public static double FORWARD_OFFSET = 5.983669448819; // in; offset of the lateral wheel (original : 6.25)
 
 //    public static double WHEEL_DIAMETER =  1.49606;
 
-//    public static double WHEEL_RADIUS = 1.49606;
+    //    public static double WHEEL_RADIUS = 1.49606;
     public static double WHEEL_RADIUS = 1.8898;
     public static double X_MULTIPLIER = 0.1073685635;
     public static double Y_MULTIPLIER = .1075361015;
@@ -106,23 +106,22 @@ public class Configuration {
 
     //****************************************************************************************************************//
     //Linear Slide Motor Values / Percentages
-
     public static double LINEAR_SLIDE_POWER = 0.75;
-
     public static int LINEAR_SLIDE_POS_HOME = 0;
     public static int LINEAR_SLIDE_POS_LO = 1200;
     public static int LINEAR_SLIDE_POS_MED = 1600;
     public static int LINEAR_SLIDE_POS_HI = 2000;
-  
+
     //****************************************************************************************************************//
     // Tuning values for odometry servos
-  
     public static boolean ODO_SERVO_TRUE = true;
     public static boolean ODO_SERVO_FALSE = false;
-  
-  //****************************************************************************************************************//
+
+    //****************************************************************************************************************//
     // Tuning Values for BackAndForth
-  
     public static double OMEGA_WEIGHT = 0.1;
     public static double VX_WEIGHT = 0.1;
     public static double VY_WEIGHT = 0.1;
+
+
+}
