@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Subsystems.drive;
+package org.firstinspires.ftc.teamcode.OpModeTests.RoadRunnerTests;
 
 import androidx.annotation.NonNull;
 
@@ -41,8 +41,8 @@ public class StandardTrackingWheelLocalizer extends ThreeTrackingWheelLocalizer 
 
     public StandardTrackingWheelLocalizer(HardwareMap hardwareMap, List<Integer> lastTrackingEncPositions, List<Integer> lastTrackingEncVels) {
         super(Arrays.asList(
-                new Pose2d(0, Configuration.TRACKWIDTH / 2, 0), // left
-                new Pose2d(0, -Configuration.TRACKWIDTH / 2, 0), // right
+                new Pose2d(0, Configuration.LATERAL_DISTANCE / 2, 0), // left
+                new Pose2d(0, -Configuration.LATERAL_DISTANCE / 2, 0), // right
                 new Pose2d(Configuration.FORWARD_OFFSET, 0, Math.toRadians(90)) // front
         ));
 

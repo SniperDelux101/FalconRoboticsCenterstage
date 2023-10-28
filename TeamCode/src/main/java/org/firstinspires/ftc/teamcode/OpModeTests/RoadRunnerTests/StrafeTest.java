@@ -19,7 +19,7 @@ import org.firstinspires.ftc.teamcode.Subsystems.MecanumDriveSubsystem;
 @Autonomous(group = "drive")
 public class StrafeTest extends CommandOpMode {
 
-    public static double DISTANCE = 10; // in
+    public static double DISTANCE = 35; // in
 
     private MecanumDriveSubsystem drive;
     private TrajectoryFollowerCommand strafeFollower;

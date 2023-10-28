@@ -13,7 +13,6 @@ import com.qualcomm.robotcore.util.RobotLog;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.internal.system.Misc;
 import org.firstinspires.ftc.teamcode.Subsystems.drive.FalconMecanumDrive;
-import org.firstinspires.ftc.teamcode.Subsystems.drive.StandardTrackingWheelLocalizer;
 import org.firstinspires.ftc.teamcode.Utilities.Configuration;
 
 /**
