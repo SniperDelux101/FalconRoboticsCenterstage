@@ -96,6 +96,15 @@ public class Configuration {
 
     //****************************************************************************************************************//
     //Intake Motor Values / Percentages
-
     public static double INTAKE_MOTOR_POWER = 0.10;
+
+    //****************************************************************************************************************//
+    //Linear Slide Motor Values / Percentages
+
+    public static double LINEAR_SLIDE_POWER = 0.75;
+
+    public static int LINEAR_SLIDE_POS_HOME = 0;
+    public static int LINEAR_SLIDE_POS_LO = 1200;
+    public static int LINEAR_SLIDE_POS_MED = 1600;
+    public static int LINEAR_SLIDE_POS_HI = 2000;
 }
