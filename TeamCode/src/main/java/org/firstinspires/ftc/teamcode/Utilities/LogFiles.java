@@ -16,10 +16,8 @@ import com.qualcomm.robotcore.util.WebHandlerManager;
 
 import org.firstinspires.ftc.ftccommon.external.WebHandlerRegistrar;
 import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
-import org.firstinspires.ftc.teamcode.Utilities.Configuration;
 import org.firstinspires.ftc.teamcode.Subsystems.drive.FalconMecanumDrive;
 import org.firstinspires.ftc.teamcode.Subsystems.drive.SampleTankDrive;
-import org.firstinspires.ftc.teamcode.Subsystems.drive.StandardTrackingWheelLocalizer;
 
 import java.io.File;
 import java.io.FileInputStream;
