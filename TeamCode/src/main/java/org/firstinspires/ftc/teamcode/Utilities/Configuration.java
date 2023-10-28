@@ -102,17 +102,27 @@ public class Configuration {
 
     //****************************************************************************************************************//
     //Intake Motor Values / Percentages
-
     public static double INTAKE_MOTOR_POWER = 0.10;
 
+    //****************************************************************************************************************//
+    //Linear Slide Motor Values / Percentages
+
+    public static double LINEAR_SLIDE_POWER = 0.75;
+
+    public static int LINEAR_SLIDE_POS_HOME = 0;
+    public static int LINEAR_SLIDE_POS_LO = 1200;
+    public static int LINEAR_SLIDE_POS_MED = 1600;
+    public static int LINEAR_SLIDE_POS_HI = 2000;
+  
+    //****************************************************************************************************************//
+    // Tuning values for odometry servos
+  
     public static boolean ODO_SERVO_TRUE = true;
     public static boolean ODO_SERVO_FALSE = false;
-
-    //****************************************************************************************************************//
+  
+  //****************************************************************************************************************//
     // Tuning Values for BackAndForth
-
+  
     public static double OMEGA_WEIGHT = 0.1;
     public static double VX_WEIGHT = 0.1;
     public static double VY_WEIGHT = 0.1;
-
-}
