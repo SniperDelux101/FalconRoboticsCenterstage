@@ -106,7 +106,9 @@ public class Configuration {
 
     //****************************************************************************************************************//
     //Linear Slide Motor Values / Percentages
+
     public static double LINEAR_SLIDE_POWER = 0.75;
+
     public static int LINEAR_SLIDE_POS_HOME = 0;
     public static int LINEAR_SLIDE_POS_LO = 1200;
     public static int LINEAR_SLIDE_POS_MED = 1600;
@@ -114,14 +116,21 @@ public class Configuration {
 
     //****************************************************************************************************************//
     // Tuning values for odometry servos
+
     public static boolean ODO_SERVO_TRUE = true;
     public static boolean ODO_SERVO_FALSE = false;
 
     //****************************************************************************************************************//
     // Tuning Values for BackAndForth
+
     public static double OMEGA_WEIGHT = 0.1;
     public static double VX_WEIGHT = 0.1;
     public static double VY_WEIGHT = 0.1;
 
+    //****************************************************************************************************************//
+    // Values for Climb Mechanism
+
+    public static int CLIMB_OUT = 150;
+    public static int CLIMB_IN = 0;
 
 }
