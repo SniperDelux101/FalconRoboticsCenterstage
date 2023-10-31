@@ -161,4 +161,7 @@ public class Configuration {
     public static double LAUNCH_RELEASE = 45;
     public static double LAUNCH_RETRACT = 15;
 
+    //************************************************************
+    // Confidence configuration for the vision
+    public static double CONFIDENCE_SCORE = .75;
 }

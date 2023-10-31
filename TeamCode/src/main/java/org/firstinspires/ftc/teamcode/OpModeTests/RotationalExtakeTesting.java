@@ -5,19 +5,19 @@ import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import org.firstinspires.ftc.teamcode.Subsystems.RotationalExtakeSubsystem;
+import org.firstinspires.ftc.teamcode.Subsystems.ExtakeSubsystem;
 import org.firstinspires.ftc.teamcode.Utilities.Configuration;
 
 @Config
 @TeleOp(group = "subsystems test")
 public class RotationalExtakeTesting extends OpMode {
 
-    private RotationalExtakeSubsystem rotationalExtakeSubsystem;
+    private ExtakeSubsystem rotationalExtakeSubsystem;
 
     @Override
     public void init() {
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
-        rotationalExtakeSubsystem = new RotationalExtakeSubsystem(hardwareMap);
+        rotationalExtakeSubsystem = new ExtakeSubsystem(hardwareMap);
     }
     @Override
     public void loop() {
