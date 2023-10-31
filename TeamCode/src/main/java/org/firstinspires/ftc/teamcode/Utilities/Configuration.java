@@ -113,6 +113,7 @@ public class Configuration {
     public static int LINEAR_SLIDE_POS_LO = 1200;
     public static int LINEAR_SLIDE_POS_MED = 1600;
     public static int LINEAR_SLIDE_POS_HI = 2000;
+    public static int LINEAR_SLIDE_MULTIPLIER = 10;
 
     //****************************************************************************************************************//
     // Tuning values for odometry servos
@@ -132,5 +133,17 @@ public class Configuration {
 
     public static int CLIMB_OUT = 150;
     public static int CLIMB_IN = 0;
+    public static int CLIMB_MULTIPLIER = 10;
+
+
+    //****************************************************************************************************************//
+    // Values for horizontal extake servo
+
+    public static double R_SERVO_MIN = 0;
+    public static double R_SERVO_MAX = 90;
+    public static double R_SERVO_LEFT = 10;
+    public static double R_SERVO_CENTER = 20;
+    public static double R_SERVO_RIGHT = 30;
+
 
 }
