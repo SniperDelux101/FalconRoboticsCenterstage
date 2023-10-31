@@ -18,23 +18,46 @@ public class OdometryControlSubsystem extends SubsystemBase {
 
         servoRear = new SimpleServo(hMap, "Rear_Odometry_Servo", Configuration.ODO_MIN_ANGLE, Configuration.ODO_MAX_ANGLE);
 
-        servoLeft.setInverted(false);
-        servoRight.setInverted(true);
-        servoRear.setInverted(false);
+        servoLeft.setInverted(Configuration.ODO_SERVO_FALSE);
+        servoRight.setInverted(Configuration.ODO_SERVO_TRUE);
+        servoRear.setInverted(Configuration.ODO_SERVO_FALSE);
 
     }
 
+    public void dropLeft() {
+        servoLeft.setPosition(Configuration.LEFT_ODO_DROP_POSITION);
+    }
+
+    public void dropRight() {
+        servoRight.setPosition(Configuration.RIGHT_ODO_DROP_POSITION);
+    }
+
+    public void dropRear() {
+        servoRear.setPosition(Configuration.REAR_ODO_DROP_POSITION);
+    }
+
+    public void retractLeft() {
+        servoLeft.setPosition(Configuration.LEFT_ODO_RETRACT_POSITION);
+    }
+
+    public void retractRight() {
+        servoRight.setPosition(Configuration.RIGHT_ODO_RETRACT_POSITION);
+    }
+
+    public void retractRear() {
+        servoRear.setPosition(Configuration.REAR_ODO_RETRACT_POSITION);
+    }
 
     public void drop() {
-        servoLeft.setPosition(Configuration.ODO_DROP_POSITION);
-        servoRight.setPosition(Configuration.ODO_DROP_POSITION);
-        servoRear.setPosition(Configuration.ODO_DROP_POSITION);
+        servoLeft.setPosition(Configuration.LEFT_ODO_DROP_POSITION);
+        servoRight.setPosition(Configuration.RIGHT_ODO_DROP_POSITION);
+        servoRear.setPosition(Configuration.REAR_ODO_DROP_POSITION);
     }
 
     public void retract() {
-        servoLeft.setPosition(Configuration.ODO_RETRACT_POSITION);
-        servoRight.setPosition(Configuration.ODO_RETRACT_POSITION);
-        servoRear.setPosition(Configuration.ODO_RETRACT_POSITION);
+        servoLeft.setPosition(Configuration.LEFT_ODO_RETRACT_POSITION);
+        servoRight.setPosition(Configuration.RIGHT_ODO_RETRACT_POSITION);
+        servoRear.setPosition(Configuration.REAR_ODO_RETRACT_POSITION);
     }
 
 }

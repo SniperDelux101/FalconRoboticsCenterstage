@@ -11,6 +11,19 @@ import org.firstinspires.ftc.teamcode.Subsystems.IntakeMotorSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.OdometryControlSubsystem;
 import org.firstinspires.ftc.teamcode.Utilities.Configuration;
 
+/*
+This testing OpMode just makes sure that the motion of the motors for intake is accurate
+    ** This testing only utilizes gamepad one **
+
+    Right Bumper -------> Motor Forward
+    Left Bumper -------> Motor Reverse
+
+    Button B -------> Stops motors
+
+ */
+
+
+
 @Config
 @TeleOp(group = "subsystems test")
 public class IntakeMotorTest extends OpMode {

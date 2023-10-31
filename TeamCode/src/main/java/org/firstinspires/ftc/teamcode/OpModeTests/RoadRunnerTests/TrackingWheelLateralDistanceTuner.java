@@ -8,7 +8,6 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.teamcode.Subsystems.drive.FalconMecanumDrive;
-import org.firstinspires.ftc.teamcode.Subsystems.drive.StandardTrackingWheelLocalizer;
 import org.firstinspires.ftc.teamcode.Utilities.Configuration;
 
 /**
@@ -122,7 +121,7 @@ public class TrackingWheelLateralDistanceTuner extends LinearOpMode {
         telemetry.clearAll();
         telemetry.addLine("Localizer's total heading: " + Math.toDegrees(headingAccumulator) + "°");
         telemetry.addLine("Effective LATERAL_DISTANCE: " +
-                (headingAccumulator / (NUM_TURNS * Math.PI * 2)) * Configuration.TRACKWIDTH);
+                (headingAccumulator / (NUM_TURNS * Math.PI * 2)) * Configuration.LATERAL_DISTANCE);
 
         telemetry.update();
 
