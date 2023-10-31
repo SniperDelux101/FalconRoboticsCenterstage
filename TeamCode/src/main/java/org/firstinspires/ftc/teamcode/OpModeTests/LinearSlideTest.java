@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.Subsystems.LinearSlideSubsystem;
+import org.firstinspires.ftc.teamcode.Utilities.Configuration;
 
 @Config
 @TeleOp(group = "subsystems test")
@@ -27,23 +28,39 @@ public class LinearSlideTest extends OpMode {
 
         double pos = linearSlideSubsystem.LinearCurPos();
 
-        if(gamepad1.y) {
+        if(gamepad1.dpad_left && gamepad1.y) {
+            Configuration.LINEAR_SLIDE_POS_LO += Configuration.LINEAR_SLIDE_MULTIPLIER;
             linearSlideSubsystem.LinearPosLo();
         }
-
-
-        if(gamepad1.x) {
+        if(gamepad1.dpad_left && gamepad1.a) {
+            Configuration.LINEAR_SLIDE_POS_LO -= Configuration.LINEAR_SLIDE_MULTIPLIER;
+            linearSlideSubsystem.LinearPosLo();
+        }
+        if(gamepad1.dpad_up && gamepad1.y) {
+            Configuration.LINEAR_SLIDE_POS_MED += Configuration.LINEAR_SLIDE_MULTIPLIER;
             linearSlideSubsystem.LinearPosMed();
         }
-
-        if(gamepad1.a) {
+        if(gamepad1.dpad_up && gamepad1.a) {
+            Configuration.LINEAR_SLIDE_POS_MED -= Configuration.LINEAR_SLIDE_MULTIPLIER;
+            linearSlideSubsystem.LinearPosMed();
+        }
+        if(gamepad1.dpad_right && gamepad1.y) {
+            Configuration.LINEAR_SLIDE_POS_HI += Configuration.LINEAR_SLIDE_MULTIPLIER;
             linearSlideSubsystem.LinearPosHi();
         }
-
-        if(gamepad1.b) {
-            linearSlideSubsystem.LinearStop();
+        if(gamepad1.dpad_right && gamepad1.a) {
+            Configuration.LINEAR_SLIDE_POS_HI -= Configuration.LINEAR_SLIDE_MULTIPLIER;
+            linearSlideSubsystem.LinearPosHi();
         }
-
+        if(gamepad1.left_stick_button) {
+            linearSlideSubsystem.LinearPosLo();
+        }
+        if(gamepad1.touchpad) {
+            linearSlideSubsystem.LinearPosMed();
+        }
+        if(gamepad1.right_stick_button) {
+            linearSlideSubsystem.LinearPosHi();
+        }
 
         telemetry.addData("Current Motor Position : ", pos);
         telemetry.update();

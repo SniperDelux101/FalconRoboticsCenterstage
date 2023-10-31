@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.OpModeTests;
 
+import android.graphics.Bitmap;
+
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
@@ -7,6 +9,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.teamcode.Subsystems.ClimbSubsytem;
 import org.firstinspires.ftc.teamcode.Subsystems.LinearSlideSubsystem;
+import org.firstinspires.ftc.teamcode.Utilities.Configuration;
 
 public class ClimbTest extends OpMode {
 
@@ -21,13 +24,27 @@ public class ClimbTest extends OpMode {
     @Override
     public void loop() {
 
-        if(gamepad1.left_bumper) {
-            climbSubsytem.ClimbOut();
-        }
-
-        if(gamepad1.right_bumper) {
+        if(gamepad1.left_bumper && gamepad1.y) {
+            Configuration.CLIMB_IN -= Configuration.CLIMB_MULTIPLIER;
             climbSubsytem.ClimbIn();
         }
-
+        if(gamepad1.left_bumper && gamepad1.a) {
+            Configuration.CLIMB_IN += Configuration.CLIMB_MULTIPLIER;
+            climbSubsytem.ClimbIn();
+        }
+        if(gamepad1.right_bumper && gamepad1.y) {
+            Configuration.CLIMB_OUT -= Configuration.CLIMB_MULTIPLIER;
+            climbSubsytem.ClimbOut();
+        }
+        if(gamepad1.right_bumper && gamepad1.a) {
+            Configuration.CLIMB_OUT += Configuration.CLIMB_MULTIPLIER;
+            climbSubsytem.ClimbOut();
+        }
+        if(gamepad1.dpad_up) {
+            climbSubsytem.ClimbIn();
+        }
+        if(gamepad1.dpad_down) {
+            climbSubsytem.ClimbOut();
+        }
     }
 }
