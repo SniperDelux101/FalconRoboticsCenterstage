@@ -144,6 +144,6 @@ public class Configuration {
     public static double R_SERVO_LEFT = 10;
     public static double R_SERVO_CENTER = 20;
     public static double R_SERVO_RIGHT = 30;
-
+    public static double R_SERVO_MULTIPLIER = 5;
 
 }
