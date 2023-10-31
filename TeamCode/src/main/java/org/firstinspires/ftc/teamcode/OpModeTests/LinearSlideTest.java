@@ -34,8 +34,6 @@ This testing program allows for the configuration of the linear slide positionin
  */
 
 
-
-
 @Config
 @TeleOp(group = "subsystems test")
 public class LinearSlideTest extends OpMode {
