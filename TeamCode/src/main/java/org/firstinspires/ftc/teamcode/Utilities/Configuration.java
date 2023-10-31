@@ -133,4 +133,18 @@ public class Configuration {
     public static int CLIMB_OUT = 150;
     public static int CLIMB_IN = 0;
 
+    //****************************************************************************************************************//
+    // Values for horizontal extake servo
+
+    public static double H_SERVO_MIN = 0;
+    public static double H_SERVO_MAX = 90;
+
+    //****************************************************************************************************************//
+    // Values for launching servo
+
+    public static double LAUNCHING_MIN = 0;
+    public static double LAUNCHING_MAX = 90;
+    public static double LAUNCH_RELEASE = 45;
+    public static double LAUNCH_RETRACT = 15;
+
 }
