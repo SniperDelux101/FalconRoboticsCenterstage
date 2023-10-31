@@ -15,7 +15,6 @@ public class RotationalExtakeSubsystem extends SubsystemBase {
     public RotationalExtakeSubsystem(HardwareMap hMap) {
         r_Servo = new SimpleServo(hMap, "Extake_Rotational_Servo", Configuration.R_SERVO_MIN, Configuration.R_SERVO_MAX);
     }
-
     public void leftRotation() {
         r_Servo.setPosition(Configuration.R_SERVO_LEFT);
     }

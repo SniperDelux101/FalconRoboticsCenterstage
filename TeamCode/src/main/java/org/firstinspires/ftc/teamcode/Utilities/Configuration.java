@@ -113,6 +113,7 @@ public class Configuration {
     public static int LINEAR_SLIDE_POS_LO = 1200;
     public static int LINEAR_SLIDE_POS_MED = 1600;
     public static int LINEAR_SLIDE_POS_HI = 2000;
+    public static int LINEAR_SLIDE_POS_TRANSFER = 800;
     public static int LINEAR_SLIDE_MULTIPLIER = 10;
 
     //****************************************************************************************************************//
