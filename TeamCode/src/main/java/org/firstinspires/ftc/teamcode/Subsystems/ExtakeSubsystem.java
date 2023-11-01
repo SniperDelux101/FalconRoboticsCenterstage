@@ -47,6 +47,8 @@ public class ExtakeSubsystem extends SubsystemBase {
         controlArm1.setPosition(position);
         controlArm2.setPosition(position);
     }
+
+    /// tells the servos to direction of the wheels while intake and ejecting pixels.
     public void pixelIntake(){
        pixelWheelDirection(DcMotorSimple.Direction.REVERSE);
     }
@@ -59,6 +61,7 @@ public class ExtakeSubsystem extends SubsystemBase {
 
     }
 
+    ///Tells servos which direction to move.
     public void leftRotation() {
         r_Servo.setPosition(Configuration.R_SERVO_LEFT);
     }

@@ -25,9 +25,11 @@ public class AirplaneLaunchTest extends OpMode {
             airplaneLauncherSubsystem.release();
         }
 
-        if(gamepad1.b) {
+        else if(gamepad1.b) {
             airplaneLauncherSubsystem.retract();
         }
+        telemetry.addData("current servo position",airplaneLauncherSubsystem.getLanucherServoPosition());
+        telemetry.update();
     }
 
 }

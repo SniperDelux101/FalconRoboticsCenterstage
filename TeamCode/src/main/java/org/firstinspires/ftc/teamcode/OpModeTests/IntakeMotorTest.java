@@ -46,12 +46,12 @@ public class IntakeMotorTest extends OpMode {
             direction = "Forward";
         }
 
-        if(gamepad1.left_bumper) {
+        else if(gamepad1.left_bumper) {
             intakeMotorSubsystem.reverse();
             direction = "Reverse";
         }
 
-        if(gamepad1.b) {
+        else if(gamepad1.b) {
             intakeMotorSubsystem.stop();
             direction = "Stopped";
         }

@@ -53,17 +53,17 @@ public class OdometryTestOp extends OpMode {
             odometryControlSubsystem.retractLeft();
         }
 
-        if(gamepad1.a && gamepad1.dpad_left) {
+        else if(gamepad1.a && gamepad1.dpad_left) {
             Configuration.LEFT_ODO_RETRACT_POSITION -= Configuration.ODO_SERVO_MULTIPLIER;
             odometryControlSubsystem.retractLeft();
         }
 
-        if(gamepad1.x && gamepad1.dpad_left) {
+        else if(gamepad1.x && gamepad1.dpad_left) {
             Configuration.LEFT_ODO_DROP_POSITION += Configuration.ODO_SERVO_MULTIPLIER;
             odometryControlSubsystem.dropLeft();
         }
 
-        if(gamepad1.b && gamepad1.dpad_left) {
+        else if(gamepad1.b && gamepad1.dpad_left) {
             Configuration.LEFT_ODO_DROP_POSITION -= Configuration.ODO_SERVO_MULTIPLIER;
             odometryControlSubsystem.dropLeft();
 
@@ -75,38 +75,38 @@ public class OdometryTestOp extends OpMode {
                 odometryControlSubsystem.retractRear();
             }
 
-            if (gamepad1.a && gamepad1.dpad_up) {
+            else if (gamepad1.a && gamepad1.dpad_up) {
                 Configuration.REAR_ODO_RETRACT_POSITION -= Configuration.ODO_SERVO_MULTIPLIER;
                 odometryControlSubsystem.retractRear();
             }
 
-            if (gamepad1.x && gamepad1.dpad_up) {
+            else if (gamepad1.x && gamepad1.dpad_up) {
                 Configuration.REAR_ODO_DROP_POSITION += Configuration.ODO_SERVO_MULTIPLIER;
                 odometryControlSubsystem.dropRear();
             }
 
-            if (gamepad1.b && gamepad1.dpad_up) {
+            else if (gamepad1.b && gamepad1.dpad_up) {
                 Configuration.REAR_ODO_DROP_POSITION -= Configuration.ODO_SERVO_MULTIPLIER;
                 odometryControlSubsystem.dropRear();
             }
 
 // For right odo servo
-            if (gamepad1.y && gamepad1.dpad_right) {
+            else if (gamepad1.y && gamepad1.dpad_right) {
                 Configuration.RIGHT_ODO_RETRACT_POSITION += Configuration.ODO_SERVO_MULTIPLIER;
                 odometryControlSubsystem.retractRight();
             }
 
-            if (gamepad1.a && gamepad1.dpad_right) {
+            else if (gamepad1.a && gamepad1.dpad_right) {
                 Configuration.RIGHT_ODO_RETRACT_POSITION -= Configuration.ODO_SERVO_MULTIPLIER;
                 odometryControlSubsystem.retractRight();
             }
 
-            if (gamepad1.x && gamepad1.dpad_right) {
+            else if (gamepad1.x && gamepad1.dpad_right) {
                 Configuration.RIGHT_ODO_DROP_POSITION += Configuration.ODO_SERVO_MULTIPLIER;
                 odometryControlSubsystem.dropRight();
             }
 
-            if (gamepad1.b && gamepad1.dpad_right) {
+            else if (gamepad1.b && gamepad1.dpad_right) {
                 Configuration.RIGHT_ODO_DROP_POSITION -= Configuration.ODO_SERVO_MULTIPLIER;
                 odometryControlSubsystem.dropRight();
             }
@@ -117,7 +117,7 @@ public class OdometryTestOp extends OpMode {
             odometryControlSubsystem.retract();
         }
 
-        if(gamepad1.right_bumper) {
+        else if(gamepad1.right_bumper) {
             odometryControlSubsystem.drop();
         }
 

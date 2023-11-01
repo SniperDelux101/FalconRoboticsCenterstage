@@ -10,7 +10,7 @@ import org.firstinspires.ftc.teamcode.Utilities.Configuration;
 
 @Config
 @TeleOp(group = "subsystems test")
-public class RotationalExtakeTesting extends OpMode {
+public class ExtakeArmTesting extends OpMode {
 
     private ExtakeSubsystem rotationalExtakeSubsystem;
     private double controlArmPosition = 0.0;

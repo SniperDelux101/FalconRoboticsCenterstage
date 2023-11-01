@@ -17,11 +17,13 @@ public class ClimbSubsytem extends SubsystemBase {
         climbMotorRight = hMap.dcMotor.get("Climb_Motor_Right");
     }
 
+    /// tells the Climb motors to extend out
     public void ClimbOut() {
         climbMotorLeft.setTargetPosition(Configuration.CLIMB_OUT);
         climbMotorRight.setTargetPosition(Configuration.CLIMB_OUT);
     }
 
+    /// tells the climb motors to retrack in
     public void ClimbIn() {
         climbMotorLeft.setTargetPosition(Configuration.CLIMB_IN);
         climbMotorRight.setTargetPosition(Configuration.CLIMB_IN);

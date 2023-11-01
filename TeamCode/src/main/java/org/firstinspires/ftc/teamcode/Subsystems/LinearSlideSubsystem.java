@@ -22,27 +22,23 @@ public class LinearSlideSubsystem extends SubsystemBase {
     }
 
     public void LinearPosHome() {
-        linearSlideMotor.setTargetPosition(Configuration.LINEAR_SLIDE_POS_HOME);
-        linearSlideMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        linearSlideMotor.setPower(Configuration.LINEAR_SLIDE_POWER);
+        runToPosition(Configuration.LINEAR_SLIDE_POS_HOME);
     }
     public void LinearPosLo() {
-        linearSlideMotor.setTargetPosition(Configuration.LINEAR_SLIDE_POS_LO);
-        linearSlideMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        linearSlideMotor.setPower(Configuration.LINEAR_SLIDE_POWER);
+        runToPosition(Configuration.LINEAR_SLIDE_POS_LO);
     }
     public void LinearPosMed() {
-        linearSlideMotor.setTargetPosition(Configuration.LINEAR_SLIDE_POS_MED);
-        linearSlideMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        linearSlideMotor.setPower(Configuration.LINEAR_SLIDE_POWER);
+        runToPosition(Configuration.LINEAR_SLIDE_POS_MED);
     }
     public void LinearPosHi() {
-        linearSlideMotor.setTargetPosition(Configuration.LINEAR_SLIDE_POS_HI);
-        linearSlideMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        linearSlideMotor.setPower(Configuration.LINEAR_SLIDE_POWER);
+        runToPosition(Configuration.LINEAR_SLIDE_POS_HI);
     }
     public void LinearPosTransfer() {
-        linearSlideMotor.setTargetPosition(Configuration.LINEAR_SLIDE_POS_TRANSFER);
+        runToPosition(Configuration.LINEAR_SLIDE_POS_TRANSFER);
+    }
+
+    public void runToPosition(int linearSlidePosTransfer) {
+        linearSlideMotor.setTargetPosition(linearSlidePosTransfer);
         linearSlideMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         linearSlideMotor.setPower(Configuration.LINEAR_SLIDE_POWER);
     }

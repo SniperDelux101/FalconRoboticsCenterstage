@@ -44,23 +44,27 @@ public class ClimbTest extends OpMode {
             Configuration.CLIMB_IN += Configuration.CLIMB_MULTIPLIER;
             climbSubsytem.ClimbIn();
         }
-        if(gamepad1.left_bumper && gamepad1.a) {
+        else if(gamepad1.left_bumper && gamepad1.a) {
             Configuration.CLIMB_IN -= Configuration.CLIMB_MULTIPLIER;
             climbSubsytem.ClimbIn();
         }
-        if(gamepad1.right_bumper && gamepad1.y) {
+        else if(gamepad1.right_bumper && gamepad1.y) {
             Configuration.CLIMB_OUT += Configuration.CLIMB_MULTIPLIER;
             climbSubsytem.ClimbOut();
         }
-        if(gamepad1.right_bumper && gamepad1.a) {
+        else if(gamepad1.right_bumper && gamepad1.a) {
             Configuration.CLIMB_OUT -= Configuration.CLIMB_MULTIPLIER;
             climbSubsytem.ClimbOut();
         }
-        if(gamepad1.dpad_up) {
+        else if(gamepad1.dpad_up) {
             climbSubsytem.ClimbOut();
         }
-        if(gamepad1.dpad_down) {
+        else if(gamepad1.dpad_down) {
             climbSubsytem.ClimbIn();
         }
+
+        telemetry.addData("Value for clim in", Configuration.CLIMB_IN);
+        telemetry.addData("value for climb out", Configuration.CLIMB_OUT);
+        telemetry.update();
     }
 }

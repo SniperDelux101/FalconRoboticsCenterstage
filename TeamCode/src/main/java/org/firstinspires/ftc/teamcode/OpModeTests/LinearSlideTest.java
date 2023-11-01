@@ -40,7 +40,7 @@ public class LinearSlideTest extends OpMode {
 
 
     private LinearSlideSubsystem linearSlideSubsystem;
-
+    private double pos;
     @Override
     public void init() {
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
@@ -49,53 +49,52 @@ public class LinearSlideTest extends OpMode {
     @Override
     public void loop() {
 
-        double pos = linearSlideSubsystem.LinearCurPos();
 
         if(gamepad1.dpad_left && gamepad1.y) {
             Configuration.LINEAR_SLIDE_POS_LO += Configuration.LINEAR_SLIDE_MULTIPLIER;
             linearSlideSubsystem.LinearPosLo();
         }
-        if(gamepad1.dpad_left && gamepad1.a) {
+        else if(gamepad1.dpad_left && gamepad1.a) {
             Configuration.LINEAR_SLIDE_POS_LO -= Configuration.LINEAR_SLIDE_MULTIPLIER;
             linearSlideSubsystem.LinearPosLo();
         }
-        if(gamepad1.dpad_up && gamepad1.y) {
+        else if(gamepad1.dpad_up && gamepad1.y) {
             Configuration.LINEAR_SLIDE_POS_MED += Configuration.LINEAR_SLIDE_MULTIPLIER;
             linearSlideSubsystem.LinearPosMed();
         }
-        if(gamepad1.dpad_up && gamepad1.a) {
+        else if(gamepad1.dpad_up && gamepad1.a) {
             Configuration.LINEAR_SLIDE_POS_MED -= Configuration.LINEAR_SLIDE_MULTIPLIER;
             linearSlideSubsystem.LinearPosMed();
         }
-        if(gamepad1.dpad_right && gamepad1.y) {
+        else if(gamepad1.dpad_right && gamepad1.y) {
             Configuration.LINEAR_SLIDE_POS_HI += Configuration.LINEAR_SLIDE_MULTIPLIER;
             linearSlideSubsystem.LinearPosHi();
         }
-        if(gamepad1.dpad_right && gamepad1.a) {
+        else if(gamepad1.dpad_right && gamepad1.a) {
             Configuration.LINEAR_SLIDE_POS_HI -= Configuration.LINEAR_SLIDE_MULTIPLIER;
             linearSlideSubsystem.LinearPosHi();
         }
-        if(gamepad1.dpad_down && gamepad1.y) {
+        else if(gamepad1.dpad_down && gamepad1.y) {
             Configuration.LINEAR_SLIDE_POS_TRANSFER += Configuration.LINEAR_SLIDE_MULTIPLIER;
             linearSlideSubsystem.LinearPosTransfer();
         }
-        if(gamepad1.dpad_down && gamepad1.a) {
+        else if(gamepad1.dpad_down && gamepad1.a) {
             Configuration.LINEAR_SLIDE_POS_TRANSFER -= Configuration.LINEAR_SLIDE_MULTIPLIER;
             linearSlideSubsystem.LinearPosTransfer();
         }
-        if(gamepad1.dpad_left && gamepad1.right_bumper) {
+        else if(gamepad1.dpad_left && gamepad1.right_bumper) {
             linearSlideSubsystem.LinearPosLo();
         }
-        if(gamepad1.dpad_up && gamepad1.right_bumper) {
+        else if(gamepad1.dpad_up && gamepad1.right_bumper) {
             linearSlideSubsystem.LinearPosMed();
         }
-        if(gamepad1.dpad_right && gamepad1.right_bumper) {
+        else if(gamepad1.dpad_right && gamepad1.right_bumper) {
             linearSlideSubsystem.LinearPosHi();
         }
-        if(gamepad1.dpad_down && gamepad1.right_bumper) {
+        else if(gamepad1.dpad_down && gamepad1.right_bumper) {
             linearSlideSubsystem.LinearPosTransfer();
         }
-
+        pos = linearSlideSubsystem.LinearCurPos();
         telemetry.addData("Current Motor Position : ", pos);
         telemetry.update();
 

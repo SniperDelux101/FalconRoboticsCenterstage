@@ -21,6 +21,9 @@ public class AirplaneLauncherSubsystem extends SubsystemBase {
     public void release() {
         launchServo.setPosition(Configuration.LAUNCH_RELEASE);
     }
+    public double getLanucherServoPosition(){
+        return launchServo.getPosition();
+    }
 
     public void retract() {
         launchServo.setPosition(Configuration.LAUNCH_RETRACT);
