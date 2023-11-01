@@ -4,6 +4,8 @@ import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 
+import org.checkerframework.checker.index.qual.PolyUpperBound;
+
 @Config
 public class Configuration {
 
@@ -153,6 +155,15 @@ public class Configuration {
     public static double H_SERVO_MIN = 0;
     public static double H_SERVO_MAX = 90;
 
+    public static double E_MIN_ARM_ANGLE = 0.0;
+    public static double E_MAX_ARM_ANGLE = 90.0;
+
+    public static double BOARD_HIGH_POSITION= 10.0 ;
+    public static double BOARD_MID_POSITION= 10.0;
+    public static double BOARD_LOW_POSITION=10.0;
+    public static double REST_POSITION=10.0;
+    public static double INTAKE_POSITION=10.0;
+
     //****************************************************************************************************************//
     // Values for launching servo
 
@@ -164,4 +175,6 @@ public class Configuration {
     //************************************************************
     // Confidence configuration for the vision
     public static double CONFIDENCE_SCORE = .75;
+
+    //
 }

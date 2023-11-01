@@ -13,11 +13,40 @@ public class ExtakeSubsystem extends SubsystemBase {
     private final SimpleServo r_Servo;
     private final CRServo pixelWheel;
 
+    private final SimpleServo controlArm1;
+    private final  SimpleServo controlArm2;
+
+
     public ExtakeSubsystem(HardwareMap hMap) {
         r_Servo = new SimpleServo(hMap, "Extake_Rotational_Servo", Configuration.R_SERVO_MIN, Configuration.R_SERVO_MAX);
         pixelWheel = hMap.get(CRServo.class, "pixelwheel");
+        controlArm1 = new SimpleServo(hMap, "arm1", Configuration.E_MIN_ARM_ANGLE, Configuration.E_MAX_ARM_ANGLE);
+        controlArm2 = new SimpleServo(hMap, "arm2", Configuration.E_MIN_ARM_ANGLE, Configuration.E_MAX_ARM_ANGLE);
     }
 
+    public void setControlArmToHighBoard (){
+       setControlArmPosition(Configuration.BOARD_HIGH_POSITION);
+    }
+    public void setControlArmToMidBoard (){
+        setControlArmPosition(Configuration.BOARD_MID_POSITION);
+    }
+    public void setControlArmToLowBoard (){
+        setControlArmPosition(Configuration.BOARD_LOW_POSITION);
+    }
+    public void setControlArmToIntake (){
+        setControlArmPosition(Configuration.INTAKE_POSITION);
+    }
+    public void setControlArmToRest(){
+        setControlArmPosition(Configuration.REST_POSITION);
+    }
+
+    /*
+    sets the positions for the arms and how far up and down it can go.
+     */
+    public void setControlArmPosition (double position){
+        controlArm1.setPosition(position);
+        controlArm2.setPosition(position);
+    }
     public void pixelIntake(){
        pixelWheelDirection(DcMotorSimple.Direction.REVERSE);
     }
