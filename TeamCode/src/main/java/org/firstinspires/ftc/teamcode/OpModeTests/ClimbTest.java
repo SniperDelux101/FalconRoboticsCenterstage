@@ -1,16 +1,11 @@
 package org.firstinspires.ftc.teamcode.OpModeTests;
 
-import android.graphics.Bitmap;
-
 import com.acmerobotics.dashboard.FtcDashboard;
-import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
-import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.Subsystems.ClimbSubsytem;
-import org.firstinspires.ftc.teamcode.Subsystems.LinearSlideSubsystem;
+import org.firstinspires.ftc.teamcode.Subsystems.ClimbSubsystem;
 import org.firstinspires.ftc.teamcode.Utilities.Configuration;
 
 /*
@@ -29,12 +24,12 @@ This testing OpMode controls the configuration of the positioning regarding the 
 @TeleOp(group = "subsystems test")
 public class ClimbTest extends OpMode {
 
-    private ClimbSubsytem climbSubsytem;
+    private ClimbSubsystem climbSubsystem;
 
     @Override
     public void init() {
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
-        climbSubsytem = new ClimbSubsytem(hardwareMap);
+        climbSubsystem = new ClimbSubsystem(hardwareMap);
     }
 
     @Override
@@ -62,14 +57,14 @@ public class ClimbTest extends OpMode {
         }
         else if(gamepad1.dpad_up) {
             command = "Dpad Up";
-            climbSubsytem.ClimbOut();
+            climbSubsystem.ClimbOut();
         }
         else if(gamepad1.dpad_down) {
-            climbSubsytem.ClimbIn();
+            climbSubsystem.ClimbIn();
             command = "Dpad Down";
         }
 
-        int[] motorPositions = climbSubsytem.getCurrentMotorPositions();
+        int[] motorPositions = climbSubsystem.getCurrentMotorPositions();
         telemetry.addData("Value for clim in", Configuration.CLIMB_IN);
         telemetry.addData("value for climb out", Configuration.CLIMB_OUT);
         telemetry.addData("Left Motor Position", motorPositions[0]);
