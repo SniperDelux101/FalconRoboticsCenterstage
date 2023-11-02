@@ -55,6 +55,9 @@ public class ExtakeSubsystem extends SubsystemBase {
     public void pixelEject (){
         pixelWheelDirection(DcMotorSimple.Direction.FORWARD);
     }
+    public void pixelStop(){
+        pixelWheel.setPower(0.0);
+    }
     private void pixelWheelDirection (DcMotorSimple.Direction direction){
         pixelWheel.setDirection(direction);
         pixelWheel.setPower(1.0);

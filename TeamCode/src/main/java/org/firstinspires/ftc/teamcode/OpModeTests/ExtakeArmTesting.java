@@ -12,59 +12,86 @@ import org.firstinspires.ftc.teamcode.Utilities.Configuration;
 @TeleOp(group = "subsystems test")
 public class ExtakeArmTesting extends OpMode {
 
-    private ExtakeSubsystem rotationalExtakeSubsystem;
+    private ExtakeSubsystem extakeSubsystem;
     private double controlArmPosition = 0.0;
     @Override
     public void init() {
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
-        rotationalExtakeSubsystem = new ExtakeSubsystem(hardwareMap);
+        extakeSubsystem = new ExtakeSubsystem(hardwareMap);
     }
     @Override
     public void loop() {
         if(gamepad1.dpad_left && gamepad1.x) {
             Configuration.R_SERVO_LEFT -= Configuration.R_SERVO_MULTIPLIER;
-            rotationalExtakeSubsystem.leftRotation();
+            extakeSubsystem.leftRotation();
         }
         else if(gamepad1.dpad_left && gamepad1.b) {
             Configuration.R_SERVO_LEFT += Configuration.R_SERVO_MULTIPLIER;
-            rotationalExtakeSubsystem.leftRotation();
+            extakeSubsystem.leftRotation();
         }
         else if(gamepad1.dpad_up && gamepad1.x) {
             Configuration.R_SERVO_CENTER -= Configuration.R_SERVO_MULTIPLIER;
-            rotationalExtakeSubsystem.centerRotation();
+            extakeSubsystem.centerRotation();
         }
         else if(gamepad1.dpad_up && gamepad1.b) {
             Configuration.R_SERVO_CENTER += Configuration.R_SERVO_MULTIPLIER;
-            rotationalExtakeSubsystem.centerRotation();
+            extakeSubsystem.centerRotation();
         }
         else if(gamepad1.dpad_right && gamepad1.x) {
             Configuration.R_SERVO_RIGHT -= Configuration.R_SERVO_MULTIPLIER;
-            rotationalExtakeSubsystem.rightRotation();
+            extakeSubsystem.rightRotation();
         }
         else if(gamepad1.dpad_right && gamepad1.b) {
             Configuration.R_SERVO_RIGHT += Configuration.R_SERVO_MULTIPLIER;
-            rotationalExtakeSubsystem.rightRotation();
+            extakeSubsystem.rightRotation();
         }
         else if (gamepad1.right_bumper){
-            rotationalExtakeSubsystem.pixelEject();
+            extakeSubsystem.pixelEject();
         }
         else if (gamepad1.left_bumper){
-            rotationalExtakeSubsystem.pixelIntake();
+            extakeSubsystem.pixelIntake();
+        }
+        else if (gamepad1.left_trigger > 0){
+            extakeSubsystem.pixelStop();
         }
         else if (gamepad1.left_trigger > 0 && gamepad1.x){
             controlArmPosition++;
             if (controlArmPosition > Configuration.E_MAX_ARM_ANGLE){
                 controlArmPosition = Configuration.E_MAX_ARM_ANGLE;
             }
-            rotationalExtakeSubsystem.setControlArmPosition(controlArmPosition);
+            extakeSubsystem.setControlArmPosition(controlArmPosition);
         }
         else if (gamepad1.left_trigger > 0 && gamepad1.b) {
             controlArmPosition--;
             if (controlArmPosition< Configuration.E_MIN_ARM_ANGLE){
                 controlArmPosition = Configuration.E_MIN_ARM_ANGLE;
             }
-            rotationalExtakeSubsystem.setControlArmPosition(controlArmPosition);
+            extakeSubsystem.setControlArmPosition(controlArmPosition);
         }
+        else if(gamepad2.a){
+            extakeSubsystem.leftRotation();
+        }
+        else if(gamepad2.b){
+            extakeSubsystem.centerRotation();
+        }
+        else if(gamepad2.y){
+            extakeSubsystem.rightRotation();
+        }
+        else if(gamepad2.dpad_left){
+            extakeSubsystem.setControlArmToRest();
+        }
+        else if(gamepad2.dpad_up){
+            extakeSubsystem.setControlArmToHighBoard();
+        } else if (gamepad2.dpad_right) {
+            extakeSubsystem.setControlArmToMidBoard();
+        }
+        else if (gamepad2.dpad_down){
+            extakeSubsystem.setControlArmToIntake();
+        }
+        else if(gamepad2.left_bumper){
+            extakeSubsystem.setControlArmToLowBoard();
+        }
+
 
         telemetry.addData("Control Arm Position: ", controlArmPosition);
         telemetry.addData("Pixel Box Left Position : ",Configuration.R_SERVO_LEFT);

@@ -141,11 +141,11 @@ public class Configuration {
     // Values for horizontal extake servo
 
     public static double R_SERVO_MIN = 0;
-    public static double R_SERVO_MAX = 90;
-    public static double R_SERVO_LEFT = 10;
-    public static double R_SERVO_CENTER = 20;
-    public static double R_SERVO_RIGHT = 30;
-    public static double R_SERVO_MULTIPLIER = 5;
+    public static double R_SERVO_MAX = 1;
+    public static double R_SERVO_LEFT = .7;
+    public static double R_SERVO_CENTER = .5;
+    public static double R_SERVO_RIGHT = .35;
+    public static double R_SERVO_MULTIPLIER = .05;
 
     //****************************************************************************************************************//
     // Values for horizontal extake servo
@@ -156,18 +156,18 @@ public class Configuration {
     public static double E_MIN_ARM_ANGLE = 0.0;
     public static double E_MAX_ARM_ANGLE = 90.0;
 
-    public static double BOARD_HIGH_POSITION= 10.0 ;
-    public static double BOARD_MID_POSITION= 10.0;
-    public static double BOARD_LOW_POSITION=10.0;
-    public static double REST_POSITION=10.0;
-    public static double INTAKE_POSITION=10.0;
+    public static double BOARD_HIGH_POSITION= .6;
+    public static double BOARD_MID_POSITION= .5;
+    public static double BOARD_LOW_POSITION=.3;
+    public static double REST_POSITION=.4;
+    public static double INTAKE_POSITION=.45;
 
     //****************************************************************************************************************//
     // Values for launching servo
 
     public static double LAUNCHING_MIN = 0;
     public static double LAUNCHING_MAX = 90;
-    public static double LAUNCH_RELEASE = 45;
+    public static double LAUNCH_RELEASE = .5;
     public static double LAUNCH_RETRACT = 0;
 
     //************************************************************
