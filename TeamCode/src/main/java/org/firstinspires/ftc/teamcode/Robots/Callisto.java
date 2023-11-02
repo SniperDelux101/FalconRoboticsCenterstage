@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.Robots;
 
+import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.Robot;
+import com.arcrobotics.ftclib.command.RunCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
@@ -79,6 +81,14 @@ public class Callisto extends Robot {
                         new LaunchDrone(airplaneLauncherSubsystem),
                         new RetractClimbArmsCommand(climbSubsystem)
                 ));
+
+
+        utilityGamepad.getGamepadButton(GamepadKeys.Button.X)
+                .whenPressed(
+                        new InstantCommand(()->{
+                            extakeSubsystem.rightRotation();
+                        })
+                );
     }
 
     private void initAuto() {
