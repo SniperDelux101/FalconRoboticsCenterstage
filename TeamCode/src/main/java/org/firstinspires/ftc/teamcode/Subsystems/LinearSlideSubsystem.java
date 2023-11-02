@@ -11,6 +11,7 @@ public class LinearSlideSubsystem extends SubsystemBase {
     private final DcMotor linearSlideMotor;
     public LinearSlideSubsystem(HardwareMap hMap) {
         linearSlideMotor = hMap.dcMotor.get("TestMotor");
+        linearSlideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
 

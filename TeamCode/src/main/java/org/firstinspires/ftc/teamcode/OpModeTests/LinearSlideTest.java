@@ -33,8 +33,6 @@ This testing program allows for the configuration of the linear slide positionin
 
  */
 
-
-@Config
 @TeleOp(group = "subsystems test")
 public class LinearSlideTest extends OpMode {
 
@@ -93,6 +91,9 @@ public class LinearSlideTest extends OpMode {
         }
         else if(gamepad1.dpad_down && gamepad1.right_bumper) {
             linearSlideSubsystem.LinearPosTransfer();
+        }
+        else if (gamepad1.dpad_down && gamepad1.left_bumper){
+            linearSlideSubsystem.LinearPosHome();
         }
         pos = linearSlideSubsystem.LinearCurPos();
         telemetry.addData("Current Motor Position : ", pos);
