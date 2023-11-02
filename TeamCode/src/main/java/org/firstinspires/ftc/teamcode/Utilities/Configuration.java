@@ -4,19 +4,17 @@ import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 
-import org.checkerframework.checker.index.qual.PolyUpperBound;
-
 @Config
 public class Configuration {
 
     // TRACKWIDTH is the distance between mecanum wheels
     public static double TRACKWIDTH = 10.281731791974025; //11.6003937; //5.33
 
-    public static double TRACKTURN = 2.7705;
+    //public static double TRACKTURN = 2.7705;
 
     public static double FORWARD_OFFSET = -5.00; //-5.983669448819
     public static double LATERAL_DISTANCE = 10.281731791974025;
-    public static double CENTER_WHEEL_OFSET = 5.983669448819;
+    //public static double CENTER_WHEEL_OFSET = 5.983669448819;
 
     //public static double FORWARD_OFFSET = 5.983669448819; // in; offset of the lateral wheel (original : 6.25)
 
@@ -27,7 +25,7 @@ public class Configuration {
     public static double X_MULTIPLIER = 0.1073685635;
     public static double Y_MULTIPLIER = .1075361015;
     public static double TICKS_PER_REV = 8192;
-    public static double DISTANCE_PER_PULSE = Math.PI * Configuration.WHEEL_RADIUS / Configuration.TICKS_PER_REV;
+    //public static double DISTANCE_PER_PULSE = Math.PI * Configuration.WHEEL_RADIUS / Configuration.TICKS_PER_REV;
     public static double GEAR_RATIO = 3.7; // output (wheel) speed / input (motor) speed [Should be 4.5 or 0.2222222]
     public static double MAX_RPM = 1620;
 
@@ -152,8 +150,8 @@ public class Configuration {
     //****************************************************************************************************************//
     // Values for horizontal extake servo
 
-    public static double H_SERVO_MIN = 0;
-    public static double H_SERVO_MAX = 90;
+    //public static double H_SERVO_MIN = 0;
+    //public static double H_SERVO_MAX = 90;
 
     public static double E_MIN_ARM_ANGLE = 0.0;
     public static double E_MAX_ARM_ANGLE = 90.0;
@@ -170,7 +168,7 @@ public class Configuration {
     public static double LAUNCHING_MIN = 0;
     public static double LAUNCHING_MAX = 90;
     public static double LAUNCH_RELEASE = 45;
-    public static double LAUNCH_RETRACT = 15;
+    public static double LAUNCH_RETRACT = 0;
 
     //************************************************************
     // Confidence configuration for the vision
