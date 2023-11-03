@@ -19,9 +19,9 @@ public class ExtakeSubsystem extends SubsystemBase {
 
     public ExtakeSubsystem(HardwareMap hMap) {
         r_Servo = new SimpleServo(hMap, "Extake_Rotational_Servo", Configuration.R_SERVO_MIN, Configuration.R_SERVO_MAX);
-        pixelWheel = hMap.get(CRServo.class, "pixelwheel");
-        controlArm1 = new SimpleServo(hMap, "arm1", Configuration.E_MIN_ARM_ANGLE, Configuration.E_MAX_ARM_ANGLE);
-        controlArm2 = new SimpleServo(hMap, "arm2", Configuration.E_MIN_ARM_ANGLE, Configuration.E_MAX_ARM_ANGLE);
+        pixelWheel = hMap.get(CRServo.class, "Pixel_Wheel");
+        controlArm1 = new SimpleServo(hMap, "Arm1_Servo", Configuration.E_MIN_ARM_ANGLE, Configuration.E_MAX_ARM_ANGLE);
+        controlArm2 = new SimpleServo(hMap, "Arm2_Servo", Configuration.E_MIN_ARM_ANGLE, Configuration.E_MAX_ARM_ANGLE);
     }
 
     public void setControlArmToHighBoard (){
