@@ -38,7 +38,7 @@ public class AutonomousDriveCommand extends CommandBase {
     @Override
     public void execute(){
         /// TODO:
-       mecanumDriveSubsystem.followTrajectorySequenceAsync(trajectorySequence);
+       mecanumDriveSubsystem.getDrive().followTrajectorySequence(trajectorySequence);
     }
     @Override
     public boolean isFinished(){
@@ -47,7 +47,7 @@ public class AutonomousDriveCommand extends CommandBase {
 
 
     // autonomous pathing from red alliance far from the back drop
-    private TrajectorySequence redAllianceFar (){
+    public TrajectorySequence redAllianceFar (){
 
         TrajectorySequence untitled0 = mecanumDriveSubsystem.getDrive().trajectorySequenceBuilder(new Pose2d(-36.91, -61.93, Math.toRadians(450.00)))
                 .splineTo(new Vector2d(-35.87, -35.87), Math.toRadians(447.71))
@@ -60,7 +60,7 @@ public class AutonomousDriveCommand extends CommandBase {
         return untitled0;
     }
     // autonomous pathing from blue alliance far from the back drop
-    private TrajectorySequence blueAllianceFar (){
+    public TrajectorySequence blueAllianceFar (){
         TrajectorySequence untitled0 = mecanumDriveSubsystem.getDrive().trajectorySequenceBuilder(new Pose2d(-36.91, 61.93, Math.toRadians(-90.00)))
                 .splineTo(new Vector2d(-35.87, 35.87), Math.toRadians(-87.71))
                 .splineTo(new Vector2d(-37.09, 11.03), Math.toRadians(267.20))
@@ -73,7 +73,7 @@ public class AutonomousDriveCommand extends CommandBase {
         return untitled0;
     }
     //  autonomous pathing from red alliance near the back drop
-    private TrajectorySequence redAllianceNear (){
+    public TrajectorySequence redAllianceNear (){
         TrajectorySequence untitled0 = mecanumDriveSubsystem.getDrive().trajectorySequenceBuilder(new Pose2d(12.07, -61.23, Math.toRadians(0.00)))
                 .splineTo(new Vector2d(36.39, -60.88), Math.toRadians(0.82))
                 .splineTo(new Vector2d(62.10, -61.23), Math.toRadians(-0.77))
@@ -82,7 +82,7 @@ public class AutonomousDriveCommand extends CommandBase {
         return untitled0;
     }
     // autonomous pathing from blue alliance near the back drop
-    private TrajectorySequence blueAllianceNear (){
+    public TrajectorySequence blueAllianceNear (){
         TrajectorySequence untitled0 = mecanumDriveSubsystem.getDrive().trajectorySequenceBuilder(new Pose2d(11.55, 61.06, Math.toRadians(0.00)))
                 .splineTo(new Vector2d(36.22, 61.23), Math.toRadians(0.40))
                 .splineTo(new Vector2d(60.01, 61.23), Math.toRadians(0.00))

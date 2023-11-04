@@ -52,6 +52,7 @@ public class Callisto extends Robot {
     HardwareMap hMap;
     GamepadEx driverGamepad, utilityGamepad;
 
+
     private final Alliance alliance;
     private final AutonomousPath autonomousPath;
     private final RobotMode robotMode;
@@ -203,13 +204,16 @@ public class Callisto extends Robot {
     private void initAuto() {
         //TODO: Add code for autonomous driving
         odometryControlSubsystem.drop();
+
+        schedule(new AutonomousDriveCommand(driveBaseSubsystem, alliance , autonomousPath));
     }
 
     @Override
     public void run() {
-        if (robotMode == RobotMode.AUTO){
-            schedule(new AutonomousDriveCommand(driveBaseSubsystem, alliance , autonomousPath));
+        if (robotMode == RobotMode.TELEOP) {
+            driveBaseSubsystem.drive(driverGamepad.getLeftY(), driverGamepad.getLeftX(), driverGamepad.getRightX());
         }
+
 //        telemetry.addData("x", driveBaseSubsystem.getPoseEstimate().getX());
 //        telemetry.addData("y", driveBaseSubsystem.getPoseEstimate().getY());
 //        telemetry.addData("heading", driveBaseSubsystem.getPoseEstimate().getHeading());
@@ -236,8 +240,6 @@ public class Callisto extends Robot {
 
         telemetry.update();
         super.run();
-
-        driveBaseSubsystem.drive(driverGamepad.getLeftY(), driverGamepad.getLeftX(), driverGamepad.getRightX());
     }
 
 //    public void cleanUp() {
