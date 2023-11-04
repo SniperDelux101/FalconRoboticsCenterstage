@@ -102,7 +102,7 @@ public class Configuration {
 
     //****************************************************************************************************************//
     //Intake Motor Values / Percentages
-    public static double INTAKE_MOTOR_POWER = 0.10;
+    public static double INTAKE_MOTOR_POWER = 1.0;
 
     //****************************************************************************************************************//
     //Linear Slide Motor Values / Percentages
@@ -111,9 +111,10 @@ public class Configuration {
 
     public static int LINEAR_SLIDE_POS_HOME = 0;
     public static int LINEAR_SLIDE_POS_LO = 1200;
-    public static int LINEAR_SLIDE_POS_MED = 1600;
-    public static int LINEAR_SLIDE_POS_HI = 2000;
-    public static int LINEAR_SLIDE_POS_TRANSFER = 800;
+    public static int LINEAR_SLIDE_POS_MED = 2200;
+    //TODO change the HI position once "spine" can reach the desired distance
+    public static int LINEAR_SLIDE_POS_HI = 2200;
+    public static int LINEAR_SLIDE_POS_TRANSFER = 1;
     public static int LINEAR_SLIDE_MULTIPLIER = 10;
 
     //****************************************************************************************************************//
@@ -142,9 +143,9 @@ public class Configuration {
 
     public static double R_SERVO_MIN = 0;
     public static double R_SERVO_MAX = 1;
-    public static double R_SERVO_LEFT = .7;
-    public static double R_SERVO_CENTER = .5;
-    public static double R_SERVO_RIGHT = .35;
+    public static double R_SERVO_LEFT = .18008;
+    public static double R_SERVO_CENTER = .3349;
+    public static double R_SERVO_RIGHT = .528;
     public static double R_SERVO_MULTIPLIER = .05;
 
     //****************************************************************************************************************//
@@ -154,14 +155,14 @@ public class Configuration {
     //public static double H_SERVO_MAX = 90;
 
     public static double E_MIN_ARM_ANGLE = 0.0;
-    public static double E_MAX_ARM_ANGLE = 90.0;
+    public static double E_MAX_ARM_ANGLE = 255.0;
 
     public static double BOARD_HIGH_POSITION= .6;
     public static double BOARD_MID_POSITION= .5;
     public static double BOARD_LOW_POSITION=.3;
-    public static double REST_POSITION=.4;
-    public static double INTAKE_POSITION=.45;
-    public static double EXTAKE_POSITION= .2;
+    public static double PIXELBOXARM_PREPEXCHANGE =.4;
+    public static double PIXELBOXARM_EXCHANGE =.45;
+    public static double PIXELBOXARM_EXTAKE = .2;
 
     //****************************************************************************************************************//
     // Values for launching servo

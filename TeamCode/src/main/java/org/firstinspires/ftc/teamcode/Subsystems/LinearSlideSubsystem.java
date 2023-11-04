@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode.Subsystems;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.Utilities.Configuration;
@@ -62,5 +61,9 @@ public class LinearSlideSubsystem extends SubsystemBase {
     public void stop() {
 
         linearSlideMotor.stopMotor();
+    }
+
+    public void resetEncoder() {
+        linearSlideMotor.resetEncoder();
     }
 }

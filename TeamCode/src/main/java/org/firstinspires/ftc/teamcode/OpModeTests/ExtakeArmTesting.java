@@ -54,18 +54,20 @@ public class ExtakeArmTesting extends OpMode {
         else if (gamepad1.left_trigger > 0){
             extakeSubsystem.pixelStop();
         }
-        else if (gamepad1.left_trigger > 0 && gamepad1.x){
-            controlArmPosition++;
+        else if (gamepad1.dpad_up){
+            controlArmPosition+=.001;
             if (controlArmPosition > Configuration.E_MAX_ARM_ANGLE){
                 controlArmPosition = Configuration.E_MAX_ARM_ANGLE;
             }
+            telemetry.addData("Moving Arm to: ", controlArmPosition);
             extakeSubsystem.setControlArmPosition(controlArmPosition);
         }
-        else if (gamepad1.left_trigger > 0 && gamepad1.b) {
-            controlArmPosition--;
+        else if (gamepad1.dpad_down) {
+            controlArmPosition-=.001;
             if (controlArmPosition< Configuration.E_MIN_ARM_ANGLE){
                 controlArmPosition = Configuration.E_MIN_ARM_ANGLE;
             }
+            telemetry.addData("Moving Arm to: ", controlArmPosition);
             extakeSubsystem.setControlArmPosition(controlArmPosition);
         }
         else if(gamepad2.a){
@@ -78,7 +80,7 @@ public class ExtakeArmTesting extends OpMode {
             extakeSubsystem.rightRotation();
         }
         else if(gamepad2.dpad_left){
-            extakeSubsystem.setControlArmToRest();
+            extakeSubsystem.setControlArmToPrepExchange();
         }
         else if(gamepad2.dpad_up){
             extakeSubsystem.setControlArmToHighBoard();
@@ -86,14 +88,15 @@ public class ExtakeArmTesting extends OpMode {
             extakeSubsystem.setControlArmToMidBoard();
         }
         else if (gamepad2.dpad_down){
-            extakeSubsystem.setControlArmToIntake();
+            extakeSubsystem.setControlArmToExchange();
         }
         else if(gamepad2.left_bumper){
             extakeSubsystem.setControlArmToLowBoard();
         }
 
 
-        telemetry.addData("Control Arm Position: ", controlArmPosition);
+        telemetry.addData("Control Arm1 Position: ", extakeSubsystem.getControlArm1Position());
+        telemetry.addData("Control Arm2 Position: ", extakeSubsystem.getControlArm2Position());
         telemetry.addData("Pixel Box Left Position : ",Configuration.R_SERVO_LEFT);
         telemetry.addData("Pixel Box Right Position: ", Configuration.R_SERVO_RIGHT);
         telemetry.addData("Pixel Box Center Position:", Configuration.R_SERVO_CENTER);

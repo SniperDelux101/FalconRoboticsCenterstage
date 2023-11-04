@@ -1,8 +1,7 @@
 package org.firstinspires.ftc.teamcode.Commands;
 
 public enum PixelBoxArmPosition {
-    Default,
-    Intake,
+    PrepExchange,
+    Exchange,
     Extake
-
 }

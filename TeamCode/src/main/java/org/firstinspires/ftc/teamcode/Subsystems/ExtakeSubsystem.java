@@ -20,8 +20,8 @@ public class ExtakeSubsystem extends SubsystemBase {
     public ExtakeSubsystem(HardwareMap hMap) {
         r_Servo = new SimpleServo(hMap, "Extake_Rotational_Servo", Configuration.R_SERVO_MIN, Configuration.R_SERVO_MAX);
         pixelWheel = hMap.get(CRServo.class, "Pixel_Wheel");
-        controlArm1 = new SimpleServo(hMap, "Arm1_Servo", Configuration.E_MIN_ARM_ANGLE, Configuration.E_MAX_ARM_ANGLE);
-        controlArm2 = new SimpleServo(hMap, "Arm2_Servo", Configuration.E_MIN_ARM_ANGLE, Configuration.E_MAX_ARM_ANGLE);
+        controlArm1 = new SimpleServo(hMap, "Arm1_Servo", 0, 255);   //Configuration.E_MIN_ARM_ANGLE, Configuration.E_MAX_ARM_ANGLE);
+        controlArm2 = new SimpleServo(hMap, "Arm2_Servo", 0, 255); //Configuration.E_MIN_ARM_ANGLE, Configuration.E_MAX_ARM_ANGLE);
     }
 
     public void setControlArmToHighBoard (){
@@ -33,13 +33,13 @@ public class ExtakeSubsystem extends SubsystemBase {
     public void setControlArmToLowBoard (){
         setControlArmPosition(Configuration.BOARD_LOW_POSITION);
     }
-    public void setControlArmToIntake (){
-        setControlArmPosition(Configuration.INTAKE_POSITION);
+    public void setControlArmToExchange(){
+        setControlArmPosition(Configuration.PIXELBOXARM_EXCHANGE);
     }
-    public void setControlArmToRest(){
-        setControlArmPosition(Configuration.REST_POSITION);
+    public void setControlArmToPrepExchange(){
+        setControlArmPosition(Configuration.PIXELBOXARM_PREPEXCHANGE);
     }
-    public void setControlArmToExtake(){ setControlArmPosition(Configuration.EXTAKE_POSITION);}
+    public void setControlArmToExtake(){ setControlArmPosition(Configuration.PIXELBOXARM_EXTAKE);}
 
     /*
     sets the positions for the arms and how far up and down it can go.
@@ -47,6 +47,13 @@ public class ExtakeSubsystem extends SubsystemBase {
     public void setControlArmPosition (double position){
         controlArm1.setPosition(position);
         controlArm2.setPosition(position);
+    }
+
+    public double getControlArm1Position(){
+        return controlArm1.getPosition();
+    }
+    public double getControlArm2Position(){
+        return controlArm2.getPosition();
     }
 
     /// tells the servos to direction of the wheels while intake and ejecting pixels.

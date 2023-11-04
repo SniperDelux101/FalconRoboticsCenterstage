@@ -16,11 +16,11 @@ public class MovePixelBoxArmToPositionCommand extends CommandBase {
     @Override
     public void execute(){
         switch (pixelBoxArmPosition) {
-            case Default:
-                extakeSubsystem.setControlArmToRest();
+            case PrepExchange:
+                extakeSubsystem.setControlArmToPrepExchange();
                 break;
-            case Intake:
-                extakeSubsystem.setControlArmToIntake();
+            case Exchange:
+                extakeSubsystem.setControlArmToExchange();
                 break;
             case Extake:
                 extakeSubsystem.setControlArmToExtake();
