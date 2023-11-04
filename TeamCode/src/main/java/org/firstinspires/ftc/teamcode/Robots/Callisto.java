@@ -12,10 +12,12 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Commands.ExtendClimbArmsCommand;
 import org.firstinspires.ftc.teamcode.Commands.LaunchDrone;
+import org.firstinspires.ftc.teamcode.Commands.MovePixelBoxArmToPositionCommand;
 import org.firstinspires.ftc.teamcode.Commands.MoveToPixelBoxPosition;
 import org.firstinspires.ftc.teamcode.Commands.PixelBoxPosition;
 import org.firstinspires.ftc.teamcode.Commands.RetractClimbArmsCommand;
 import org.firstinspires.ftc.teamcode.Commands.RunLinearSlideToPosition;
+import org.firstinspires.ftc.teamcode.Commands.StopPixelBoxReset;
 import org.firstinspires.ftc.teamcode.Subsystems.AirplaneLauncherSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.ClimbSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.ExtakeSubsystem;
@@ -116,7 +118,16 @@ public class Callisto extends Robot {
                         .whenPressed(
                                 new MoveToPixelBoxPosition( extakeSubsystem, PixelBoxPosition.Center)
                         );
-        //
+        // Dropping the pixel
+        utilityGamepad.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER)
+                .whenPressed(
+                        new InstantCommand(() -> {
+                            extakeSubsystem.pixelEject();
+                        })
+                )
+                .whenReleased(new StopPixelBoxReset(extakeSubsystem, linearSlideSubsystem));
+        //Manually controlling the drop box movement
+        //utilityGamepad.getLeftX
         // Stop the Intake motor
         driverGamepad.getGamepadButton(GamepadKeys.Button.B)
                 .whenPressed(

@@ -39,6 +39,7 @@ public class ExtakeSubsystem extends SubsystemBase {
     public void setControlArmToRest(){
         setControlArmPosition(Configuration.REST_POSITION);
     }
+    public void setControlArmToExtake(){ setControlArmPosition(Configuration.EXTAKE_POSITION);}
 
     /*
     sets the positions for the arms and how far up and down it can go.

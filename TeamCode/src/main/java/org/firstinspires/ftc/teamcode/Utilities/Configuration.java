@@ -161,6 +161,7 @@ public class Configuration {
     public static double BOARD_LOW_POSITION=.3;
     public static double REST_POSITION=.4;
     public static double INTAKE_POSITION=.45;
+    public static double EXTAKE_POSITION= .2;
 
     //****************************************************************************************************************//
     // Values for launching servo
