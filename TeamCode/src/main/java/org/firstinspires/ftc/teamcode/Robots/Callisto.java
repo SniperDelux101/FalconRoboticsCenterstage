@@ -9,7 +9,11 @@ import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.checkerframework.checker.units.qual.A;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.Commands.Autonomous.Alliance;
+import org.firstinspires.ftc.teamcode.Commands.Autonomous.AutonomousDriveCommand;
+import org.firstinspires.ftc.teamcode.Commands.Autonomous.AutonomousPath;
 import org.firstinspires.ftc.teamcode.Commands.FireDroneAndClimbCommand;
 import org.firstinspires.ftc.teamcode.Commands.MovePixelBoxArmToPositionCommand;
 import org.firstinspires.ftc.teamcode.Commands.MoveToPixelBoxPosition;
@@ -47,10 +51,17 @@ public class Callisto extends Robot {
     Telemetry telemetry;
     HardwareMap hMap;
     GamepadEx driverGamepad, utilityGamepad;
+
+    private final Alliance alliance;
+    private final AutonomousPath autonomousPath;
+    private final RobotMode robotMode;
     //endregion
-    public Callisto(RobotMode mode, HardwareMap map, Gamepad gamepad1, Gamepad gamepad2, Telemetry tel) {
+    public Callisto(RobotMode mode, HardwareMap map, Gamepad gamepad1, Gamepad gamepad2, Telemetry tel , Alliance p_alliance , AutonomousPath path) {
         hMap = map;
         telemetry = tel;
+        robotMode = mode;
+        alliance = p_alliance;
+        autonomousPath = path;
 
         //region Initialize Subsystems
         driveBaseSubsystem = new MecanumDriveSubsystem(new FalconMecanumDrive(map),false);
@@ -196,6 +207,9 @@ public class Callisto extends Robot {
 
     @Override
     public void run() {
+        if (robotMode == RobotMode.AUTO){
+            schedule(new AutonomousDriveCommand(driveBaseSubsystem, alliance , autonomousPath));
+        }
 //        telemetry.addData("x", driveBaseSubsystem.getPoseEstimate().getX());
 //        telemetry.addData("y", driveBaseSubsystem.getPoseEstimate().getY());
 //        telemetry.addData("heading", driveBaseSubsystem.getPoseEstimate().getHeading());

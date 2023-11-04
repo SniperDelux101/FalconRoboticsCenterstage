@@ -61,6 +61,10 @@ public class MecanumDriveSubsystem extends SubsystemBase {
         );
     }
 
+    public FalconMecanumDrive getDrive(){
+        return drive;
+    }
+
     public void setDrivePower(Pose2d drivePower) {
         drive.setDrivePower(drivePower);
     }
