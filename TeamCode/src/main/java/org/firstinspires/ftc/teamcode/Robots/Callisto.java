@@ -51,6 +51,7 @@ public class Callisto extends Robot {
     Telemetry telemetry;
     HardwareMap hMap;
     GamepadEx driverGamepad, utilityGamepad;
+    Gamepad FTC_driverGamepad, FTC_utilityGamepad;
 
 
     private final Alliance alliance;
@@ -63,6 +64,8 @@ public class Callisto extends Robot {
         robotMode = mode;
         alliance = p_alliance;
         autonomousPath = path;
+        FTC_driverGamepad = gamepad1;
+        FTC_utilityGamepad = gamepad2;
 
         //region Initialize Subsystems
         driveBaseSubsystem = new MecanumDriveSubsystem(new FalconMecanumDrive(map),false);
@@ -211,7 +214,10 @@ public class Callisto extends Robot {
     @Override
     public void run() {
         if (robotMode == RobotMode.TELEOP) {
-            driveBaseSubsystem.drive(driverGamepad.getLeftY(), driverGamepad.getLeftX(), driverGamepad.getRightX());
+            if (FTC_driverGamepad.left_trigger>0)
+                driveBaseSubsystem.drive(driverGamepad.getLeftY(), driverGamepad.getLeftX(), driverGamepad.getRightX(), Configuration.DrivePower*.3);
+            else
+             driveBaseSubsystem.drive(driverGamepad.getLeftY(), driverGamepad.getLeftX(), driverGamepad.getRightX());
         }
 
 //        telemetry.addData("x", driveBaseSubsystem.getPoseEstimate().getX());

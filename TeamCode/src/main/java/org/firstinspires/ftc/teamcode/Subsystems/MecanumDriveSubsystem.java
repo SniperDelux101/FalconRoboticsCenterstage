@@ -45,7 +45,7 @@ public class MecanumDriveSubsystem extends SubsystemBase {
         drive.updatePoseEstimate();
     }
 
-    public void drive(double leftY, double leftX, double rightX) {
+    public void drive(double leftY, double leftX, double rightX , double power ){
         Pose2d poseEstimate = getPoseEstimate();
 
         Vector2d input = new Vector2d(-leftY, -leftX).rotated(
@@ -54,11 +54,14 @@ public class MecanumDriveSubsystem extends SubsystemBase {
 
         drive.setWeightedDrivePower(
                 new Pose2d(
-                        input.getX() * Configuration.DrivePower,
-                        input.getY() * Configuration.DrivePower,
-                        -rightX * Configuration.DrivePower
+                        input.getX() * power,
+                        input.getY() * power,
+                        -rightX * power
                 )
         );
+    }
+    public void drive(double leftY, double leftX, double rightX) {
+        drive (leftY , leftX , rightX, Configuration.DrivePower);
     }
 
     public FalconMecanumDrive getDrive(){
