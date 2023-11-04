@@ -2,25 +2,29 @@ package org.firstinspires.ftc.teamcode.Robots;
 
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.Robot;
-import com.arcrobotics.ftclib.command.RunCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
+import com.arcrobotics.ftclib.gamepad.TriggerReader;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.Commands.DefaultDrive;
 import org.firstinspires.ftc.teamcode.Commands.ExtendClimbArmsCommand;
 import org.firstinspires.ftc.teamcode.Commands.LaunchDrone;
+import org.firstinspires.ftc.teamcode.Commands.MoveToPixelBoxPosition;
+import org.firstinspires.ftc.teamcode.Commands.PixelBoxPosition;
 import org.firstinspires.ftc.teamcode.Commands.RetractClimbArmsCommand;
+import org.firstinspires.ftc.teamcode.Commands.RunLinearSlideToPosition;
 import org.firstinspires.ftc.teamcode.Subsystems.AirplaneLauncherSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.ClimbSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.ExtakeSubsystem;
+import org.firstinspires.ftc.teamcode.Subsystems.IntakeMotorSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.LinearSlideSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.MecanumDriveSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.OdometryControlSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.drive.FalconMecanumDrive;
+import org.firstinspires.ftc.teamcode.Utilities.Configuration;
 
 public class Callisto extends Robot {
     //region Subsystems
@@ -30,6 +34,7 @@ public class Callisto extends Robot {
     private final ExtakeSubsystem extakeSubsystem;
     private final LinearSlideSubsystem linearSlideSubsystem;
     private final OdometryControlSubsystem odometryControlSubsystem;
+    private final IntakeMotorSubsystem intakeMotorSubsystem;
     //endregion
 
     //region Commands
@@ -52,6 +57,7 @@ public class Callisto extends Robot {
         climbSubsystem = new ClimbSubsystem(hMap);
         extakeSubsystem = new ExtakeSubsystem(hMap);
         linearSlideSubsystem = new LinearSlideSubsystem(hMap);
+        intakeMotorSubsystem = new IntakeMotorSubsystem(hMap);
         //endregion
 
         //TODO// UNCOMMENT CODE ONCE VALUES HAVE BEEN DETERMINED
@@ -86,9 +92,78 @@ public class Callisto extends Robot {
         utilityGamepad.getGamepadButton(GamepadKeys.Button.X)
                 .whenPressed(
                         new InstantCommand(()->{
-                            extakeSubsystem.rightRotation();
+                            extakeSubsystem.rightRotation();})
+                );
+        // liner slide extenmdds to high position
+        utilityGamepad.getGamepadButton(GamepadKeys.Button.B)
+                        .whenPressed(
+                                new RunLinearSlideToPosition( linearSlideSubsystem, Configuration.LINEAR_SLIDE_POS_HI)
+                        );
+        utilityGamepad.getGamepadButton(GamepadKeys.Button.Y)
+                        .whenPressed(
+                                new RunLinearSlideToPosition(linearSlideSubsystem, Configuration.LINEAR_SLIDE_POS_MED)
+                        );
+        utilityGamepad.getGamepadButton(GamepadKeys.Button.X)
+                        .whenPressed(
+                                new RunLinearSlideToPosition(linearSlideSubsystem, Configuration.LINEAR_SLIDE_POS_LO)
+                        );
+        utilityGamepad.getGamepadButton(GamepadKeys.Button.A)
+                        .whenPressed(
+                                new RunLinearSlideToPosition(linearSlideSubsystem, Configuration.LINEAR_SLIDE_POS_TRANSFER)
+                        );
+        // Drop the box
+        utilityGamepad.getGamepadButton(GamepadKeys.Button.DPAD_UP)
+                        .whenPressed(
+                                new MoveToPixelBoxPosition( extakeSubsystem, PixelBoxPosition.Center)
+                        );
+        //
+        // Stop the Intake motor
+        driverGamepad.getGamepadButton(GamepadKeys.Button.B)
+                .whenPressed(
+                        new InstantCommand(()-> {
+                            intakeMotorSubsystem.stop();
                         })
                 );
+        // lifting the odometry up
+        driverGamepad.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER)
+                .whenPressed(
+                        new InstantCommand(()-> {
+                            odometryControlSubsystem.retract();
+                        })
+                );
+        // Dropping the odometry down
+        driverGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER)
+                .whenPressed(
+                        new InstantCommand(()-> {
+                            odometryControlSubsystem.drop();
+                        })
+                );
+        /* Start the intake wheels
+        TriggerReader rightTrigger = new TriggerReader(driverGamepad, GamepadKeys.Trigger.RIGHT_TRIGGER)
+                .wasJustPressed(
+                        new InstantCommand(()->{
+                                intakeMotorSubsystem.forward();
+                })
+                );
+        rightTrigger.wasJustReleased(
+                new InstantCommand(()-> {
+                    intakeMotorSubsystem.stop();
+                }));
+        // Reverse the Intake Wheels
+        TriggerReader leftTrigger = new TriggerReader(driverGamepad, GamepadKeys.Trigger.LEFT_TRIGGER)
+                .wasJustPressed(
+                        new InstantCommand(()-> {
+                            intakeMotorSubsystem.reverse();
+                        }));
+        leftTrigger.wasJustReleased(
+                new InstantCommand(()-> {
+                    intakeMotorSubsystem.stop();
+                }));
+*/
+
+
+
+
     }
 
     private void initAuto() {

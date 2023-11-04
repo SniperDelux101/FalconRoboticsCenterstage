@@ -1,12 +1,11 @@
 package org.firstinspires.ftc.teamcode.OpModeTests;
 
 import com.acmerobotics.dashboard.FtcDashboard;
-import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.Commands.RunLinerslideToPositionCommand;
+import org.firstinspires.ftc.teamcode.Commands.RunLinearSlideToPosition;
 import org.firstinspires.ftc.teamcode.Subsystems.LinearSlideSubsystem;
 import org.firstinspires.ftc.teamcode.Utilities.Configuration;
 
@@ -91,7 +90,7 @@ public class LinearSlideTest extends OpMode {
         }
         else if(gamepad1.dpad_left && gamepad1.right_bumper) {
             //linearSlideSubsystem.LinearPosLo();
-            RunLinerslideToPositionCommand command = new RunLinerslideToPositionCommand(linearSlideSubsystem, Configuration.LINEAR_SLIDE_POS_LO);
+            RunLinearSlideToPosition command = new RunLinearSlideToPosition(linearSlideSubsystem, Configuration.LINEAR_SLIDE_POS_LO);
             command.execute();
             while(!command.isFinished() && linearSlideSubsystem.LinearCurPos() < Configuration.LINEAR_SLIDE_POS_LO) {
                 telemetry.addData("running to low position, target ", Configuration.LINEAR_SLIDE_POS_LO);
@@ -103,7 +102,7 @@ public class LinearSlideTest extends OpMode {
         }
         else if(gamepad1.dpad_up && gamepad1.right_bumper) {
             //linearSlideSubsystem.LinearPosMed();
-            new RunLinerslideToPositionCommand(linearSlideSubsystem, Configuration.LINEAR_SLIDE_POS_MED)
+            new RunLinearSlideToPosition(linearSlideSubsystem, Configuration.LINEAR_SLIDE_POS_MED)
                     .execute();
             while(linearSlideSubsystem.LinearCurPos() < Configuration.LINEAR_SLIDE_POS_MED)
             {}
@@ -112,7 +111,7 @@ public class LinearSlideTest extends OpMode {
         }
         else if(gamepad1.dpad_right && gamepad1.right_bumper) {
             //linearSlideSubsystem.LinearPosHi();
-            new RunLinerslideToPositionCommand(linearSlideSubsystem, Configuration.LINEAR_SLIDE_POS_HI)
+            new RunLinearSlideToPosition(linearSlideSubsystem, Configuration.LINEAR_SLIDE_POS_HI)
                     .execute();
             while(linearSlideSubsystem.LinearCurPos() < Configuration.LINEAR_SLIDE_POS_HI)
             {}
@@ -121,7 +120,7 @@ public class LinearSlideTest extends OpMode {
         }
         else if(gamepad1.dpad_down && gamepad1.right_bumper) {
             //linearSlideSubsystem.LinearPosTransfer();
-            new RunLinerslideToPositionCommand(linearSlideSubsystem, Configuration.LINEAR_SLIDE_POS_TRANSFER)
+            new RunLinearSlideToPosition(linearSlideSubsystem, Configuration.LINEAR_SLIDE_POS_TRANSFER)
                     .execute();
             while(linearSlideSubsystem.LinearCurPos() < Configuration.LINEAR_SLIDE_POS_TRANSFER)
             {}
@@ -130,7 +129,7 @@ public class LinearSlideTest extends OpMode {
         }
         else if (gamepad1.dpad_down && gamepad1.left_bumper){
             //linearSlideSubsystem.LinearPosHome();
-            new RunLinerslideToPositionCommand(linearSlideSubsystem, Configuration.LINEAR_SLIDE_POS_HOME)
+            new RunLinearSlideToPosition(linearSlideSubsystem, Configuration.LINEAR_SLIDE_POS_HOME)
                     .execute();
             while(linearSlideSubsystem.LinearCurPos() < Configuration.LINEAR_SLIDE_POS_HOME)
             {}
@@ -138,7 +137,7 @@ public class LinearSlideTest extends OpMode {
             telemetry.addData(" Running to Home Position , target ", Configuration.LINEAR_SLIDE_POS_HOME);
         }
         else if(gamepad1.left_trigger > 0 && gamepad1.right_trigger > 0){
-            new RunLinerslideToPositionCommand(linearSlideSubsystem, 0)
+            new RunLinearSlideToPosition(linearSlideSubsystem, 0)
                     .execute();
             while(linearSlideSubsystem.LinearCurPos() > 0 )
             {}

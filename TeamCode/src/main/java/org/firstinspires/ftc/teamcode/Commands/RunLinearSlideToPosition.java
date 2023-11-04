@@ -1,15 +1,14 @@
 package org.firstinspires.ftc.teamcode.Commands;
 
 import com.arcrobotics.ftclib.command.CommandBase;
-import com.arcrobotics.ftclib.hardware.motors.Motor;
 
 import org.firstinspires.ftc.teamcode.Subsystems.LinearSlideSubsystem;
 
-public class RunLinerslideToPositionCommand extends CommandBase {
+public class RunLinearSlideToPosition extends CommandBase {
     private final LinearSlideSubsystem linearSlideSubsystem;
     private final int targetPosition;
 
-    public RunLinerslideToPositionCommand(LinearSlideSubsystem subsystem, int position){
+    public RunLinearSlideToPosition(LinearSlideSubsystem subsystem, int position){
         linearSlideSubsystem = subsystem;
         targetPosition = position;
         addRequirements(linearSlideSubsystem);
