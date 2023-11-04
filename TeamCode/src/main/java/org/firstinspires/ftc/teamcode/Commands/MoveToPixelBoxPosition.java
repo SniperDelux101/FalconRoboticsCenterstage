@@ -14,7 +14,6 @@ public class MoveToPixelBoxPosition extends CommandBase {
         extakeSubsystem = subsystem;
         pixelBoxPosition = position;
         addRequirements(extakeSubsystem);
-
     }
 
     @Override

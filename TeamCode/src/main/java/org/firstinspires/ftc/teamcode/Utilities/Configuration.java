@@ -31,7 +31,7 @@ public class Configuration {
 
     public static double LATERAL_LIMITER = 0.3;
 
-    public static double DrivePower = 0.25;
+    public static double DrivePower = .75;
 
     /*
      * Set RUN_USING_ENCODER to true to enable built-in hub velocity control using drive encoders.
@@ -110,10 +110,10 @@ public class Configuration {
     public static double LINEAR_SLIDE_POWER = 0.75;
 
     public static int LINEAR_SLIDE_POS_HOME = 0;
-    public static int LINEAR_SLIDE_POS_LO = 1200;
-    public static int LINEAR_SLIDE_POS_MED = 2200;
+    public static int LINEAR_SLIDE_POS_LO = 2400;
+    public static int LINEAR_SLIDE_POS_MED = 3400;
     //TODO change the HI position once "spine" can reach the desired distance
-    public static int LINEAR_SLIDE_POS_HI = 2200;
+    public static int LINEAR_SLIDE_POS_HI = 3400;
     public static int LINEAR_SLIDE_POS_TRANSFER = 1;
     public static int LINEAR_SLIDE_MULTIPLIER = 10;
 
@@ -144,7 +144,7 @@ public class Configuration {
     public static double R_SERVO_MIN = 0;
     public static double R_SERVO_MAX = 1;
     public static double R_SERVO_LEFT = .18008;
-    public static double R_SERVO_CENTER = .3349;
+    public static double R_SERVO_CENTER = .35;
     public static double R_SERVO_RIGHT = .528;
     public static double R_SERVO_MULTIPLIER = .05;
 
@@ -160,9 +160,9 @@ public class Configuration {
     public static double BOARD_HIGH_POSITION= .6;
     public static double BOARD_MID_POSITION= .5;
     public static double BOARD_LOW_POSITION=.3;
-    public static double PIXELBOXARM_PREPEXCHANGE =.4;
-    public static double PIXELBOXARM_EXCHANGE =.45;
-    public static double PIXELBOXARM_EXTAKE = .2;
+    public static double PIXELBOXARM_PREPEXCHANGE = 1.0;
+    public static double PIXELBOXARM_EXCHANGE = .95;
+    public static double PIXELBOXARM_EXTAKE = 0.0;
 
     //****************************************************************************************************************//
     // Values for launching servo

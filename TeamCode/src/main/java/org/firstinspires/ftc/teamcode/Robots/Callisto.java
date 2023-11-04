@@ -6,19 +6,17 @@ import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.button.GamepadButton;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
-import com.arcrobotics.ftclib.gamepad.TriggerReader;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.Commands.ExtendClimbArmsCommand;
 import org.firstinspires.ftc.teamcode.Commands.FireDroneAndClimbCommand;
-import org.firstinspires.ftc.teamcode.Commands.LaunchDrone;
 import org.firstinspires.ftc.teamcode.Commands.MovePixelBoxArmToPositionCommand;
 import org.firstinspires.ftc.teamcode.Commands.MoveToPixelBoxPosition;
+import org.firstinspires.ftc.teamcode.Commands.PixelBoxArmPosition;
 import org.firstinspires.ftc.teamcode.Commands.PixelBoxPosition;
-import org.firstinspires.ftc.teamcode.Commands.RetractClimbArmsCommand;
-import org.firstinspires.ftc.teamcode.Commands.RunLinearSlideToPosition;
+import org.firstinspires.ftc.teamcode.Commands.ResetAndPrepForExchangeCommand;
+import org.firstinspires.ftc.teamcode.Commands.RunLinearSlideAndCenterPixelBoxCommand;
 import org.firstinspires.ftc.teamcode.Commands.StopPixelBoxReset;
 import org.firstinspires.ftc.teamcode.Subsystems.AirplaneLauncherSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.ClimbSubsystem;
@@ -64,6 +62,8 @@ public class Callisto extends Robot {
         intakeMotorSubsystem = new IntakeMotorSubsystem(hMap);
         //endregion
 
+        linearSlideSubsystem.resetEncoder();
+
         //TODO// UNCOMMENT CODE ONCE VALUES HAVE BEEN DETERMINED
 //        odometryControlSubsystem.drop();
 
@@ -78,86 +78,88 @@ public class Callisto extends Robot {
         driverGamepad = new GamepadEx(gamepad1);
         utilityGamepad = new GamepadEx(gamepad2);
 
-//        odometryControlSubsystem.retract();
+        odometryControlSubsystem.retract();
 
-//        driveCommand = new DefaultDrive(driveBaseSubsystem, driverGamepad::getLeftX, driverGamepad::getLeftY, driverGamepad::getRightX);
-//        register(driveBaseSubsystem);
-//        driveBaseSubsystem.setDefaultCommand(driveCommand);
-
-        utilityGamepad.getGamepadButton(GamepadKeys.Button.A)
-                .whenPressed(new ExtendClimbArmsCommand(climbSubsystem));
-        utilityGamepad.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER)
-                .whenPressed(new SequentialCommandGroup(
-                        new LaunchDrone(airplaneLauncherSubsystem),
-                        new RetractClimbArmsCommand(climbSubsystem)
-                ));
-
-
-        utilityGamepad.getGamepadButton(GamepadKeys.Button.X)
-                .whenPressed(
-                        new InstantCommand(()->{
-                            extakeSubsystem.rightRotation();})
-                );
-        // liner slide extenmdds to high position
+        // linear slide extends to high position
         utilityGamepad.getGamepadButton(GamepadKeys.Button.B)
                         .whenPressed(
-                                new RunLinearSlideToPosition( linearSlideSubsystem, Configuration.LINEAR_SLIDE_POS_HI)
+                                new SequentialCommandGroup(
+                                    new RunLinearSlideAndCenterPixelBoxCommand( extakeSubsystem,linearSlideSubsystem, Configuration.LINEAR_SLIDE_POS_HI),
+                                        new MovePixelBoxArmToPositionCommand(extakeSubsystem, PixelBoxArmPosition.Extake)
+                                )
                         );
+        // linear slide extends to med position
         utilityGamepad.getGamepadButton(GamepadKeys.Button.Y)
                         .whenPressed(
-                                new RunLinearSlideToPosition(linearSlideSubsystem, Configuration.LINEAR_SLIDE_POS_MED)
+                                new SequentialCommandGroup(
+                                    new RunLinearSlideAndCenterPixelBoxCommand(extakeSubsystem,linearSlideSubsystem, Configuration.LINEAR_SLIDE_POS_MED),
+                                        new MovePixelBoxArmToPositionCommand(extakeSubsystem, PixelBoxArmPosition.Extake)
+                                )
                         );
+        //linear slide extends to low position
         utilityGamepad.getGamepadButton(GamepadKeys.Button.X)
                         .whenPressed(
-                                new RunLinearSlideToPosition(linearSlideSubsystem, Configuration.LINEAR_SLIDE_POS_LO)
+                                new SequentialCommandGroup(
+                                    new RunLinearSlideAndCenterPixelBoxCommand(extakeSubsystem,linearSlideSubsystem, Configuration.LINEAR_SLIDE_POS_LO),
+                                        new MovePixelBoxArmToPositionCommand(extakeSubsystem, PixelBoxArmPosition.Extake)
+                                )
                         );
+        //linear slide extends to transfer position
         utilityGamepad.getGamepadButton(GamepadKeys.Button.A)
                         .whenPressed(
-                                new RunLinearSlideToPosition(linearSlideSubsystem, Configuration.LINEAR_SLIDE_POS_TRANSFER)
+                                new ResetAndPrepForExchangeCommand(extakeSubsystem, linearSlideSubsystem)
                         );
         // Drop the box
         utilityGamepad.getGamepadButton(GamepadKeys.Button.DPAD_UP)
                         .whenPressed(
                                 new MoveToPixelBoxPosition( extakeSubsystem, PixelBoxPosition.Center)
                         );
-        // Dropping the pixel
-        utilityGamepad.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER)
+        utilityGamepad.getGamepadButton(GamepadKeys.Button.DPAD_LEFT)
                 .whenPressed(
-                        new InstantCommand(() -> {
-                            extakeSubsystem.pixelEject();
-                        })
+                        new MoveToPixelBoxPosition( extakeSubsystem, PixelBoxPosition.Left)
+                );
+        utilityGamepad.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT)
+                .whenPressed(
+                        new MoveToPixelBoxPosition( extakeSubsystem, PixelBoxPosition.Right)
+                );
+        // Dropping the pixel
+        utilityGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER)
+                .whenHeld(
+                        new InstantCommand(extakeSubsystem::pixelEject, extakeSubsystem)
                 )
                 .whenReleased(new StopPixelBoxReset(extakeSubsystem, linearSlideSubsystem));
-        //Manually controlling the drop box movement
-        //utilityGamepad.getLeftX
+
         // Stop the Intake motor
         driverGamepad.getGamepadButton(GamepadKeys.Button.B)
                 .whenPressed(
-                        new InstantCommand(()-> {
-                            intakeMotorSubsystem.stop();
-                        })
+                        new InstantCommand(intakeMotorSubsystem::stop, intakeMotorSubsystem)
                 );
-        // lifting the odometry up
-        driverGamepad.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER)
-                .whenPressed(
-                        new InstantCommand(()-> {
-                            odometryControlSubsystem.retract();
-                        })
-                );
-        // Dropping the odometry down
+        // Reverses the intake motor
         driverGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER)
                 .whenPressed(
-                        new InstantCommand(()-> {
-                            odometryControlSubsystem.drop();
-                        })
+                        new SequentialCommandGroup(
+                                new InstantCommand(intakeMotorSubsystem::intake, intakeMotorSubsystem),
+                                new InstantCommand(extakeSubsystem::pixelIntake, extakeSubsystem)
+                        )
                 );
+        // Intakes motor
+        driverGamepad.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER)
+                .whenPressed(
+                        new SequentialCommandGroup(
+                                new InstantCommand(intakeMotorSubsystem::eject, intakeMotorSubsystem),
+                                new InstantCommand(extakeSubsystem::pixelEject, extakeSubsystem)
+                                ));
+
+        //Stops the pixelbox from spinning
+        driverGamepad.getGamepadButton(GamepadKeys.Button.X)
+                        .whenPressed(new InstantCommand(extakeSubsystem::pixelStop, extakeSubsystem));
 
         //Send climb arms out command
         utilityGamepad.getGamepadButton(GamepadKeys.Button.DPAD_DOWN)
-                        .and(new GamepadButton(utilityGamepad, GamepadKeys.Button.RIGHT_BUMPER))
-                                .whenActive(new InstantCommand(()->{
-                                    climbSubsystem.ClimbOut();
-                                }));
+                .and(new GamepadButton(utilityGamepad, GamepadKeys.Button.RIGHT_BUMPER))
+                .whenActive(
+                        new InstantCommand(climbSubsystem::ClimbOut, climbSubsystem)
+                );
 
         //fire the Drone and Climb
         driverGamepad.getGamepadButton(GamepadKeys.Button.DPAD_DOWN)
@@ -185,25 +187,39 @@ public class Callisto extends Robot {
                     intakeMotorSubsystem.stop();
                 }));
 */
-
-
-
-
     }
 
     private void initAuto() {
         //TODO: Add code for autonomous driving
-
-        odometryControlSubsystem.retract();
         odometryControlSubsystem.drop();
     }
 
     @Override
     public void run() {
+//        telemetry.addData("x", driveBaseSubsystem.getPoseEstimate().getX());
+//        telemetry.addData("y", driveBaseSubsystem.getPoseEstimate().getY());
+//        telemetry.addData("heading", driveBaseSubsystem.getPoseEstimate().getHeading());
+        telemetry.addLine("Driver Control");
+        telemetry.addLine("[LEFT BUMPER] --> [Full Eject]");
+        telemetry.addLine("[RIGHT BUMPER] --> [Full Intake]");
+        telemetry.addLine("[X BUTTON] --> [PixelBox Stop]");
+        telemetry.addLine("[Y BUTTON] --> [-------]");
+        telemetry.addLine("[B BUTTON] --> [Stop Intake Motor]");
+        telemetry.addLine("[A BUTTON] --> [-------]");
+        telemetry.addLine("[D-PAD DOWN + RIGHT BUMPER] --> [Launch Drone & Climb In]");
 
-        telemetry.addData("x", driveBaseSubsystem.getPoseEstimate().getX());
-        telemetry.addData("y", driveBaseSubsystem.getPoseEstimate().getY());
-        telemetry.addData("heading", driveBaseSubsystem.getPoseEstimate().getHeading());
+        telemetry.addLine("Utility Control");
+        telemetry.addLine("[LEFT BUMPER] --> [-------]");
+        telemetry.addLine("[RIGHT BUMPER] --> [Hold to Remove Pixels & Release to go back to exchange]");
+        telemetry.addLine("[X BUTTON] --> [Linear Position Low]");
+        telemetry.addLine("[Y BUTTON] --> [Linear Position Medium]");
+        telemetry.addLine("[B BUTTON] --> [Linear Position High]");
+        telemetry.addLine("[A BUTTON] --> [Return to Exchange]");
+        telemetry.addLine("[D-PAD LEFT] --> [Extake Left]");
+        telemetry.addLine("[D-PAD UP] --> [Extake Center]");
+        telemetry.addLine("[D-PAD RIGHT] --> [Extake Right]");
+        telemetry.addLine("[D-PAD DOWN + RIGHT BUMPER] --> [Climb Out]");
+
         telemetry.update();
         super.run();
 

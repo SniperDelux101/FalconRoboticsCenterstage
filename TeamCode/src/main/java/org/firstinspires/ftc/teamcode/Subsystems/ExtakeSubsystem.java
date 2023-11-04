@@ -58,10 +58,10 @@ public class ExtakeSubsystem extends SubsystemBase {
 
     /// tells the servos to direction of the wheels while intake and ejecting pixels.
     public void pixelIntake(){
-       pixelWheelDirection(DcMotorSimple.Direction.REVERSE);
+       pixelWheelDirection(DcMotorSimple.Direction.FORWARD);
     }
     public void pixelEject (){
-        pixelWheelDirection(DcMotorSimple.Direction.FORWARD);
+        pixelWheelDirection(DcMotorSimple.Direction.REVERSE);
     }
     public void pixelStop(){
         pixelWheel.setPower(0.0);

@@ -24,6 +24,7 @@ public class RunLinearSlideToPosition extends CommandBase {
     }
     @Override
     public boolean isFinished(){
+
         return linearSlideSubsystem.isSlideAtTargetPosition();
     }
 

@@ -22,7 +22,10 @@ public class StopPixelBoxReset extends SequentialCommandGroup {
                 new MoveToPixelBoxPosition(extakeSubsystem, PixelBoxPosition.Center),
                 new MovePixelBoxArmToPositionCommand(extakeSubsystem, PixelBoxArmPosition.PrepExchange),
                 new RunLinearSlideToPosition(linearSlideSubsystem, Configuration.LINEAR_SLIDE_POS_TRANSFER),
-                new MovePixelBoxArmToPositionCommand(extakeSubsystem, PixelBoxArmPosition.Extake)
+                new MovePixelBoxArmToPositionCommand(extakeSubsystem, PixelBoxArmPosition.Exchange),
+                new InstantCommand(()->{
+                    extakeSubsystem.pixelIntake();
+                })
         );
         addRequirements(extakeSubsystem, linearSlideSubsystem );
     }

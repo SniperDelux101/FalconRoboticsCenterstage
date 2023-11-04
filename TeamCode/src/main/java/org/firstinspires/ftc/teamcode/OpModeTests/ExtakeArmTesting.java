@@ -55,7 +55,7 @@ public class ExtakeArmTesting extends OpMode {
             extakeSubsystem.pixelStop();
         }
         else if (gamepad1.dpad_up){
-            controlArmPosition+=.001;
+            controlArmPosition+=.005;
             if (controlArmPosition > Configuration.E_MAX_ARM_ANGLE){
                 controlArmPosition = Configuration.E_MAX_ARM_ANGLE;
             }
@@ -63,7 +63,7 @@ public class ExtakeArmTesting extends OpMode {
             extakeSubsystem.setControlArmPosition(controlArmPosition);
         }
         else if (gamepad1.dpad_down) {
-            controlArmPosition-=.001;
+            controlArmPosition-=.005;
             if (controlArmPosition< Configuration.E_MIN_ARM_ANGLE){
                 controlArmPosition = Configuration.E_MIN_ARM_ANGLE;
             }

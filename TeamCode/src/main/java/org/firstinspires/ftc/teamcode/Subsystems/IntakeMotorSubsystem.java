@@ -15,12 +15,12 @@ public class IntakeMotorSubsystem extends SubsystemBase {
     }
 
     /// it tells the intake motor to run forward
-    public void forward() {
+    public void eject() {
         intakeMotor.setRunMode(Motor.RunMode.RawPower);
         intakeMotor.set(Configuration.INTAKE_MOTOR_POWER);
     }
     /// it tells the intake motor to run in reverse
-    public void reverse() {
+    public void intake() {
         intakeMotor.setRunMode(Motor.RunMode.RawPower);
         intakeMotor.set(-Configuration.INTAKE_MOTOR_POWER);
     }
