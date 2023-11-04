@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.Robots;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.Robot;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
+import com.arcrobotics.ftclib.command.button.GamepadButton;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.arcrobotics.ftclib.gamepad.TriggerReader;
@@ -11,6 +12,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Commands.ExtendClimbArmsCommand;
+import org.firstinspires.ftc.teamcode.Commands.FireDroneAndClimbCommand;
 import org.firstinspires.ftc.teamcode.Commands.LaunchDrone;
 import org.firstinspires.ftc.teamcode.Commands.MovePixelBoxArmToPositionCommand;
 import org.firstinspires.ftc.teamcode.Commands.MoveToPixelBoxPosition;
@@ -149,6 +151,18 @@ public class Callisto extends Robot {
                             odometryControlSubsystem.drop();
                         })
                 );
+
+        //Send climb arms out command
+        utilityGamepad.getGamepadButton(GamepadKeys.Button.DPAD_DOWN)
+                        .and(new GamepadButton(utilityGamepad, GamepadKeys.Button.RIGHT_BUMPER))
+                                .whenActive(new InstantCommand(()->{
+                                    climbSubsystem.ClimbOut();
+                                }));
+
+        //fire the Drone and Climb
+        driverGamepad.getGamepadButton(GamepadKeys.Button.DPAD_DOWN)
+                .and(new GamepadButton(driverGamepad, GamepadKeys.Button.A))
+                .whenActive(new FireDroneAndClimbCommand(airplaneLauncherSubsystem, climbSubsystem));
         /* Start the intake wheels
         TriggerReader rightTrigger = new TriggerReader(driverGamepad, GamepadKeys.Trigger.RIGHT_TRIGGER)
                 .wasJustPressed(
