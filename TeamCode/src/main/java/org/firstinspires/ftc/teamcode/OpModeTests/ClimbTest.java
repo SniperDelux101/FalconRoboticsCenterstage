@@ -4,6 +4,7 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.Subsystems.ClimbSubsystem;
 import org.firstinspires.ftc.teamcode.Utilities.Configuration;
@@ -62,6 +63,12 @@ public class ClimbTest extends OpMode {
         else if(gamepad1.dpad_down) {
             climbSubsystem.ClimbIn();
             command = "Dpad Down";
+        }
+        else if(gamepad1.left_trigger > 0 ) {
+            climbSubsystem.climbMotorLeft.setPower(-1.0);
+        }else if (gamepad1.right_trigger > 0 ){
+            climbSubsystem.climbMotorRight.setTargetPosition(0);
+            climbSubsystem.climbMotorRight.setPower(-1.0);
         }
 
         int[] motorPositions = climbSubsystem.getCurrentMotorPositions();

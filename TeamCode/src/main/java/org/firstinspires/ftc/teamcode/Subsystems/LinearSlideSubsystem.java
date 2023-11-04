@@ -47,7 +47,7 @@ public class LinearSlideSubsystem extends SubsystemBase {
     public void runToPosition(int linearSlidePos, boolean runSynchronous){
         linearSlideMotor.setRunMode(Motor.RunMode.PositionControl);
         linearSlideMotor.setTargetPosition(linearSlidePos);
-        linearSlideMotor.set(.5);
+        linearSlideMotor.set(1.0);
         if(runSynchronous){
             while(LinearCurPos() < linearSlidePos){}
             stop();
@@ -55,10 +55,12 @@ public class LinearSlideSubsystem extends SubsystemBase {
     }
 
     public boolean isSlideAtTargetPosition(){
+
         return linearSlideMotor.atTargetPosition();
     }
 
     public void stop() {
+
         linearSlideMotor.stopMotor();
     }
 }

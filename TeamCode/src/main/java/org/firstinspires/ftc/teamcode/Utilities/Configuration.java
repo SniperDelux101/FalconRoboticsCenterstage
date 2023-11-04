@@ -132,7 +132,7 @@ public class Configuration {
     //****************************************************************************************************************//
     // Values for Climb Mechanism
 
-    public static int CLIMB_OUT = 150;
+    public static int CLIMB_OUT = 9500;
     public static int CLIMB_IN = 0;
     public static int CLIMB_MULTIPLIER = 10;
 
