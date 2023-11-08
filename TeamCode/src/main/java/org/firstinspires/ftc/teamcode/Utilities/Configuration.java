@@ -10,11 +10,11 @@ public class Configuration {
     // TRACKWIDTH is the distance between mecanum wheels
     public static double TRACKWIDTH = 10.281731791974025; //11.6003937; //5.33
 
-    public static double TRACKTURN = 2.7705;
+    //public static double TRACKTURN = 2.7705;
 
     public static double FORWARD_OFFSET = -5.00; //-5.983669448819
     public static double LATERAL_DISTANCE = 10.281731791974025;
-    public static double CENTER_WHEEL_OFSET = 5.983669448819;
+    //public static double CENTER_WHEEL_OFSET = 5.983669448819;
 
     //public static double FORWARD_OFFSET = 5.983669448819; // in; offset of the lateral wheel (original : 6.25)
 
@@ -25,13 +25,13 @@ public class Configuration {
     public static double X_MULTIPLIER = 0.1073685635;
     public static double Y_MULTIPLIER = .1075361015;
     public static double TICKS_PER_REV = 8192;
-    public static double DISTANCE_PER_PULSE = Math.PI * Configuration.WHEEL_RADIUS / Configuration.TICKS_PER_REV;
+    //public static double DISTANCE_PER_PULSE = Math.PI * Configuration.WHEEL_RADIUS / Configuration.TICKS_PER_REV;
     public static double GEAR_RATIO = 3.7; // output (wheel) speed / input (motor) speed [Should be 4.5 or 0.2222222]
     public static double MAX_RPM = 1620;
 
     public static double LATERAL_LIMITER = 0.3;
 
-    public static double DrivePower = 0.25;
+    public static double DrivePower = .75;
 
     /*
      * Set RUN_USING_ENCODER to true to enable built-in hub velocity control using drive encoders.
@@ -102,7 +102,7 @@ public class Configuration {
 
     //****************************************************************************************************************//
     //Intake Motor Values / Percentages
-    public static double INTAKE_MOTOR_POWER = 0.10;
+    public static double INTAKE_MOTOR_POWER = 1.0;
 
     //****************************************************************************************************************//
     //Linear Slide Motor Values / Percentages
@@ -110,10 +110,11 @@ public class Configuration {
     public static double LINEAR_SLIDE_POWER = 0.75;
 
     public static int LINEAR_SLIDE_POS_HOME = 0;
-    public static int LINEAR_SLIDE_POS_LO = 1200;
-    public static int LINEAR_SLIDE_POS_MED = 1600;
-    public static int LINEAR_SLIDE_POS_HI = 2000;
-    public static int LINEAR_SLIDE_POS_TRANSFER = 800;
+    public static int LINEAR_SLIDE_POS_LO = 2400;
+    public static int LINEAR_SLIDE_POS_MED = 3400;
+    //TODO change the HI position once "spine" can reach the desired distance
+    public static int LINEAR_SLIDE_POS_HI = 3400;
+    public static int LINEAR_SLIDE_POS_TRANSFER = 1;
     public static int LINEAR_SLIDE_MULTIPLIER = 10;
 
     //****************************************************************************************************************//
@@ -132,7 +133,7 @@ public class Configuration {
     //****************************************************************************************************************//
     // Values for Climb Mechanism
 
-    public static int CLIMB_OUT = 150;
+    public static int CLIMB_OUT = 9500;
     public static int CLIMB_IN = 0;
     public static int CLIMB_MULTIPLIER = 10;
 
@@ -141,24 +142,39 @@ public class Configuration {
     // Values for horizontal extake servo
 
     public static double R_SERVO_MIN = 0;
-    public static double R_SERVO_MAX = 90;
-    public static double R_SERVO_LEFT = 10;
-    public static double R_SERVO_CENTER = 20;
-    public static double R_SERVO_RIGHT = 30;
-    public static double R_SERVO_MULTIPLIER = 5;
+    public static double R_SERVO_MAX = 1;
+    public static double R_SERVO_LEFT = .18008;
+    public static double R_SERVO_CENTER = .35;
+    public static double R_SERVO_RIGHT = .528;
+    public static double R_SERVO_MULTIPLIER = .05;
 
     //****************************************************************************************************************//
     // Values for horizontal extake servo
 
-    public static double H_SERVO_MIN = 0;
-    public static double H_SERVO_MAX = 90;
+    //public static double H_SERVO_MIN = 0;
+    //public static double H_SERVO_MAX = 90;
+
+    public static double E_MIN_ARM_ANGLE = 0.0;
+    public static double E_MAX_ARM_ANGLE = 255.0;
+
+    public static double BOARD_HIGH_POSITION= .6;
+    public static double BOARD_MID_POSITION= .5;
+    public static double BOARD_LOW_POSITION=.3;
+    public static double PIXELBOXARM_PREPEXCHANGE = 1.0;
+    public static double PIXELBOXARM_EXCHANGE = .95;
+    public static double PIXELBOXARM_EXTAKE = 0.0;
 
     //****************************************************************************************************************//
     // Values for launching servo
 
     public static double LAUNCHING_MIN = 0;
     public static double LAUNCHING_MAX = 90;
-    public static double LAUNCH_RELEASE = 45;
-    public static double LAUNCH_RETRACT = 15;
+    public static double LAUNCH_RELEASE = .5;
+    public static double LAUNCH_RETRACT = 0;
 
+    //************************************************************
+    // Confidence configuration for the vision
+    public static double CONFIDENCE_SCORE = .75;
+
+    //
 }

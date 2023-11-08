@@ -1,50 +1,69 @@
 package org.firstinspires.ftc.teamcode.Subsystems;
 
 import com.arcrobotics.ftclib.command.SubsystemBase;
-import com.qualcomm.robotcore.hardware.DcMotor;
+import com.arcrobotics.ftclib.hardware.motors.Motor;
+import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.Utilities.Configuration;
 
 public class LinearSlideSubsystem extends SubsystemBase {
 
-    private final DcMotor linearSlideMotor;
+    private final MotorEx linearSlideMotor;
     public LinearSlideSubsystem(HardwareMap hMap) {
-        linearSlideMotor = hMap.dcMotor.get("TestMotor");
+        linearSlideMotor = new MotorEx(hMap,"Linear_Slide_Motor");
+        linearSlideMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
+        linearSlideMotor.setRunMode(Motor.RunMode.PositionControl);
     }
-
-
     public void LinearStop() {
-        linearSlideMotor.setPower(0);
+        linearSlideMotor.stopMotor();
     }
+
     public double LinearCurPos() {
         return linearSlideMotor.getCurrentPosition();
     }
 
     public void LinearPosHome() {
-        linearSlideMotor.setTargetPosition(Configuration.LINEAR_SLIDE_POS_HOME);
-        linearSlideMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        linearSlideMotor.setPower(Configuration.LINEAR_SLIDE_POWER);
+        runToPosition(Configuration.LINEAR_SLIDE_POS_HOME);
     }
     public void LinearPosLo() {
-        linearSlideMotor.setTargetPosition(Configuration.LINEAR_SLIDE_POS_LO);
-        linearSlideMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        linearSlideMotor.setPower(Configuration.LINEAR_SLIDE_POWER);
+        runToPosition(Configuration.LINEAR_SLIDE_POS_LO);
     }
     public void LinearPosMed() {
-        linearSlideMotor.setTargetPosition(Configuration.LINEAR_SLIDE_POS_MED);
-        linearSlideMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        linearSlideMotor.setPower(Configuration.LINEAR_SLIDE_POWER);
+        runToPosition(Configuration.LINEAR_SLIDE_POS_MED);
     }
     public void LinearPosHi() {
-        linearSlideMotor.setTargetPosition(Configuration.LINEAR_SLIDE_POS_HI);
-        linearSlideMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        linearSlideMotor.setPower(Configuration.LINEAR_SLIDE_POWER);
+        runToPosition(Configuration.LINEAR_SLIDE_POS_HI);
     }
     public void LinearPosTransfer() {
-        linearSlideMotor.setTargetPosition(Configuration.LINEAR_SLIDE_POS_TRANSFER);
-        linearSlideMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        linearSlideMotor.setPower(Configuration.LINEAR_SLIDE_POWER);
+        runToPosition(Configuration.LINEAR_SLIDE_POS_TRANSFER);
     }
 
+    public void runToPosition(int linearSlidePosTransfer){
+        runToPosition(linearSlidePosTransfer, false);
+    }
+
+    public void runToPosition(int linearSlidePos, boolean runSynchronous){
+        linearSlideMotor.setRunMode(Motor.RunMode.PositionControl);
+        linearSlideMotor.setTargetPosition(linearSlidePos);
+        linearSlideMotor.set(1.0);
+        if(runSynchronous){
+            while(LinearCurPos() < linearSlidePos){}
+            stop();
+        }
+    }
+
+    public boolean isSlideAtTargetPosition(){
+
+        return linearSlideMotor.atTargetPosition();
+    }
+
+    public void stop() {
+
+        linearSlideMotor.stopMotor();
+    }
+
+    public void resetEncoder() {
+        linearSlideMotor.resetEncoder();
+    }
 }

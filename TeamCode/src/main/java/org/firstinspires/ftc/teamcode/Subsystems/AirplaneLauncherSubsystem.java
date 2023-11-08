@@ -18,8 +18,15 @@ public class AirplaneLauncherSubsystem extends SubsystemBase {
         // launchServo.setInverted(true);
     }
 
+    public void stop(){
+        launchServo.disable();
+    }
+
     public void release() {
         launchServo.setPosition(Configuration.LAUNCH_RELEASE);
+    }
+    public double getLanucherServoPosition(){
+        return launchServo.getPosition();
     }
 
     public void retract() {

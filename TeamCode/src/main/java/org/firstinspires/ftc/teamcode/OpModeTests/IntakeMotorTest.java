@@ -6,9 +6,7 @@ import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Subsystems.IntakeMotorSubsystem;
-import org.firstinspires.ftc.teamcode.Subsystems.OdometryControlSubsystem;
 import org.firstinspires.ftc.teamcode.Utilities.Configuration;
 
 /*
@@ -42,16 +40,16 @@ public class IntakeMotorTest extends OpMode {
     public void loop() {
 
         if(gamepad1.right_bumper) {
-            intakeMotorSubsystem.forward();
+            intakeMotorSubsystem.intake();
             direction = "Forward";
         }
 
-        if(gamepad1.left_bumper) {
-            intakeMotorSubsystem.reverse();
+        else if(gamepad1.left_bumper) {
+            intakeMotorSubsystem.eject();
             direction = "Reverse";
         }
 
-        if(gamepad1.b) {
+        else if(gamepad1.b) {
             intakeMotorSubsystem.stop();
             direction = "Stopped";
         }
