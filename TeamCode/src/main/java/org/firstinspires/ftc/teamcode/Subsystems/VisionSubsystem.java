@@ -6,9 +6,12 @@ import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.teamcode.Utilities.Configuration;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.tfod.TfodProcessor;
+
+import java.util.List;
 
 public class VisionSubsystem {
     private static  final String TFOD_MODEL_FILE = "";
@@ -65,6 +68,9 @@ public class VisionSubsystem {
         visionPortal.close();
     }
 
+    public List<Recognition> getRecognitions (){
+        return tfod.getRecognitions();
+    }
 
 }
 
