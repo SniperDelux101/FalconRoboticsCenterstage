@@ -2,14 +2,12 @@ package org.firstinspires.ftc.teamcode.Commands.Autonomous;
 
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Commands.MovePixelBoxArmToPositionCommand;
 import org.firstinspires.ftc.teamcode.Commands.MoveToPixelBoxPosition;
 import org.firstinspires.ftc.teamcode.Commands.PixelBoxArmPosition;
 import org.firstinspires.ftc.teamcode.Commands.PixelBoxPosition;
 import org.firstinspires.ftc.teamcode.Commands.PlacePixelOnSpikeCommand;
 import org.firstinspires.ftc.teamcode.Commands.RunLinearSlideAndCenterPixelBoxCommand;
-import org.firstinspires.ftc.teamcode.Commands.TrajectoryFollowerCommand;
 import org.firstinspires.ftc.teamcode.Commands.TrajectorySequenceFollowerCommand;
 import org.firstinspires.ftc.teamcode.Subsystems.ExtakeSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.IntakeMotorSubsystem;
@@ -45,14 +43,15 @@ public class AutonomousDriveCommand extends SequentialCommandGroup {
 
         TeamPropPosition teamPropPosition = identifyTeamPropPositionCommand.getTeamPropPosition();
 
+        //TODO:
         addCommands(
                 // This moves the robot to its center position
-                new TrajectorySequenceFollowerCommand(mecanumDriveSubsystem, AutonomousPaths.RedAllianceNearPhaseOne(mecanumDriveSubsystem.getDrive(),
-                        teamPropPosition)),
+                new TrajectorySequenceFollowerCommand(mecanumDriveSubsystem, AutonomousPaths.PhaseOne(alliance, mecanumDriveSubsystem.getDrive(),
+                        teamPropPosition, path)),
                 // This places a pixel on the spike
                 new PlacePixelOnSpikeCommand(intakeMotorSubsystem).withTimeout(2000),
                 // This moves the robot to a scoring position near the backdrop
-                new TrajectorySequenceFollowerCommand(mecanumDriveSubsystem, AutonomousPaths.RedAllianceNearPhaseTwo(mecanumDriveSubsystem.getDrive())),
+                new TrajectorySequenceFollowerCommand(mecanumDriveSubsystem, AutonomousPaths.PhaseTwo(alliance, mecanumDriveSubsystem.getDrive(), teamPropPosition, path)),
                 // This will score a pixel on the backdrop
                 new RunLinearSlideAndCenterPixelBoxCommand(extakeSubsystem,linearSlideSubsystem, Configuration.LINEAR_SLIDE_POS_LO),
                 // This moves the arm into a scoring position

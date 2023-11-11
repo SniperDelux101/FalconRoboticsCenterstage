@@ -26,8 +26,8 @@ public class VisionSubsystem extends SubsystemBase {
     ///the variable to store our
     private VisionPortal visionPortal;
 
-    public VisionSubsystem (VisionPortal vp , HardwareMap hm ){
-        visionPortal = vp;
+    public VisionSubsystem (HardwareMap hm ){
+        //visionPortal = vp;
         hardwareMap = hm;
     }
     public void initTfod(boolean allowStreaming ){

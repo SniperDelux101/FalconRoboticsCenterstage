@@ -9,6 +9,7 @@ import org.firstinspires.ftc.teamcode.Commands.Autonomous.Alliance;
 import org.firstinspires.ftc.teamcode.Commands.Autonomous.AutonomousStartLocation;
 import org.firstinspires.ftc.teamcode.Robots.Callisto;
 import org.firstinspires.ftc.teamcode.Robots.RobotMode;
+import org.firstinspires.ftc.vision.VisionPortal;
 
 @Autonomous(preselectTeleOp = "Drivebase_Op")
 public class Autonomous_Red_Near_TeleOp extends OpMode {

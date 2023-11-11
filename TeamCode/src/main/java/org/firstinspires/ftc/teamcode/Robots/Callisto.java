@@ -28,8 +28,10 @@ import org.firstinspires.ftc.teamcode.Subsystems.IntakeMotorSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.LinearSlideSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.MecanumDriveSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.OdometryControlSubsystem;
+import org.firstinspires.ftc.teamcode.Subsystems.VisionSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.drive.FalconMecanumDrive;
 import org.firstinspires.ftc.teamcode.Utilities.Configuration;
+import org.firstinspires.ftc.vision.VisionPortal;
 
 public class Callisto extends Robot {
     //region Subsystems
@@ -40,6 +42,7 @@ public class Callisto extends Robot {
     private final LinearSlideSubsystem linearSlideSubsystem;
     private final OdometryControlSubsystem odometryControlSubsystem;
     private final IntakeMotorSubsystem intakeMotorSubsystem;
+    private final VisionSubsystem visionSubsystem;
     //endregion
 
     //region Commands
@@ -74,6 +77,8 @@ public class Callisto extends Robot {
         extakeSubsystem = new ExtakeSubsystem(hMap);
         linearSlideSubsystem = new LinearSlideSubsystem(hMap);
         intakeMotorSubsystem = new IntakeMotorSubsystem(hMap);
+        //TODO: Fix the vision portal
+        visionSubsystem = new VisionSubsystem(hMap);
         //endregion
 
         linearSlideSubsystem.resetEncoder();
@@ -207,7 +212,8 @@ public class Callisto extends Robot {
         //TODO: Add code for autonomous driving
         odometryControlSubsystem.drop();
 
-//        schedule(new AutonomousDriveCommand(driveBaseSubsystem, alliance , autonomousStartLocation));
+        schedule(new AutonomousDriveCommand(driveBaseSubsystem, linearSlideSubsystem, intakeMotorSubsystem, extakeSubsystem, visionSubsystem,
+                alliance, autonomousStartLocation));
     }
 
     @Override
