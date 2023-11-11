@@ -3,7 +3,12 @@ package org.firstinspires.ftc.teamcode.Commands.Autonomous;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.Commands.MovePixelBoxArmToPositionCommand;
+import org.firstinspires.ftc.teamcode.Commands.MoveToPixelBoxPosition;
+import org.firstinspires.ftc.teamcode.Commands.PixelBoxArmPosition;
+import org.firstinspires.ftc.teamcode.Commands.PixelBoxPosition;
 import org.firstinspires.ftc.teamcode.Commands.PlacePixelOnSpikeCommand;
+import org.firstinspires.ftc.teamcode.Commands.RunLinearSlideAndCenterPixelBoxCommand;
 import org.firstinspires.ftc.teamcode.Commands.TrajectoryFollowerCommand;
 import org.firstinspires.ftc.teamcode.Commands.TrajectorySequenceFollowerCommand;
 import org.firstinspires.ftc.teamcode.Subsystems.ExtakeSubsystem;
@@ -12,6 +17,7 @@ import org.firstinspires.ftc.teamcode.Subsystems.LinearSlideSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.MecanumDriveSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.VisionSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.drive.TrajectorySequence.TrajectorySequence;
+import org.firstinspires.ftc.teamcode.Utilities.Configuration;
 
 public class AutonomousDriveCommand extends SequentialCommandGroup {
 
@@ -37,15 +43,37 @@ public class AutonomousDriveCommand extends SequentialCommandGroup {
         visionSubsystem = vs;
         identifyTeamPropPositionCommand = new IdentifyTeamPropPositionCommand(visionSubsystem);
 
+        TeamPropPosition teamPropPosition = identifyTeamPropPositionCommand.getTeamPropPosition();
+
         addCommands(
+                // This moves the robot to its center position
                 new TrajectorySequenceFollowerCommand(mecanumDriveSubsystem, AutonomousPaths.RedAllianceNearPhaseOne(mecanumDriveSubsystem.getDrive(),
-                        identifyTeamPropPositionCommand.getTeamPropPosition())),
+                        teamPropPosition)),
+                // This places a pixel on the spike
                 new PlacePixelOnSpikeCommand(intakeMotorSubsystem).withTimeout(2000),
-                new TrajectorySequenceFollowerCommand(mecanumDriveSubsystem, AutonomousPaths.RedAllianceNearPhaseTwo(mecanumDriveSubsystem.getDrive()))
+                // This moves the robot to a scoring position near the backdrop
+                new TrajectorySequenceFollowerCommand(mecanumDriveSubsystem, AutonomousPaths.RedAllianceNearPhaseTwo(mecanumDriveSubsystem.getDrive())),
+                // This will score a pixel on the backdrop
+                new RunLinearSlideAndCenterPixelBoxCommand(extakeSubsystem,linearSlideSubsystem, Configuration.LINEAR_SLIDE_POS_LO),
+                // This moves the arm into a scoring position
+                new MovePixelBoxArmToPositionCommand(extakeSubsystem, PixelBoxArmPosition.Extake),
+                // This moves the pixel box to the correct location based off of which spike location the team prop is on
+                new MoveToPixelBoxPosition(extakeSubsystem, getPixelBoxPositionFromPropPosition(teamPropPosition))
         );
 
         addRequirements(mecanumDriveSubsystem, linearSlideSubsystem, intakeMotorSubsystem, extakeSubsystem, visionSubsystem);
 
+    }
+
+    private PixelBoxPosition getPixelBoxPositionFromPropPosition(TeamPropPosition teamPropPosition) {
+        if(teamPropPosition == TeamPropPosition.Left) {
+            return PixelBoxPosition.Left;
+        } else if (teamPropPosition == TeamPropPosition.Center) {
+            return PixelBoxPosition.Center;
+        }
+        else {
+            return PixelBoxPosition.Right;
+        }
     }
 
     @Override

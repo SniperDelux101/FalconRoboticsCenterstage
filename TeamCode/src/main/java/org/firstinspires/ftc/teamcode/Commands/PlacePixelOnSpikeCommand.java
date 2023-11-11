@@ -10,6 +10,7 @@ public class PlacePixelOnSpikeCommand extends CommandBase {
 
     public PlacePixelOnSpikeCommand(IntakeMotorSubsystem subsystem) {
         intakeMotorSubsystem = subsystem;
+        addRequirements(intakeMotorSubsystem);
     }
 
     @Override
@@ -20,5 +21,11 @@ public class PlacePixelOnSpikeCommand extends CommandBase {
     @Override
     public boolean isFinished() {
         return true;
+    }
+
+    @Override
+    public void end(boolean interrupted) {
+        super.end(interrupted);
+        intakeMotorSubsystem.stop();
     }
 }
