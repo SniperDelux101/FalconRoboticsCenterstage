@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.Commands.Autonomous;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.Commands.PlacePixelOnSpikeCommand;
 import org.firstinspires.ftc.teamcode.Commands.TrajectoryFollowerCommand;
 import org.firstinspires.ftc.teamcode.Commands.TrajectorySequenceFollowerCommand;
 import org.firstinspires.ftc.teamcode.Subsystems.ExtakeSubsystem;
@@ -38,7 +39,9 @@ public class AutonomousDriveCommand extends SequentialCommandGroup {
 
         addCommands(
                 new TrajectorySequenceFollowerCommand(mecanumDriveSubsystem, AutonomousPaths.RedAllianceNearPhaseOne(mecanumDriveSubsystem.getDrive(),
-                        identifyTeamPropPositionCommand.getTeamPropPosition()))
+                        identifyTeamPropPositionCommand.getTeamPropPosition())),
+                new PlacePixelOnSpikeCommand(intakeMotorSubsystem).withTimeout(2000),
+                new TrajectorySequenceFollowerCommand(mecanumDriveSubsystem, AutonomousPaths.RedAllianceNearPhaseTwo(mecanumDriveSubsystem.getDrive()))
         );
 
         addRequirements(mecanumDriveSubsystem, linearSlideSubsystem, intakeMotorSubsystem, extakeSubsystem, visionSubsystem);

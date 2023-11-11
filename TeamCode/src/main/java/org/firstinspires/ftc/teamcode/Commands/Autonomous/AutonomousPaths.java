@@ -25,20 +25,12 @@ public class AutonomousPaths {
         return path;
     }
 
-    public static TrajectorySequence RedAllianceNearPhaseTwo (FalconMecanumDrive drive, TeamPropPosition teamPropPosition){
+    public static TrajectorySequence RedAllianceNearPhaseTwo (FalconMecanumDrive drive){
 
-        TrajectorySequence path = null;
-        if(teamPropPosition == TeamPropPosition.Left) {
-            //TODO: Implement path for left position
-        }
-        else if(teamPropPosition == TeamPropPosition.Center) {
-            path = drive.trajectorySequenceBuilder(new Pose2d(12.00, -64.00, Math.toRadians(90.00)))
-                    .splineTo(new Vector2d(12.00, -34.00), Math.toRadians(90.00))
-                    .build();
-        }
-        else {
-            //TODO: Implement path for right position
-        }
+        TrajectorySequence path = drive.trajectorySequenceBuilder(new Pose2d(12.00, -34.00, Math.toRadians(90.00)))
+                .lineTo(new Vector2d(26.00, -34.00))
+                .lineTo(new Vector2d(44.00, -34.00))
+                .build();
         return path;
     }
 
