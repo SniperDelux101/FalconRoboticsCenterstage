@@ -3,12 +3,11 @@ package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
-import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.Commands.Autonomous.Alliance;
-import org.firstinspires.ftc.teamcode.Commands.Autonomous.AutonomousPath;
+import org.firstinspires.ftc.teamcode.Commands.Autonomous.AutonomousStartLocation;
 import org.firstinspires.ftc.teamcode.Robots.Callisto;
 import org.firstinspires.ftc.teamcode.Robots.RobotMode;
 import org.firstinspires.ftc.teamcode.Robots.SimpleRobot;
@@ -25,7 +24,7 @@ public class Drivebase_Op extends OpMode {
     @Override
     public void init() {
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
-        robot = new Callisto(RobotMode.TELEOP, hardwareMap, gamepad1, gamepad2, telemetry, Alliance.Blue, AutonomousPath.Far);
+        robot = new Callisto(RobotMode.TELEOP, hardwareMap, gamepad1, gamepad2, telemetry, Alliance.Blue, AutonomousStartLocation.Far);
         //simpleRobot = new SimpleRobot(RobotMode.TELEOP, hardwareMap, gamepad1, gamepad2, telemetry);
     }
 

@@ -9,11 +9,10 @@ import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.checkerframework.checker.units.qual.A;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Commands.Autonomous.Alliance;
 import org.firstinspires.ftc.teamcode.Commands.Autonomous.AutonomousDriveCommand;
-import org.firstinspires.ftc.teamcode.Commands.Autonomous.AutonomousPath;
+import org.firstinspires.ftc.teamcode.Commands.Autonomous.AutonomousStartLocation;
 import org.firstinspires.ftc.teamcode.Commands.FireDroneAndClimbCommand;
 import org.firstinspires.ftc.teamcode.Commands.MovePixelBoxArmToPositionCommand;
 import org.firstinspires.ftc.teamcode.Commands.MoveToPixelBoxPosition;
@@ -55,15 +54,15 @@ public class Callisto extends Robot {
 
 
     private final Alliance alliance;
-    private final AutonomousPath autonomousPath;
+    private final AutonomousStartLocation autonomousStartLocation;
     private final RobotMode robotMode;
     //endregion
-    public Callisto(RobotMode mode, HardwareMap map, Gamepad gamepad1, Gamepad gamepad2, Telemetry tel , Alliance p_alliance , AutonomousPath path) {
+    public Callisto(RobotMode mode, HardwareMap map, Gamepad gamepad1, Gamepad gamepad2, Telemetry tel , Alliance p_alliance , AutonomousStartLocation path) {
         hMap = map;
         telemetry = tel;
         robotMode = mode;
         alliance = p_alliance;
-        autonomousPath = path;
+        autonomousStartLocation = path;
         FTC_driverGamepad = gamepad1;
         FTC_utilityGamepad = gamepad2;
 
@@ -208,7 +207,7 @@ public class Callisto extends Robot {
         //TODO: Add code for autonomous driving
         odometryControlSubsystem.drop();
 
-        schedule(new AutonomousDriveCommand(driveBaseSubsystem, alliance , autonomousPath));
+//        schedule(new AutonomousDriveCommand(driveBaseSubsystem, alliance , autonomousStartLocation));
     }
 
     @Override

@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.Subsystems;
 import android.util.Size;
 
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
+import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
@@ -13,7 +14,7 @@ import org.firstinspires.ftc.vision.tfod.TfodProcessor;
 
 import java.util.List;
 
-public class VisionSubsystem {
+public class VisionSubsystem extends SubsystemBase {
     private static  final String TFOD_MODEL_FILE = "";
     private static final String[] LABELS ={
             "TeamProp"

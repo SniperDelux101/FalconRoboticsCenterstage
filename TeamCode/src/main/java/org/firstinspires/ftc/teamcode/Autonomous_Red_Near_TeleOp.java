@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.teamcode.Commands.Autonomous.Alliance;
-import org.firstinspires.ftc.teamcode.Commands.Autonomous.AutonomousPath;
+import org.firstinspires.ftc.teamcode.Commands.Autonomous.AutonomousStartLocation;
 import org.firstinspires.ftc.teamcode.Robots.Callisto;
 import org.firstinspires.ftc.teamcode.Robots.RobotMode;
 
@@ -20,7 +20,7 @@ public class Autonomous_Red_Near_TeleOp extends OpMode {
     @Override
     public void init() {
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
-        robot = new Callisto(RobotMode.AUTO, hardwareMap, gamepad1, gamepad2, telemetry, Alliance.Red, AutonomousPath.Near);
+        robot = new Callisto(RobotMode.AUTO, hardwareMap, gamepad1, gamepad2, telemetry, Alliance.Red, AutonomousStartLocation.Near);
     }
 
     @Override
