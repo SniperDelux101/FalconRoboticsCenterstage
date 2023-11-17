@@ -28,6 +28,20 @@ public class AutonomousPaths {
             return BlueAlliancePhaseTwo(drive, teamPropPosition, startLocation);
         }
     }
+    public static TrajectorySequence Park (Alliance alliance, FalconMecanumDrive drive, AutonomousStartLocation startLocation){
+        if ( alliance== Alliance.Red && startLocation == AutonomousStartLocation.Near){
+            return drive.trajectorySequenceBuilder(new Pose2d()).build(); //TODO; Implemnet parking for red alliance near
+        }
+        else if (alliance == Alliance.Red && startLocation == AutonomousStartLocation.Far){
+          return drive.trajectorySequenceBuilder(new Pose2d()).build();//TODO; Impelement parking for red alliance far
+        }
+        else if (alliance == Alliance.Blue && startLocation == AutonomousStartLocation.Near){
+            return drive.trajectorySequenceBuilder(new Pose2d()).build(); //TODO; Impelement parking for blue alliance near
+        }else {
+            return drive.trajectorySequenceBuilder(new Pose2d()).build(); //TODO; Impelement parking for blue alliance far
+        }
+    }
+
 
     private static TrajectorySequence RedAlliancePhaseOne(FalconMecanumDrive drive, TeamPropPosition teamPropPosition, AutonomousStartLocation startLocation){
 

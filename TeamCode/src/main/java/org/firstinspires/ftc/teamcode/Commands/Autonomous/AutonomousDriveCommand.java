@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.Commands.Autonomous;
 
+import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 
 import org.firstinspires.ftc.teamcode.Commands.MovePixelBoxArmToPositionCommand;
@@ -8,6 +9,8 @@ import org.firstinspires.ftc.teamcode.Commands.PixelBoxArmPosition;
 import org.firstinspires.ftc.teamcode.Commands.PixelBoxPosition;
 import org.firstinspires.ftc.teamcode.Commands.PlacePixelOnSpikeCommand;
 import org.firstinspires.ftc.teamcode.Commands.RunLinearSlideAndCenterPixelBoxCommand;
+import org.firstinspires.ftc.teamcode.Commands.StopPixelBoxReset;
+import org.firstinspires.ftc.teamcode.Commands.TrajectoryFollowerCommand;
 import org.firstinspires.ftc.teamcode.Commands.TrajectorySequenceFollowerCommand;
 import org.firstinspires.ftc.teamcode.Subsystems.ExtakeSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.IntakeMotorSubsystem;
@@ -57,7 +60,13 @@ public class AutonomousDriveCommand extends SequentialCommandGroup {
                 // This moves the arm into a scoring position
                 new MovePixelBoxArmToPositionCommand(extakeSubsystem, PixelBoxArmPosition.Extake),
                 // This moves the pixel box to the correct location based off of which spike location the team prop is on
-                new MoveToPixelBoxPosition(extakeSubsystem, getPixelBoxPositionFromPropPosition(teamPropPosition))
+                new MoveToPixelBoxPosition(extakeSubsystem, getPixelBoxPositionFromPropPosition(teamPropPosition)),
+                // This drops the pixel to the correct position
+                new InstantCommand( extakeSubsystem::pixelEject, extakeSubsystem),
+                // This retracts the linear slide
+                new StopPixelBoxReset(extakeSubsystem, linearSlideSubsystem),
+                // this will park
+                new TrajectorySequenceFollowerCommand(mecanumDriveSubsystem, AutonomousPaths.Park(alliance, mecanumDriveSubsystem.getDrive(), autonomousStartLocation))
         );
 
         addRequirements(mecanumDriveSubsystem, linearSlideSubsystem, intakeMotorSubsystem, extakeSubsystem, visionSubsystem);
