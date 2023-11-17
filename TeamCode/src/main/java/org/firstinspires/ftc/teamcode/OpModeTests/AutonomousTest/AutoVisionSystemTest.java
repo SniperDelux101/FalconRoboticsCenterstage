@@ -25,10 +25,11 @@ public class AutoVisionSystemTest extends OpMode {
     @Override
     public void loop() {
         if (getRecognition) {
-            visionSubsystem.getRecognitions();
+            teamPropPosition = visionSubsystem.getTeamPropPosition();
             getRecognition = false;
         }
-
+        telemetry.addData("Team Prop Position : ", teamPropPosition);
+        telemetry.update();
     }
 
 }

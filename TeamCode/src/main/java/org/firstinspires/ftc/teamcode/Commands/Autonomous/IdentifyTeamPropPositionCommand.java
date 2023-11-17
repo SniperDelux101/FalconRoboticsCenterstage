@@ -17,29 +17,7 @@ public class IdentifyTeamPropPositionCommand  {
 
 
     public TeamPropPosition getTeamPropPosition(){
-        List<Recognition> currentRecognitions = visionSubsystem.getRecognitions();
-        Recognition teamProp = null;
-        for (Recognition recognition : currentRecognitions){
-
-            if (teamProp == null){
-                teamProp = recognition;
-            }
-            else if (recognition.getConfidence()> teamProp.getConfidence()){
-                teamProp = recognition;
-            }
-        }
-        TeamPropPosition position = TeamPropPosition.Center;
-        if (teamProp != null ) {
-            double x= (teamProp.getLeft()+ teamProp.getRight()) /2 ;
-            double y = (teamProp.getTop()+ teamProp.getBottom()) / 2;
-            if (x< 213 ){
-                position = TeamPropPosition.Left;
-            }
-            else if ( x > 426)
-                position = TeamPropPosition.Right;
-        }
-
-      return position;
+       return visionSubsystem.getTeamPropPosition();
     }
 
 }
