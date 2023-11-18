@@ -31,7 +31,6 @@ import org.firstinspires.ftc.teamcode.Subsystems.OdometryControlSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.VisionSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.drive.FalconMecanumDrive;
 import org.firstinspires.ftc.teamcode.Utilities.Configuration;
-import org.firstinspires.ftc.vision.VisionPortal;
 
 public class Callisto extends Robot {
     //region Subsystems
@@ -78,7 +77,7 @@ public class Callisto extends Robot {
         linearSlideSubsystem = new LinearSlideSubsystem(hMap);
         intakeMotorSubsystem = new IntakeMotorSubsystem(hMap);
         //TODO: Fix the vision portal
-        visionSubsystem = new VisionSubsystem(hMap);
+        visionSubsystem = new VisionSubsystem(hMap, telemetry);
         //endregion
 
         linearSlideSubsystem.resetEncoder();

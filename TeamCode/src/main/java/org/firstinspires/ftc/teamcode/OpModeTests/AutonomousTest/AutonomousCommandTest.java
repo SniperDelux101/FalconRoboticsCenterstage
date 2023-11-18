@@ -7,7 +7,6 @@ import org.firstinspires.ftc.teamcode.Commands.Autonomous.Alliance;
 import org.firstinspires.ftc.teamcode.Commands.Autonomous.AutonomousDriveCommand;
 import org.firstinspires.ftc.teamcode.Commands.Autonomous.AutonomousStartLocation;
 import org.firstinspires.ftc.teamcode.Commands.Autonomous.TeamPropPosition;
-import org.firstinspires.ftc.teamcode.Commands.AutonomouseDriveForward;
 import org.firstinspires.ftc.teamcode.Subsystems.AirplaneLauncherSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.ClimbSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.ExtakeSubsystem;
@@ -40,7 +39,7 @@ public class AutonomousCommandTest extends CommandOpMode {
         linearSlideSubsystem = new LinearSlideSubsystem(hardwareMap);
         intakeMotorSubsystem = new IntakeMotorSubsystem(hardwareMap);
         //TODO: Fix the vision portal
-        visionSubsystem = new VisionSubsystem(hardwareMap);
+        visionSubsystem = new VisionSubsystem(hardwareMap, telemetry);
     }
     @Override
     public void initialize (){

@@ -2,10 +2,10 @@ package org.firstinspires.ftc.teamcode.Subsystems;
 
 import android.util.Size;
 
-import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.teamcode.Commands.Autonomous.TeamPropPosition;
@@ -13,7 +13,6 @@ import org.firstinspires.ftc.teamcode.Utilities.Configuration;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.tfod.TfodProcessor;
 
-import java.util.AbstractList;
 import java.util.List;
 
 public class VisionSubsystem extends SubsystemBase {
@@ -23,6 +22,8 @@ public class VisionSubsystem extends SubsystemBase {
             "TeamProp"
     };
     private final HardwareMap hardwareMap;
+    private final Telemetry telemetry;
+
 
 
     private TfodProcessor tfod;
@@ -30,9 +31,11 @@ public class VisionSubsystem extends SubsystemBase {
     ///the variable to store our
     private VisionPortal visionPortal;
 
-    public VisionSubsystem (HardwareMap hm ){
+    public VisionSubsystem (HardwareMap hm, Telemetry tel){
         //visionPortal = vp;
         hardwareMap = hm;
+        telemetry = tel;
+
         initTfod(false);
     }
     public void initTfod(boolean allowStreaming ){
@@ -104,9 +107,7 @@ public class VisionSubsystem extends SubsystemBase {
                 else if ( x > Configuration.RIGHT_LOWER_BOUND)
                     position = TeamPropPosition.Right;
             }
-
         }
-
 
         return position;
     }
