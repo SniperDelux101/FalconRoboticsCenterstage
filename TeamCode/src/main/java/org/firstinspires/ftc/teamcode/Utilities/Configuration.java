@@ -175,6 +175,8 @@ public class Configuration {
     //************************************************************
     // Confidence configuration for the vision
     public static double CONFIDENCE_SCORE = .75;
+    public  static int LEFT_UPPER_BOUND = 213;
+    public static int RIGHT_LOWER_BOUND = 600;
 
     //
 }

@@ -13,14 +13,17 @@ import org.firstinspires.ftc.teamcode.Utilities.Configuration;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.tfod.TfodProcessor;
 
+import java.util.AbstractList;
 import java.util.List;
 
 public class VisionSubsystem extends SubsystemBase {
-    private static  final String TFOD_MODEL_FILE = "";
+    private static  final String TFOD_MODEL_FILE = "/sdcard/FIRST/tflitemodels/model_20231017_212515.tflite";
+
     private static final String[] LABELS ={
             "TeamProp"
     };
     private final HardwareMap hardwareMap;
+
 
     private TfodProcessor tfod;
 
@@ -30,6 +33,7 @@ public class VisionSubsystem extends SubsystemBase {
     public VisionSubsystem (HardwareMap hm ){
         //visionPortal = vp;
         hardwareMap = hm;
+        initTfod(false);
     }
     public void initTfod(boolean allowStreaming ){
         tfod = new TfodProcessor.Builder()
@@ -43,7 +47,7 @@ public class VisionSubsystem extends SubsystemBase {
 
 
         VisionPortal.Builder builder = new VisionPortal.Builder();
-        builder.setCamera(hardwareMap.get(WebcamName.class, "Webcame 1"));
+        builder.setCamera(hardwareMap.get(WebcamName.class, "Webcam 1"));
         builder.setCameraResolution(new Size(640, 480));
         builder.enableLiveView(allowStreaming);
         if (allowStreaming ){
@@ -53,7 +57,6 @@ public class VisionSubsystem extends SubsystemBase {
 
         visionPortal = builder.build();
         tfod.setMinResultConfidence((float) Configuration.CONFIDENCE_SCORE);
-
     }
 
     public void enableTfod (boolean ennabled ){
@@ -71,30 +74,39 @@ public class VisionSubsystem extends SubsystemBase {
     }
 
     public List<Recognition> getRecognitions (){
-        return tfod.getRecognitions();
+        List<Recognition> recognitionList = tfod.getRecognitions();
+        return recognitionList;
     }
     public TeamPropPosition getTeamPropPosition(){
         List<Recognition> currentRecognitions = getRecognitions();
+        TeamPropPosition position = TeamPropPosition.Right;
         Recognition teamProp = null;
-        for (Recognition recognition : currentRecognitions){
+        if(currentRecognitions != null){
+            for (Recognition recognition : currentRecognitions){
 
-            if (teamProp == null){
-                teamProp = recognition;
+                if (teamProp == null){
+                    teamProp = recognition;
+                }
+                else if (recognition.getConfidence()> teamProp.getConfidence()){
+                    teamProp = recognition;
+                }
             }
-            else if (recognition.getConfidence()> teamProp.getConfidence()){
-                teamProp = recognition;
+
+            if (teamProp != null ) {
+                double x= (teamProp.getLeft()+ teamProp.getRight()) /2 ;
+                double y = (teamProp.getTop()+ teamProp.getBottom()) / 2;
+                if (x< Configuration.LEFT_UPPER_BOUND){
+                    position = TeamPropPosition.Left;
+                }
+                else if  (x > Configuration.LEFT_UPPER_BOUND && x< Configuration.RIGHT_LOWER_BOUND){
+                    position = TeamPropPosition.Center;
+                }
+                else if ( x > Configuration.RIGHT_LOWER_BOUND)
+                    position = TeamPropPosition.Right;
             }
+
         }
-        TeamPropPosition position = TeamPropPosition.Center;
-        if (teamProp != null ) {
-            double x= (teamProp.getLeft()+ teamProp.getRight()) /2 ;
-            double y = (teamProp.getTop()+ teamProp.getBottom()) / 2;
-            if (x< 213 ){
-                position = TeamPropPosition.Left;
-            }
-            else if ( x > 426)
-                position = TeamPropPosition.Right;
-        }
+
 
         return position;
     }
