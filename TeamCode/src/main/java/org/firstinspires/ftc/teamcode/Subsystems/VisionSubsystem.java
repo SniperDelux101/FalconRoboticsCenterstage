@@ -56,7 +56,7 @@ public class VisionSubsystem extends SubsystemBase {
     }
 
     public void enableTfod (boolean ennabled ){
-        ///TODO: Come back and do type checking fot null values
+        ///TODO: Come back and do type checking for null values
         visionPortal.setProcessorEnabled(tfod, ennabled);
     }
     public void stopStreaming(){

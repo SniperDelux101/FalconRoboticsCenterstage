@@ -14,6 +14,7 @@ import org.firstinspires.ftc.teamcode.Subsystems.drive.FalconMecanumDrive;
 public class AutoVisionSystemTest extends OpMode {
     private VisionSubsystem visionSubsystem ;
     public static TeamPropPosition teamPropPosition = TeamPropPosition.Center;
+    private boolean getRecognition = true;
 
     @Override
     public void init() {
@@ -23,6 +24,10 @@ public class AutoVisionSystemTest extends OpMode {
     }
     @Override
     public void loop() {
+        if (getRecognition) {
+            visionSubsystem.getRecognitions();
+            getRecognition = false;
+        }
 
     }
 
