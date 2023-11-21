@@ -72,7 +72,7 @@ public class Callisto extends Robot {
         driveBaseSubsystem = new MecanumDriveSubsystem(new FalconMecanumDrive(map),false);
         odometryControlSubsystem = new OdometryControlSubsystem(hMap);
         airplaneLauncherSubsystem = new AirplaneLauncherSubsystem(hMap);
-        climbSubsystem = new ClimbSubsystem(hMap);
+        climbSubsystem = new ClimbSubsystem(hMap, telemetry);
         extakeSubsystem = new ExtakeSubsystem(hMap);
         linearSlideSubsystem = new LinearSlideSubsystem(hMap);
         intakeMotorSubsystem = new IntakeMotorSubsystem(hMap);

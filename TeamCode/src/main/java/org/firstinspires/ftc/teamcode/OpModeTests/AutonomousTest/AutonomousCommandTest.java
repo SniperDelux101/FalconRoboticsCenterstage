@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.OpModeTests.AutonomousTest;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.WaitUntilCommand;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Commands.Autonomous.Alliance;
 import org.firstinspires.ftc.teamcode.Commands.Autonomous.AutonomousDriveCommand;
 import org.firstinspires.ftc.teamcode.Commands.Autonomous.AutonomousStartLocation;
@@ -30,11 +31,11 @@ public class AutonomousCommandTest extends CommandOpMode {
     public static AutonomousStartLocation startLocation = AutonomousStartLocation.Near ;
     public static TeamPropPosition teamPropPosition = TeamPropPosition.Center;
 
-    public AutonomousCommandTest(){
+    public AutonomousCommandTest(Telemetry telemetry){
         driveBaseSubsystem = new MecanumDriveSubsystem(new FalconMecanumDrive(hardwareMap),false);
         odometryControlSubsystem = new OdometryControlSubsystem(hardwareMap);
         airplaneLauncherSubsystem = new AirplaneLauncherSubsystem(hardwareMap);
-        climbSubsystem = new ClimbSubsystem(hardwareMap);
+        climbSubsystem = new ClimbSubsystem(hardwareMap, telemetry);
         extakeSubsystem = new ExtakeSubsystem(hardwareMap);
         linearSlideSubsystem = new LinearSlideSubsystem(hardwareMap);
         intakeMotorSubsystem = new IntakeMotorSubsystem(hardwareMap);

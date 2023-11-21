@@ -4,14 +4,16 @@ import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Utilities.Configuration;
 
-public class ClimbSubsystem extends SubsystemBase {
+public class ClimbSubsystem extends FalconSubsystemBase {
 
     public final DcMotor climbMotorLeft;
     public final DcMotor climbMotorRight;
 
-    public ClimbSubsystem(HardwareMap hMap) {
+    public ClimbSubsystem(HardwareMap hMap, Telemetry tel) {
+        super(tel);
         climbMotorLeft = hMap.dcMotor.get("Climb_Motor_Left");
         climbMotorRight = hMap.dcMotor.get("Climb_Motor_Right");
 
@@ -30,6 +32,8 @@ public class ClimbSubsystem extends SubsystemBase {
     }
 
     public int[] getCurrentMotorPositions(){
+        telemetry.addData(" Left motor Position", climbMotorLeft.getCurrentPosition());
+        telemetry.addData("Right motor position", climbMotorRight.getCurrentPosition());
         return new int[] {climbMotorLeft.getCurrentPosition(), climbMotorRight.getCurrentPosition()};
     }
 
@@ -37,6 +41,7 @@ public class ClimbSubsystem extends SubsystemBase {
         climbMotorLeft.setTargetPosition(position);
         climbMotorRight.setTargetPosition(position);
 
+        telemetry.addData("climb target position ;", position);
         climbMotorLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         climbMotorRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 

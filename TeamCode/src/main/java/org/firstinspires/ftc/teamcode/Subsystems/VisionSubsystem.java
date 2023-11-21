@@ -15,14 +15,13 @@ import org.firstinspires.ftc.vision.tfod.TfodProcessor;
 
 import java.util.List;
 
-public class VisionSubsystem extends SubsystemBase {
+public class VisionSubsystem extends FalconSubsystemBase {
     private static  final String TFOD_MODEL_FILE = "/sdcard/FIRST/tflitemodels/model_20231017_212515.tflite";
 
     private static final String[] LABELS ={
             "TeamProp"
     };
     private final HardwareMap hardwareMap;
-    private final Telemetry telemetry;
 
 
 
@@ -32,9 +31,8 @@ public class VisionSubsystem extends SubsystemBase {
     private VisionPortal visionPortal;
 
     public VisionSubsystem (HardwareMap hm, Telemetry tel){
-        //visionPortal = vp;
+        super(tel);
         hardwareMap = hm;
-        telemetry = tel;
 
         initTfod(false);
     }
@@ -85,6 +83,7 @@ public class VisionSubsystem extends SubsystemBase {
         TeamPropPosition position = TeamPropPosition.Right;
         Recognition teamProp = null;
         if(currentRecognitions != null){
+            telemetry.addData("Number of recognitions" , currentRecognitions.size());
             for (Recognition recognition : currentRecognitions){
 
                 if (teamProp == null){
@@ -93,11 +92,14 @@ public class VisionSubsystem extends SubsystemBase {
                 else if (recognition.getConfidence()> teamProp.getConfidence()){
                     teamProp = recognition;
                 }
+                telemetry.addData("Confidence score" , teamProp.getConfidence());
             }
 
             if (teamProp != null ) {
                 double x= (teamProp.getLeft()+ teamProp.getRight()) /2 ;
                 double y = (teamProp.getTop()+ teamProp.getBottom()) / 2;
+                telemetry.addData("X position : ", x);
+                telemetry.addData("Y positions :", y);
                 if (x< Configuration.LEFT_UPPER_BOUND){
                     position = TeamPropPosition.Left;
                 }
@@ -108,7 +110,7 @@ public class VisionSubsystem extends SubsystemBase {
                     position = TeamPropPosition.Right;
             }
         }
-
+        telemetry.addData("Team prop position :", position);
         return position;
     }
 
