@@ -32,8 +32,8 @@ public class ClimbSubsystem extends FalconSubsystemBase {
     }
 
     public int[] getCurrentMotorPositions(){
-        telemetry.addData(" Left motor Position", climbMotorLeft.getCurrentPosition());
-        telemetry.addData("Right motor position", climbMotorRight.getCurrentPosition());
+        telemetry.addData(" Climb subsystem Left motor Position", climbMotorLeft.getCurrentPosition());
+        telemetry.addData(" Climb subsystem Right motor position", climbMotorRight.getCurrentPosition());
         return new int[] {climbMotorLeft.getCurrentPosition(), climbMotorRight.getCurrentPosition()};
     }
 

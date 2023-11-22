@@ -23,7 +23,7 @@ public class IntakeMotorSubsystem extends FalconSubsystemBase {
     public void eject(double power) {
         intakeMotor.setRunMode(Motor.RunMode.RawPower);
         intakeMotor.set(power);
-        telemetry.addData("intake motor power", power);
+        telemetry.addData("intake motor power (ejection)", power);
     }
     /// it tells the intake motor to run in reverse
     public void intake() {

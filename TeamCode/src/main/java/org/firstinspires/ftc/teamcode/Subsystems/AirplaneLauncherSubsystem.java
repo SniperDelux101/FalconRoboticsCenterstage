@@ -29,7 +29,7 @@ public class AirplaneLauncherSubsystem extends FalconSubsystemBase {
     }
 
     public double getLanucherServoPosition(){
-        telemetry.addData("Launcher servo position :", launchServo.getPosition());
+        telemetry.addData(" Air plane Launcher servo position :", launchServo.getPosition());
         return launchServo.getPosition();
     }
 

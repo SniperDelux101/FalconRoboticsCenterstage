@@ -49,7 +49,7 @@ public class ExtakeSubsystem extends FalconSubsystemBase {
     public void setControlArmPosition (double position){
         controlArm1.setPosition(position);
         //controlArm2.setPosition(position);
-        telemetry.addData(" Control arm position :", controlArm1.getPosition());
+        telemetry.addData(" Extake Control Arm 1 Position :", controlArm1.getPosition());
     }
 
     public double getControlArm1Position(){

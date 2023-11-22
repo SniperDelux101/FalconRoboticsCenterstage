@@ -29,43 +29,11 @@ public class AutoVisionSystemTest extends OpMode {
     @Override
     public void loop() {
         if (getRecognition) {
-            teamPropPosition = this.getTeamPropPosition();
+            teamPropPosition = visionSubsystem.getTeamPropPosition();
             getRecognition = true;
         }
         telemetry.addData("Team Prop Position : ", teamPropPosition);
         telemetry.update();
-    }
-    public TeamPropPosition getTeamPropPosition(){
-        List<Recognition> currentRecognitions = visionSubsystem.getRecognitions();
-        TeamPropPosition position = TeamPropPosition.Right;
-        Recognition teamProp = null;
-        if(currentRecognitions != null){
-            for (Recognition recognition : currentRecognitions){
-
-                if (teamProp == null){
-                    teamProp = recognition;
-                }
-                else if (recognition.getConfidence()> teamProp.getConfidence()){
-                    teamProp = recognition;
-                }
-            }
-
-            if (teamProp != null ) {
-                double x= (teamProp.getLeft()+ teamProp.getRight()) /2 ;
-                double y = (teamProp.getTop()+ teamProp.getBottom()) / 2;
-                telemetry.addData("X value :", x );
-                telemetry.addData("Y Value : ",y );
-                if (x< Configuration.LEFT_UPPER_BOUND){
-                    position = TeamPropPosition.Left;
-                }
-                else if  (x > Configuration.LEFT_UPPER_BOUND && x< Configuration.RIGHT_LOWER_BOUND){
-                    position = TeamPropPosition.Center;
-                }
-                else if ( x > Configuration.RIGHT_LOWER_BOUND)
-                    position = TeamPropPosition.Right;
-            }
-        }
-        return position;
     }
 
 }
