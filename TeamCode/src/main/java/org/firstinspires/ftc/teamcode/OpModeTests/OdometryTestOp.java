@@ -40,7 +40,7 @@ public class OdometryTestOp extends OpMode {
     @Override
     public void init() {
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
-        odometryControlSubsystem = new OdometryControlSubsystem(hardwareMap);
+        odometryControlSubsystem = new OdometryControlSubsystem(hardwareMap , telemetry);
     }
 
     @Override

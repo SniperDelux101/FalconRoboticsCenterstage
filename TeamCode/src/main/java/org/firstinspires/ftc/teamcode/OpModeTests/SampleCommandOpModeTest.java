@@ -15,7 +15,7 @@ public class SampleCommandOpModeTest extends CommandOpMode {
     private GamepadEx gamepad;
     @Override
     public void initialize(){
-        linearSlideSubsystem = new LinearSlideSubsystem(hardwareMap);
+        linearSlideSubsystem = new LinearSlideSubsystem(hardwareMap , telemetry);
         gamepad = new GamepadEx(gamepad1);
 
         gamepad.getGamepadButton(GamepadKeys.Button.X)
