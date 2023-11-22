@@ -13,6 +13,11 @@ public class OdometryControlSubsystem extends FalconSubsystemBase {
 
     private final SimpleServo servoLeft, servoRight, servoRear;
 
+    /**
+     * sets the odometry servos to its desired positions
+     * @param hMap
+     * @param tel
+     */
     public OdometryControlSubsystem(HardwareMap hMap, Telemetry tel ) {
 
         super(tel);

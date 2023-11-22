@@ -9,6 +9,10 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Utilities.Configuration;
 
 public class LinearSlideSubsystem extends FalconSubsystemBase {
+    /**
+     * sets the linear slide to fo to its diffirent positions
+     *
+     */
 
     private final MotorEx linearSlideMotor;
     public LinearSlideSubsystem(HardwareMap hMap, Telemetry tel) {

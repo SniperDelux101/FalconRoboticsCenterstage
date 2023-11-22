@@ -16,7 +16,9 @@ public class IntakeMotorSubsystem extends FalconSubsystemBase {
         intakeMotor = new Motor(hMap, "Intake_Motor");
     }
 
-    /// it tells the intake motor to run forward
+    /**
+     * it tells the intake motor to run forward and eject the pixel
+     */
     public void eject() {
       eject(Configuration.INTAKE_MOTOR_POWER);
     }
@@ -25,7 +27,10 @@ public class IntakeMotorSubsystem extends FalconSubsystemBase {
         intakeMotor.set(power);
         telemetry.addData("intake motor power (ejection)", power);
     }
-    /// it tells the intake motor to run in reverse
+
+    /**
+     * it tells the intake motor to run in reverse and intakes the pixel
+     */
     public void intake() {
         intakeMotor.setRunMode(Motor.RunMode.RawPower);
         intakeMotor.set(-Configuration.INTAKE_MOTOR_POWER);

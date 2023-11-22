@@ -11,6 +11,11 @@ public class AirplaneLauncherSubsystem extends FalconSubsystemBase {
 
     private final SimpleServo launchServo;
 
+    /**
+     * This subsystem controls the servos to release, stop and retract the airplanes to launch
+     * @param hMap
+     * @param tel
+     */
     public AirplaneLauncherSubsystem(HardwareMap hMap, Telemetry tel) {
         super(tel);
 

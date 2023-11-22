@@ -43,7 +43,7 @@ public class ExtakeSubsystem extends FalconSubsystemBase {
     }
     public void setControlArmToExtake(){ setControlArmPosition(Configuration.PIXELBOXARM_EXTAKE);}
 
-    /*
+    /**
     sets the positions for the arms and how far up and down it can go.
      */
     public void setControlArmPosition (double position){
@@ -59,7 +59,9 @@ public class ExtakeSubsystem extends FalconSubsystemBase {
         //return controlArm2.getPosition();
     //}
 
-    /// tells the servos to direction of the wheels while intake and ejecting pixels.
+    /**
+     *  tells the servos to direction of the wheels while intake and ejecting pixels.
+     */
     public void pixelIntake(){
        pixelWheelDirection(DcMotorSimple.Direction.FORWARD);
     }
@@ -75,7 +77,9 @@ public class ExtakeSubsystem extends FalconSubsystemBase {
 
     }
 
-    ///Tells servos which direction to move.
+    /**
+     * Tells servos which direction to move.
+     */
     public void leftRotation() {
         r_Servo.setPosition(Configuration.R_SERVO_LEFT);
     }
