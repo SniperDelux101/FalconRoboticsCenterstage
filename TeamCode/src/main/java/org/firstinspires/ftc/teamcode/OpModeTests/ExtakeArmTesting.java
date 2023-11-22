@@ -17,7 +17,7 @@ public class ExtakeArmTesting extends OpMode {
     @Override
     public void init() {
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
-        extakeSubsystem = new ExtakeSubsystem(hardwareMap);
+        extakeSubsystem = new ExtakeSubsystem(hardwareMap , telemetry);
     }
     @Override
     public void loop() {
@@ -96,7 +96,7 @@ public class ExtakeArmTesting extends OpMode {
 
 
         telemetry.addData("Control Arm1 Position: ", extakeSubsystem.getControlArm1Position());
-        telemetry.addData("Control Arm2 Position: ", extakeSubsystem.getControlArm2Position());
+        //telemetry.addData("Control Arm2 Position: ", extakeSubsystem.getControlArm2Position());
         telemetry.addData("Pixel Box Left Position : ",Configuration.R_SERVO_LEFT);
         telemetry.addData("Pixel Box Right Position: ", Configuration.R_SERVO_RIGHT);
         telemetry.addData("Pixel Box Center Position:", Configuration.R_SERVO_CENTER);

@@ -34,11 +34,11 @@ public class AutonomousCommandTest extends CommandOpMode {
     public AutonomousCommandTest(Telemetry telemetry){
         driveBaseSubsystem = new MecanumDriveSubsystem(new FalconMecanumDrive(hardwareMap),false);
         odometryControlSubsystem = new OdometryControlSubsystem(hardwareMap);
-        airplaneLauncherSubsystem = new AirplaneLauncherSubsystem(hardwareMap);
+        airplaneLauncherSubsystem = new AirplaneLauncherSubsystem(hardwareMap , telemetry);
         climbSubsystem = new ClimbSubsystem(hardwareMap, telemetry);
-        extakeSubsystem = new ExtakeSubsystem(hardwareMap);
+        extakeSubsystem = new ExtakeSubsystem(hardwareMap, telemetry);
         linearSlideSubsystem = new LinearSlideSubsystem(hardwareMap);
-        intakeMotorSubsystem = new IntakeMotorSubsystem(hardwareMap);
+        intakeMotorSubsystem = new IntakeMotorSubsystem(hardwareMap , telemetry);
         //TODO: Fix the vision portal
         visionSubsystem = new VisionSubsystem(hardwareMap, telemetry);
     }

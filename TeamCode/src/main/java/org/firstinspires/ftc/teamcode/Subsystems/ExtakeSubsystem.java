@@ -6,22 +6,24 @@ import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Utilities.Configuration;
 
-public class ExtakeSubsystem extends SubsystemBase {
+public class ExtakeSubsystem extends FalconSubsystemBase {
 
     private final SimpleServo r_Servo;
     private final CRServo pixelWheel;
 
     private final SimpleServo controlArm1;
-    private final  SimpleServo controlArm2;
+    //private final  SimpleServo controlArm2;
 
 
-    public ExtakeSubsystem(HardwareMap hMap) {
+    public ExtakeSubsystem(HardwareMap hMap, Telemetry tel) {
+        super(tel);
         r_Servo = new SimpleServo(hMap, "Extake_Rotational_Servo", Configuration.R_SERVO_MIN, Configuration.R_SERVO_MAX);
         pixelWheel = hMap.get(CRServo.class, "Pixel_Wheel");
         controlArm1 = new SimpleServo(hMap, "Arm1_Servo", 0, 255);   //Configuration.E_MIN_ARM_ANGLE, Configuration.E_MAX_ARM_ANGLE);
-        controlArm2 = new SimpleServo(hMap, "Arm2_Servo", 0, 255); //Configuration.E_MIN_ARM_ANGLE, Configuration.E_MAX_ARM_ANGLE);
+        //controlArm2 = new SimpleServo(hMap, "Arm2_Servo", 0, 255); //Configuration.E_MIN_ARM_ANGLE, Configuration.E_MAX_ARM_ANGLE);
     }
 
     public void setControlArmToHighBoard (){
@@ -46,15 +48,16 @@ public class ExtakeSubsystem extends SubsystemBase {
      */
     public void setControlArmPosition (double position){
         controlArm1.setPosition(position);
-        controlArm2.setPosition(position);
+        //controlArm2.setPosition(position);
+        telemetry.addData(" Control arm position :", controlArm1.getPosition());
     }
 
     public double getControlArm1Position(){
         return controlArm1.getPosition();
     }
-    public double getControlArm2Position(){
-        return controlArm2.getPosition();
-    }
+    //public double getControlArm2Position(){
+        //return controlArm2.getPosition();
+    //}
 
     /// tells the servos to direction of the wheels while intake and ejecting pixels.
     public void pixelIntake(){

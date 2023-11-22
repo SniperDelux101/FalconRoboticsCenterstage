@@ -4,13 +4,15 @@ import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Utilities.Configuration;
 
-public class IntakeMotorSubsystem extends SubsystemBase {
+public class IntakeMotorSubsystem extends FalconSubsystemBase {
 
     private final Motor intakeMotor;
 
-    public IntakeMotorSubsystem(HardwareMap hMap) {
+    public IntakeMotorSubsystem(HardwareMap hMap, Telemetry tel) {
+        super(tel);
         intakeMotor = new Motor(hMap, "Intake_Motor");
     }
 
@@ -21,6 +23,7 @@ public class IntakeMotorSubsystem extends SubsystemBase {
     public void eject(double power) {
         intakeMotor.setRunMode(Motor.RunMode.RawPower);
         intakeMotor.set(power);
+        telemetry.addData("intake motor power", power);
     }
     /// it tells the intake motor to run in reverse
     public void intake() {
