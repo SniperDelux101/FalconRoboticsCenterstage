@@ -29,16 +29,27 @@ public class AutonomousPaths {
         }
     }
     public static TrajectorySequence Park (Alliance alliance, FalconMecanumDrive drive, AutonomousStartLocation startLocation){
+
+        TrajectorySequence path = null;
+
         if ( alliance== Alliance.Red && startLocation == AutonomousStartLocation.Near){
-            return drive.trajectorySequenceBuilder(new Pose2d()).build(); //TODO; Implemnet parking for red alliance near
+
+            path =  drive.trajectorySequenceBuilder(new Pose2d(16.00, -63.00, Math.toRadians(90.00)))
+                    .splineTo(new Vector2d(12.00, -34.00), Math.toRadians(90.00))
+                    .lineTo(new Vector2d(44.00, -36.00))
+                    .splineTo(new Vector2d(44.00, -48.00), Math.toRadians(90.00))
+                    .splineTo(new Vector2d(63.00, -60.00), Math.toRadians(90.00))
+                    .build();
+
+            return path;
         }
         else if (alliance == Alliance.Red && startLocation == AutonomousStartLocation.Far){
-          return drive.trajectorySequenceBuilder(new Pose2d()).build();//TODO; Impelement parking for red alliance far
+          return path; //TODO; Impelement parking for red alliance far
         }
         else if (alliance == Alliance.Blue && startLocation == AutonomousStartLocation.Near){
-            return drive.trajectorySequenceBuilder(new Pose2d()).build(); //TODO; Impelement parking for blue alliance near
+            return path; //TODO; Impelement parking for blue alliance near
         }else {
-            return drive.trajectorySequenceBuilder(new Pose2d()).build(); //TODO; Impelement parking for blue alliance far
+            return path; //TODO; Impelement parking for blue alliance far
         }
     }
 
@@ -49,12 +60,14 @@ public class AutonomousPaths {
         if(startLocation == AutonomousStartLocation.Near) {
             if (teamPropPosition == TeamPropPosition.Left) {
 
-                //TODO: Implement path for left position
-
-            } else if (teamPropPosition == TeamPropPosition.Center) {
-                path = drive.trajectorySequenceBuilder(new Pose2d(12.00, -64.00, Math.toRadians(90.00)))
+                path = drive.trajectorySequenceBuilder(new Pose2d(16.00, -63.00, Math.toRadians(90.00)))
                         .splineTo(new Vector2d(12.00, -34.00), Math.toRadians(90.00))
                         .build();
+
+            } else if (teamPropPosition == TeamPropPosition.Center) {
+
+                //TODO: Implement path for center position
+
             } else {
 
                 //TODO: Implement path for right position
@@ -73,27 +86,34 @@ public class AutonomousPaths {
 
         TrajectorySequence path = null;
 
-        if(teamPropPosition == TeamPropPosition.Center && startLocation == AutonomousStartLocation.Near) {
-                path = drive.trajectorySequenceBuilder(new Pose2d(12.00, -34.00, Math.toRadians(90.00)))
-                    .lineTo(new Vector2d(26.00, -34.00))
-                    .lineTo(new Vector2d(44.00, -34.00))
+        if(teamPropPosition == TeamPropPosition.Left && startLocation == AutonomousStartLocation.Near) {
+
+            path = drive.trajectorySequenceBuilder(new Pose2d(16.00, -63.00, Math.toRadians(90.00)))
+                    .splineTo(new Vector2d(12.00, -34.00), Math.toRadians(90.00))
+                    .lineTo(new Vector2d(44.00, -36.00))
                     .build();
         }
+
+        else if(teamPropPosition == TeamPropPosition.Left && startLocation == AutonomousStartLocation.Far) {
+            //TODO: Implement a left for the far side on red alliance
+        }
+
+        else if(teamPropPosition == TeamPropPosition.Center && startLocation == AutonomousStartLocation.Near) {
+
+        }
+
         else if(teamPropPosition == TeamPropPosition.Center && startLocation == AutonomousStartLocation.Far) {
             //TODO: Implement a center for the far side on red alliance
         }
+
         else if(teamPropPosition == TeamPropPosition.Right && startLocation == AutonomousStartLocation.Near) {
             //TODO: Implement a right for the near side on red alliance
         }
-        else if(teamPropPosition == TeamPropPosition.Right && startLocation == AutonomousStartLocation.Far) {
-            //TODO: Implement a right for the far side on red alliance
-        }
-        else if(teamPropPosition == TeamPropPosition.Left && startLocation == AutonomousStartLocation.Near) {
-            //TODO: Implement a left for the near side on red alliance
-        }
+
         else {
-            //TODO: Implement a left for the far side on the red alliance
+            //TODO: Implement a right for the far side on the red alliance
         }
+
         return path;
     }
 

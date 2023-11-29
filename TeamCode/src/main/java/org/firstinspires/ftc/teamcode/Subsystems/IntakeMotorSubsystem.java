@@ -32,6 +32,7 @@ public class IntakeMotorSubsystem extends FalconSubsystemBase {
      * it tells the intake motor to run in reverse and intakes the pixel
      */
     public void intake() {
+        telemetry.addLine("Running Intake");
         intakeMotor.setRunMode(Motor.RunMode.RawPower);
         intakeMotor.set(-Configuration.INTAKE_MOTOR_POWER);
     }

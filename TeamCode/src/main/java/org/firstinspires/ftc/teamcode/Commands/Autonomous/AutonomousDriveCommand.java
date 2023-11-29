@@ -56,16 +56,16 @@ public class AutonomousDriveCommand extends SequentialCommandGroup {
                 // This moves the robot to a scoring position near the backdrop
                 new TrajectorySequenceFollowerCommand(mecanumDriveSubsystem, AutonomousPaths.PhaseTwo(alliance, mecanumDriveSubsystem.getDrive(), teamPropPosition, path)),
                 // This will score a pixel on the backdrop
-                new RunLinearSlideAndCenterPixelBoxCommand(extakeSubsystem,linearSlideSubsystem, Configuration.LINEAR_SLIDE_POS_LO),
-                // This moves the arm into a scoring position
-                new MovePixelBoxArmToPositionCommand(extakeSubsystem, PixelBoxArmPosition.Extake),
-                // This moves the pixel box to the correct location based off of which spike location the team prop is on
-                new MoveToPixelBoxPosition(extakeSubsystem, getPixelBoxPositionFromPropPosition(teamPropPosition)),
-                // This drops the pixel to the correct position
-                new InstantCommand( extakeSubsystem::pixelEject, extakeSubsystem),
-                // This retracts the linear slide
-                new StopPixelBoxReset(extakeSubsystem, linearSlideSubsystem),
-                // this will park
+//                new RunLinearSlideAndCenterPixelBoxCommand(extakeSubsystem,linearSlideSubsystem, Configuration.LINEAR_SLIDE_POS_LO),
+//                // This moves the arm into a scoring position
+//                new MovePixelBoxArmToPositionCommand(extakeSubsystem, PixelBoxArmPosition.Extake),
+//                // This moves the pixel box to the correct location based off of which spike location the team prop is on
+//                new MoveToPixelBoxPosition(extakeSubsystem, getPixelBoxPositionFromPropPosition(teamPropPosition)),
+//                // This drops the pixel to the correct position
+//                new InstantCommand( extakeSubsystem::pixelEject, extakeSubsystem),
+//                // This retracts the linear slide
+//                new StopPixelBoxReset(extakeSubsystem, linearSlideSubsystem),
+//                // this will park
                 new TrajectorySequenceFollowerCommand(mecanumDriveSubsystem, AutonomousPaths.Park(alliance, mecanumDriveSubsystem.getDrive(), autonomousStartLocation))
         );
 

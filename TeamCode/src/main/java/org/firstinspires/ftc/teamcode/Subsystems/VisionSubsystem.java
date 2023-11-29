@@ -82,7 +82,7 @@ public class VisionSubsystem extends FalconSubsystemBase {
     }
     public TeamPropPosition getTeamPropPosition(){
         List<Recognition> currentRecognitions = getRecognitions();
-        TeamPropPosition position = TeamPropPosition.Right;
+        TeamPropPosition position = TeamPropPosition.Left;
         Recognition teamProp = null;
         if(currentRecognitions != null){
             telemetry.addData("Number of Team prop recognitions" , currentRecognitions.size());
@@ -105,7 +105,7 @@ public class VisionSubsystem extends FalconSubsystemBase {
                 if (x< Configuration.LEFT_UPPER_BOUND){
                     position = TeamPropPosition.Left;
                 }
-                else if  (x > Configuration.LEFT_UPPER_BOUND && x< Configuration.RIGHT_LOWER_BOUND){
+                else if  (x > Configuration.LEFT_UPPER_BOUND && x < Configuration.RIGHT_LOWER_BOUND){
                     position = TeamPropPosition.Center;
                 }
                 else if ( x > Configuration.RIGHT_LOWER_BOUND)

@@ -26,7 +26,7 @@ public class Configuration {
     public static double Y_MULTIPLIER = .1075361015;
     public static double TICKS_PER_REV = 8192;
     //public static double DISTANCE_PER_PULSE = Math.PI * Configuration.WHEEL_RADIUS / Configuration.TICKS_PER_REV;
-    public static double GEAR_RATIO = 3.7; // output (wheel) speed / input (motor) speed [Should be 4.5 or 0.2222222]
+    public static double GEAR_RATIO = 3.0; // output (wheel) speed / input (motor) speed [Should be 4.5 or 0.2222222]
     public static double MAX_RPM = 1620;
 
     public static double LATERAL_LIMITER = 0.3;
@@ -51,9 +51,9 @@ public class Configuration {
      * motor encoders or have elected not to use them for velocity control, these values should be
      * empirically tuned.
      */
-    public static double kV = 0.01;   //1.0 / rpmToVelocity(MAX_RPM);
-    public static double kA = 0.009005;
-    public static double kStatic = 0.0020;
+    public static double kV = 0.0175;   //1.0 / rpmToVelocity(MAX_RPM);
+    public static double kA = 0.0175;
+    public static double kStatic = 0.008;
 
     /*
      * These values are used to generate the trajectories for you robot. To ensure proper operation,
@@ -146,7 +146,7 @@ public class Configuration {
     public static double R_SERVO_LEFT = .18008;
     public static double R_SERVO_CENTER = .35;
     public static double R_SERVO_RIGHT = .528;
-    public static double R_SERVO_MULTIPLIER = .05;
+    public static double R_SERVO_MULTIPLIER = .005;
 
     //****************************************************************************************************************//
     // Values for horizontal extake servo
@@ -175,8 +175,8 @@ public class Configuration {
     //************************************************************
     // Confidence configuration for the vision
     public static double CONFIDENCE_SCORE = .75;
-    public  static int LEFT_UPPER_BOUND = 213;
-    public static int RIGHT_LOWER_BOUND = 600;
+    public  static int LEFT_UPPER_BOUND = 100;
+    public static int RIGHT_LOWER_BOUND = 350;
 
     //
 }

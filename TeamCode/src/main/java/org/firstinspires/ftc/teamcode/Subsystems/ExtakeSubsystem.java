@@ -64,9 +64,13 @@ public class ExtakeSubsystem extends FalconSubsystemBase {
      */
     public void pixelIntake(){
        pixelWheelDirection(DcMotorSimple.Direction.FORWARD);
+       telemetry.addData("Pixel Intake: ", pixelWheel.getPower());
+       telemetry.addData("Pixel Intake: ", pixelWheel.getDirection());
     }
     public void pixelEject (){
         pixelWheelDirection(DcMotorSimple.Direction.REVERSE);
+        telemetry.addData("Pixel Eject: ", pixelWheel.getPower());
+        telemetry.addData("Pixel Eje    : ", pixelWheel.getDirection());
     }
     public void pixelStop(){
         pixelWheel.setPower(0.0);
