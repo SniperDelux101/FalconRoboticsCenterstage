@@ -24,12 +24,10 @@ public class AutoTest_1 extends LinearOpMode {
          drive.setPoseEstimate(StartPos);
 
         TrajectorySequence NewTest = drive.trajectorySequenceBuilder(new Pose2d(17.00, -63.00, Math.toRadians(90.00)))
-                .splineTo(new Vector2d(14.15, -47.53), Math.toRadians(90.00))
-                .splineTo(new Vector2d(13.58, -32.96), Math.toRadians(90.00))
-                .lineTo(new Vector2d(44.00, -36.00))
-                .splineTo(new Vector2d(44.56, -49.23), Math.toRadians(90.00))
-                .lineTo(new Vector2d(43.57, -61.67))
-                .splineTo(new Vector2d(63.65, -61.39), Math.toRadians(90.00))
+                .lineToConstantHeading(new Vector2d(11, -36))
+                .lineToConstantHeading(new Vector2d(24,-36))
+                .lineToSplineHeading(new Pose2d(42,-36, Math.toRadians(180)))
+
                 .build();
 
         waitForStart();
