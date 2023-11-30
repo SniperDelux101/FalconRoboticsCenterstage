@@ -8,6 +8,10 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Utilities.Configuration;
 
 public class IntakeMotorSubsystem extends FalconSubsystemBase {
+    public enum Direction{
+        Intake,
+        Eject
+    }
 
     private final Motor intakeMotor;
 

@@ -4,12 +4,14 @@ import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.WaitUntilCommand;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Commands.Autonomous.Alliance;
 import org.firstinspires.ftc.teamcode.Commands.Autonomous.AutonomousDriveCommand;
 import org.firstinspires.ftc.teamcode.Commands.Autonomous.AutonomousStartLocation;
 import org.firstinspires.ftc.teamcode.Commands.Autonomous.TeamPropPosition;
+import org.firstinspires.ftc.teamcode.Commands.IntakeCommand;
 import org.firstinspires.ftc.teamcode.Subsystems.AirplaneLauncherSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.ClimbSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.ExtakeSubsystem;
@@ -23,20 +25,21 @@ import org.firstinspires.ftc.teamcode.Subsystems.drive.FalconMecanumDrive;
 @Autonomous
 public class AutonomousCommandTest extends CommandOpMode {
     ///region Subsystems
-    private final MecanumDriveSubsystem driveBaseSubsystem;
-    private final AirplaneLauncherSubsystem airplaneLauncherSubsystem;
-    private final ClimbSubsystem climbSubsystem;
-    private final ExtakeSubsystem extakeSubsystem;
-    private final LinearSlideSubsystem linearSlideSubsystem;
-    private final OdometryControlSubsystem odometryControlSubsystem;
-    private final IntakeMotorSubsystem intakeMotorSubsystem;
+    private MecanumDriveSubsystem driveBaseSubsystem;
+    private AirplaneLauncherSubsystem airplaneLauncherSubsystem;
+    private ClimbSubsystem climbSubsystem;
+    private ExtakeSubsystem extakeSubsystem;
+    private LinearSlideSubsystem linearSlideSubsystem;
+    private OdometryControlSubsystem odometryControlSubsystem;
+    private IntakeMotorSubsystem intakeMotorSubsystem;
     ///endregion
-    private final VisionSubsystem visionSubsystem;
+    private VisionSubsystem visionSubsystem;
     public static Alliance alliance = Alliance.Red;
     public static AutonomousStartLocation startLocation = AutonomousStartLocation.Near;
     public static TeamPropPosition teamPropPosition = TeamPropPosition.Center;
 
-    public AutonomousCommandTest(Telemetry telemetry) {
+    @Override
+    public void initialize() {
         driveBaseSubsystem = new MecanumDriveSubsystem(new FalconMecanumDrive(hardwareMap), false);
         odometryControlSubsystem = new OdometryControlSubsystem(hardwareMap, telemetry);
         airplaneLauncherSubsystem = new AirplaneLauncherSubsystem(hardwareMap, telemetry);
@@ -46,10 +49,6 @@ public class AutonomousCommandTest extends CommandOpMode {
         intakeMotorSubsystem = new IntakeMotorSubsystem(hardwareMap, telemetry);
         //TODO: Fix the vision portal
         visionSubsystem = new VisionSubsystem(hardwareMap, telemetry);
-    }
-
-    @Override
-    public void initialize() {
 
         telemetry.addLine("Before Schedule");
         telemetry.update();
@@ -62,7 +61,9 @@ public class AutonomousCommandTest extends CommandOpMode {
         */
 
         schedule(
-                new InstantCommand(intakeMotorSubsystem::eject, intakeMotorSubsystem)
+                new WaitUntilCommand(this::isStarted).andThen(
+                   new IntakeCommand(intakeMotorSubsystem, IntakeMotorSubsystem.Direction.Eject).withTimeout(20000)
+                )
         );
 
         register(driveBaseSubsystem, airplaneLauncherSubsystem, climbSubsystem, extakeSubsystem, linearSlideSubsystem, odometryControlSubsystem, intakeMotorSubsystem, visionSubsystem);
