@@ -54,7 +54,7 @@ public class AutonomousPaths {
     }
 
 
-    private static TrajectorySequence RedAlliancePhaseOne(FalconMecanumDrive drive, TeamPropPosition teamPropPosition, AutonomousStartLocation startLocation){
+    public static TrajectorySequence RedAlliancePhaseOne(FalconMecanumDrive drive, TeamPropPosition teamPropPosition, AutonomousStartLocation startLocation){
 
         TrajectorySequence path = null;
         if(startLocation == AutonomousStartLocation.Near) {
@@ -82,7 +82,7 @@ public class AutonomousPaths {
         return path;
     }
 
-    private static TrajectorySequence RedAlliancePhaseTwo(FalconMecanumDrive drive, TeamPropPosition teamPropPosition, AutonomousStartLocation startLocation){
+    public static TrajectorySequence RedAlliancePhaseTwo(FalconMecanumDrive drive, TeamPropPosition teamPropPosition, AutonomousStartLocation startLocation){
 
         TrajectorySequence path = null;
 
@@ -117,13 +117,14 @@ public class AutonomousPaths {
         return path;
     }
 
-    private static TrajectorySequence BlueAlliancePhaseOne(FalconMecanumDrive drive, TeamPropPosition teamPropPosition, AutonomousStartLocation startLocation){
+    public static TrajectorySequence BlueAlliancePhaseOne(FalconMecanumDrive drive, TeamPropPosition teamPropPosition, AutonomousStartLocation startLocation){
 
         TrajectorySequence path = null;
         if(startLocation == AutonomousStartLocation.Near) {
             if (teamPropPosition == TeamPropPosition.Left) {
-
-                //TODO: Implement path for left position
+                path = drive.trajectorySequenceBuilder(new Pose2d(16.00, -63.00, Math.toRadians(90.00)))
+                        .splineTo(new Vector2d(12.00, -34.00), Math.toRadians(90.00))
+                        .build();
 
             } else if (teamPropPosition == TeamPropPosition.Center) {
 
@@ -143,12 +144,21 @@ public class AutonomousPaths {
         return path;
     }
 
-    private static TrajectorySequence BlueAlliancePhaseTwo(FalconMecanumDrive drive, TeamPropPosition teamPropPosition, AutonomousStartLocation startLocation){
+    public static TrajectorySequence BlueAlliancePhaseTwo(FalconMecanumDrive drive, TeamPropPosition teamPropPosition, AutonomousStartLocation startLocation){
 
         TrajectorySequence path = null;
 
         if(teamPropPosition == TeamPropPosition.Center && startLocation == AutonomousStartLocation.Near) {
             //TODO: Implement a center for the near side on blue alliance
+            path = drive.trajectorySequenceBuilder(new Pose2d())
+                    .forward(40)
+                    .waitSeconds(2)
+                    .back(34)
+                    .waitSeconds(2)
+                    .turn(Math.toRadians(90) + 1e-6)
+                    .waitSeconds(2)
+                    .forward(20)
+                    .build();
         }
         else if(teamPropPosition == TeamPropPosition.Center && startLocation == AutonomousStartLocation.Far) {
             //TODO: Implement a center for the far side on blue alliance
