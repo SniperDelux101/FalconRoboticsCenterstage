@@ -71,19 +71,23 @@ public class AutonomousCommandTest extends CommandOpMode {
         intakeMotorSubsystem = new IntakeMotorSubsystem(hardwareMap, telemetry);
         visionSubsystem = new VisionSubsystem(hardwareMap, telemetry);
 
-        visionSubsystem.initTfod(true);
-
         register(driveBaseSubsystem, airplaneLauncherSubsystem, climbSubsystem, extakeSubsystem, linearSlideSubsystem, odometryControlSubsystem, intakeMotorSubsystem, visionSubsystem);
-
-        telemetry.addLine("After Schedule");
-        telemetry.update();
+        visionSubsystem.initTfod(true);
     }
 
     @Override
     public void runOpMode() throws InterruptedException {
         initialize();
 
+
+
         while(this.opModeInInit()) {
+            telemetry.addLine("GamePad1 D-PadUp = Start Location Far");
+            telemetry.addLine("GamePad1 D-PadDown = Start Location Near");
+            telemetry.addLine("GamePad1 D-PadLeft = Alliance Red");
+            telemetry.addLine("GamePad1 D-PadRight = Alliance Blue");
+            telemetry.addData();
+
             if (gamepad1.dpad_left)
                 alliance = Alliance.Red;
             else if (gamepad1.dpad_right)
@@ -93,17 +97,16 @@ public class AutonomousCommandTest extends CommandOpMode {
             else if (gamepad1.dpad_down)
                 startLocation = AutonomousStartLocation.Near;
 
+            teamPropPosition = visionSubsystem.getTeamPropPosition();
+            telemetry.addData("Team Prop Position: ", teamPropPosition);
             telemetry.addData("Alliance: ", alliance);
             telemetry.addData("Auto Start Location: ", startLocation);
             telemetry.update();
         }
 
         waitForStart();
-        teamPropPosition = visionSubsystem.getTeamPropPosition();
-        telemetry.addData("Team Prop Position: ", teamPropPosition);
-        telemetry.update();
-        visionSubsystem.closeVisionPortal();
 
+        visionSubsystem.closeVisionPortal();
         TrajectorySequence phase1, phase2;
 
         if(startLocation == AutonomousStartLocation.Near && alliance == Alliance.Blue) {
