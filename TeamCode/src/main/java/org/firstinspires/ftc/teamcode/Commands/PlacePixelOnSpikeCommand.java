@@ -15,12 +15,12 @@ public class PlacePixelOnSpikeCommand extends CommandBase {
 
     @Override
     public void execute() {
-        intakeMotorSubsystem.eject(0.3);
+        intakeMotorSubsystem.eject(0.6);
     }
 
     @Override
     public boolean isFinished() {
-        return true;
+        return false;
     }
 
     @Override

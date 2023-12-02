@@ -6,6 +6,7 @@ import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.InstantCommand;
+import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SelectCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitUntilCommand;
@@ -80,13 +81,13 @@ public class AutonomousCommandTest extends CommandOpMode {
         initialize();
 
 
+        boolean readVision = true;
 
         while(this.opModeInInit()) {
             telemetry.addLine("GamePad1 D-PadUp = Start Location Far");
             telemetry.addLine("GamePad1 D-PadDown = Start Location Near");
             telemetry.addLine("GamePad1 D-PadLeft = Alliance Red");
             telemetry.addLine("GamePad1 D-PadRight = Alliance Blue");
-            telemetry.addData();
 
             if (gamepad1.dpad_left)
                 alliance = Alliance.Red;
@@ -97,7 +98,11 @@ public class AutonomousCommandTest extends CommandOpMode {
             else if (gamepad1.dpad_down)
                 startLocation = AutonomousStartLocation.Near;
 
-            teamPropPosition = visionSubsystem.getTeamPropPosition();
+            if(readVision){
+                teamPropPosition = visionSubsystem.getTeamPropPosition();
+                readVision = false;
+            }
+
             telemetry.addData("Team Prop Position: ", teamPropPosition);
             telemetry.addData("Alliance: ", alliance);
             telemetry.addData("Auto Start Location: ", startLocation);
@@ -105,6 +110,7 @@ public class AutonomousCommandTest extends CommandOpMode {
         }
 
         waitForStart();
+
 
         visionSubsystem.closeVisionPortal();
         TrajectorySequence phase1, phase2;
@@ -132,8 +138,10 @@ public class AutonomousCommandTest extends CommandOpMode {
                     new SequentialCommandGroup(
                     new TrajectorySequenceFollowerCommand(driveBaseSubsystem, phase1),
                     // This places a pixel on the spike
-                    new PlacePixelOnSpikeCommand(intakeMotorSubsystem).withTimeout(2000),
-                    new TrajectorySequenceFollowerCommand(driveBaseSubsystem, phase2)
+                            new ParallelCommandGroup(
+                                    new PlacePixelOnSpikeCommand(intakeMotorSubsystem).withTimeout(2000),
+                                    new TrajectorySequenceFollowerCommand(driveBaseSubsystem, phase2)
+                            )
                 )
         );
 
