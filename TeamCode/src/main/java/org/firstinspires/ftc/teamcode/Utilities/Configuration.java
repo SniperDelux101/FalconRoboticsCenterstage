@@ -109,11 +109,11 @@ public class Configuration {
 
     public static double LINEAR_SLIDE_POWER = 0.75;
 
-    public static int LINEAR_SLIDE_POS_HOME = 0;
-    public static int LINEAR_SLIDE_POS_LO = 2400;
-    public static int LINEAR_SLIDE_POS_MED = 3400;
+    public static int LINEAR_SLIDE_POS_HOME = -40;
+    public static int LINEAR_SLIDE_POS_LO = -2440;
+    public static int LINEAR_SLIDE_POS_MED = -3440;
     //TODO change the HI position once "spine" can reach the desired distance
-    public static int LINEAR_SLIDE_POS_HI = 3400;
+    public static int LINEAR_SLIDE_POS_HI = -3440;
     public static int LINEAR_SLIDE_POS_TRANSFER = 1;
     public static int LINEAR_SLIDE_MULTIPLIER = 10;
 

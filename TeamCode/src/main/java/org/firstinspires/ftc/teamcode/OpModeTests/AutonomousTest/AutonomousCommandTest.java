@@ -70,6 +70,12 @@ public class AutonomousCommandTest extends CommandOpMode {
                         new TrajectorySequenceFollowerCommand(driveBaseSubsystem, BlueNearCenter_Phase2())
                 )
         );
+//        schedule(
+//                new WaitUntilCommand( this::isStarted).andThen(
+//                        new TrajectoryFollowerCommand(driveBaseSubsystem, BlueNearCenter_Phase1()),
+//
+//                )
+//        );
 
         register(driveBaseSubsystem, airplaneLauncherSubsystem, climbSubsystem, extakeSubsystem, linearSlideSubsystem, odometryControlSubsystem, intakeMotorSubsystem, visionSubsystem);
 
@@ -79,27 +85,28 @@ public class AutonomousCommandTest extends CommandOpMode {
 
     public TrajectorySequence BlueNearCenter_Phase1(){
        return driveBaseSubsystem.getDrive().trajectorySequenceBuilder(new Pose2d())
-                .forward(40)
+               .strafeRight(5)
+               .forward(32)
                 .build();
     }
     public TrajectorySequence BlueNearCenter_Phase2(){
         return driveBaseSubsystem.getDrive().trajectorySequenceBuilder(new Pose2d())
-                .back(34)
+                .back(28)
                 .waitSeconds(1)
                 .turn(Math.toRadians(90) + 1e-6)
                 .waitSeconds(1)
-                .forward(20)
+                .forward(35)
                 .build();
     }
     public TrajectorySequence BlueNearLeft_Phase1 (){
         return driveBaseSubsystem.getDrive().trajectorySequenceBuilder(new Pose2d())
-         .strafeLeft(6.0)
-                .forward(35.0)
+                .strafeLeft(9.0)
+                .forward(28.0)
                 .build();
     }
     public TrajectorySequence BlueNearLeft_Phase2 (){
         return driveBaseSubsystem.getDrive().trajectorySequenceBuilder(new Pose2d())
-                .back(30.0)
+                .back(23.0)
                 .turn(Math.toRadians(90) + 1e-6)
                 .forward(29.0)
                 .build();
@@ -245,6 +252,24 @@ public class AutonomousCommandTest extends CommandOpMode {
                 .turn(Math.toRadians(-90) - 1e-6)
                 .waitSeconds(1)
                 .forward(23)
+                .build();
+    }
+
+    public TrajectorySequence RedNearLeft_Phase1 (){
+        return driveBaseSubsystem.getDrive().trajectorySequenceBuilder(new Pose2d())
+                .strafeLeft(6.0)
+                .forward(32.0)
+                .turn(Math.toRadians(90) + 1e-6)
+                .forward(4)
+                .build();
+    }
+    public TrajectorySequence RedNearLeft_Phase2 (){
+        return driveBaseSubsystem.getDrive().trajectorySequenceBuilder(new Pose2d())
+                .back(6)
+                .turn(Math.toRadians(-90) - 1e-6)
+                .back(25.0)
+                .turn(Math.toRadians(-90) - 1e-6)
+                .forward(32.0)
                 .build();
     }
 
