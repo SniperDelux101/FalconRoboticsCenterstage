@@ -66,7 +66,7 @@ public class BuildRedFarPaths {
     public static void RedFarLeft_Phase1(){
         Phase1= drive.trajectorySequenceBuilder(new Pose2d())
                 .forward(29.0)
-                .turn(Math.toRadians(90) + 1e-6)
+                .turn(Math.toRadians(130) + 1e-6)
                 .forward(9.0)
 //                .forward(RedFarLeft_Phase1Forward)
 //                .turn( RedFarLeft_Phase1Turn+ 1e-6)
@@ -85,9 +85,9 @@ public class BuildRedFarPaths {
     public static void RedFarLeft_Phase2(){
         Phase2= drive.trajectorySequenceBuilder(new Pose2d())
                 .back(12.0)
-                .turn(Math.toRadians(-90) -1e-6)
+                .turn(Math.toRadians(-130) -1e-6)
                 .forward(23)
-                .turn(Math.toRadians(-90)-1e-6)
+                .turn(Math.toRadians(-130)-1e-6)
                 .forward(93)
 //                .back(RedFarLeft_Phase2back)
 //                .strafeRight(RedFarLeft_Phase2StrafeRight)
@@ -99,7 +99,7 @@ public class BuildRedFarPaths {
     public static void RedFarRight_Phase1(){
         Phase1= drive.trajectorySequenceBuilder(new Pose2d())
                 .forward(30.0)
-                .turn(Math.toRadians(90)+1e-6)
+                .turn(Math.toRadians(130)+1e-6)
                 .forward(6)
 //                .forward(RedFarRight_Phase1Forward)
 //                .turn( RedFarRight_Phase1Turn  - 1e-6)
@@ -116,9 +116,9 @@ public class BuildRedFarPaths {
     public static void RedFarRight_Phase2 (){
         Phase2= drive.trajectorySequenceBuilder(new Pose2d())
                 .back(10)
-                .turn(Math.toRadians(-90)-1e-6)
+                .turn(Math.toRadians(-130)-1e-6)
                 .forward(22)
-                .turn(Math.toRadians(-90)-1e-6)
+                .turn(Math.toRadians(-130)-1e-6)
 //                .back(RedFarRight_Phase2Back1)
 //                .strafeLeft(RedFarRight_Phase2StrafeLeft)
 //                .forward(RedFarRight_Phase2Forward2)

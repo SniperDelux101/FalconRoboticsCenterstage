@@ -70,7 +70,7 @@ public class BuildBlueFarPaths {
     public static void BlueFarLeft_Phase1(){
         Phase1 = drive.trajectorySequenceBuilder(new Pose2d())
         .forward(29.0)
-        .turn(Math.toRadians(90) + 1e-6)
+        .turn(Math.toRadians(130) + 1e-6)
         .forward(7.0)
         .build();
 //       Phase1 = drive.trajectorySequenceBuilder(new Pose2d())
@@ -94,16 +94,16 @@ public class BuildBlueFarPaths {
 //                .strafeRight(BlueFarLeft_Phase2StrafeRight)
 //                .forward(BluefarLeft_Phase2Forward2)
                 .back(9.0)
-                 .turn(Math.toRadians(-90) - 1e-6)
+                 .turn(Math.toRadians(-130) - 1e-6)
                  .forward(22.0)
-                 .turn(Math.toRadians(90)+ 1e-6)
+                 .turn(Math.toRadians(130)+ 1e-6)
                  .forward (90.0 )
                 .build();
     }
     public static void BlueFarRight_Phase1 (){
         Phase1 = drive.trajectorySequenceBuilder(new Pose2d())
                 .forward(29.0)
-                .turn(Math.toRadians(-90) - 1e-6)
+                .turn(Math.toRadians(-130) - 1e-6)
                  .forward(9.0)
 //                .forward(BlueFarRight_Phase1Forward)
 //                .turn(BlueFarRight_Phase1turn - 1e-6)
@@ -122,9 +122,9 @@ public class BuildBlueFarPaths {
     public static void BlueFarRight_Phase2 (){
         Phase2 = drive.trajectorySequenceBuilder(new Pose2d())
                 .back(12.0)
-                .turn(Math.toRadians(90) + 1e-6)
+                .turn(Math.toRadians(130) + 1e-6)
                 .forward(22.0)
-                .turn(Math.toRadians(90) + 1e-6)
+                .turn(Math.toRadians(130) + 1e-6)
                 .forward(90.0)
 //                .back(BlueFarRight_Phase2Back1)
 //                .strafeLeft(BlueFarRight_Phase2StrafeLeft)

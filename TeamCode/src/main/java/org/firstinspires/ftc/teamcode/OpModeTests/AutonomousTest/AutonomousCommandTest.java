@@ -59,6 +59,9 @@ public class AutonomousCommandTest extends CommandOpMode {
     public static AutonomousStartLocation startLocation = AutonomousStartLocation.Near;
     public static TeamPropPosition teamPropPosition = TeamPropPosition.Center;
 
+    public static boolean runAutonomous = true;
+
+
     @Override
     public void initialize() {
         CommandScheduler.getInstance().reset();
@@ -73,7 +76,7 @@ public class AutonomousCommandTest extends CommandOpMode {
         visionSubsystem = new VisionSubsystem(hardwareMap, telemetry);
 
         register(driveBaseSubsystem, airplaneLauncherSubsystem, climbSubsystem, extakeSubsystem, linearSlideSubsystem, odometryControlSubsystem, intakeMotorSubsystem, visionSubsystem);
-        visionSubsystem.initTfod(false);
+        visionSubsystem.initTfod(true);
     }
 
     @Override
@@ -97,12 +100,15 @@ public class AutonomousCommandTest extends CommandOpMode {
                 startLocation = AutonomousStartLocation.Far;
             else if (gamepad1.dpad_down)
                 startLocation = AutonomousStartLocation.Near;
+//            else if (gamepad1.a)
+//                runAutonomous = true;
+//            else if (gamepad1.b)
+//                runAutonomous = false;
 
-            if(readVision){
-                teamPropPosition = visionSubsystem.getTeamPropPosition();
-                readVision = false;
-            }
 
+            teamPropPosition = visionSubsystem.getTeamPropPosition();
+
+            telemetry.addData("Run atonomous ; " , runAutonomous);
             telemetry.addData("Team Prop Position: ", teamPropPosition);
             telemetry.addData("Alliance: ", alliance);
             telemetry.addData("Auto Start Location: ", startLocation);
@@ -135,13 +141,13 @@ public class AutonomousCommandTest extends CommandOpMode {
         }
 
         schedule(
-                    new SequentialCommandGroup(
-                    new TrajectorySequenceFollowerCommand(driveBaseSubsystem, phase1),
-                    // This places a pixel on the spike
-                            new ParallelCommandGroup(
-                                    new PlacePixelOnSpikeCommand(intakeMotorSubsystem).withTimeout(2000),
-                                    new TrajectorySequenceFollowerCommand(driveBaseSubsystem, phase2)
-                            )
+                new SequentialCommandGroup(
+                        new TrajectorySequenceFollowerCommand(driveBaseSubsystem, phase1),
+                        // This places a pixel on the spike
+                        new ParallelCommandGroup(
+                                new PlacePixelOnSpikeCommand(intakeMotorSubsystem).withTimeout(2000),
+                                new TrajectorySequenceFollowerCommand(driveBaseSubsystem, phase2)
+                        )
                 )
         );
 

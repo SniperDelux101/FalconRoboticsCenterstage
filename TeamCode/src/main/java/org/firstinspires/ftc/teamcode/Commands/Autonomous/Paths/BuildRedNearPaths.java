@@ -68,7 +68,7 @@ public class BuildRedNearPaths {
     public static void RedNearRight_Phase1(){
         Phase1=drive.trajectorySequenceBuilder(new Pose2d())
                 .forward(29)
-                .turn(Math.toRadians(-90.0)-1e-6)
+                .turn(Math.toRadians(-130.0) -1e-6)
                 .forward(5)
 //                .forward(RedNearRight_Phase1Forward)
 //                .turn(RedNearRight_Phase1turn - 1e-6)
@@ -86,9 +86,9 @@ public class BuildRedNearPaths {
     public static void RedNearRight_Phase2(){
         Phase2 = drive.trajectorySequenceBuilder(new Pose2d())
                 .back(11)
-                .turn(Math.toRadians(-90) - 1e-6)
+                .turn(Math.toRadians(-130) - 1e-6)
                 .forward(24)
-                .turn(Math.toRadians(90)+1e-6)
+                .turn(Math.toRadians(130)+1e-6)
                 .forward(30)
 //                .back(RedNearRight_Phase2Back)
 //                .waitSeconds(1)
@@ -100,8 +100,8 @@ public class BuildRedNearPaths {
     public static void RedNearLeft_Phase1 (){
        Phase1= drive.trajectorySequenceBuilder(new Pose2d())
                .forward(29.0)
-               .turn(Math.toRadians(90) + 1e-6)
-               .forward(10)
+               .turn(Math.toRadians(130) + 1e-6)
+               .forward(18)
 //                .strafeLeft(RedNearLeft_Phase1Strafe)
 //                .forward(RedNearLeft_Phase1Forward1)
 //                .turn(RedNearLeft_Phase1Turn2+ 1e-6)
@@ -118,10 +118,10 @@ public class BuildRedNearPaths {
     }
     public static void RedNearLeft_Phase2 (){
         Phase2= drive.trajectorySequenceBuilder(new Pose2d())
-                .back(8)
-                .turn(Math.toRadians(-90) - 1e-6)
+                .back(12)
+                .turn(Math.toRadians(-130) - 1e-6)
                 .back(23.0)
-                .turn(Math.toRadians(-90) - 1e-6)
+                .turn(Math.toRadians(-130) - 1e-6)
                 .forward(35.0)
 //                .back(RedNearLeft_Phase2Back1)
 //                .turn(RedNearLeft_Phase2Turn - 1e-6)

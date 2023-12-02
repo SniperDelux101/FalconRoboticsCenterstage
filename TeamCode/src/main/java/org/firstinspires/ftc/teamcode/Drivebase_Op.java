@@ -30,7 +30,13 @@ public class Drivebase_Op extends OpMode {
 
     @Override
     public void loop() {
-        robot.run();
+        try {
+            robot.run();
+        }
+        catch (Exception ex){
+            telemetry.addLine("Exception");
+            robot.reset();
+        }
     }
 
     //TODO// UNCOMMENT CODE ONCE VALUES HAVE BEEN DETERMINED

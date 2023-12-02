@@ -68,7 +68,7 @@ public class BuildBlueNearPaths {
     public static void BlueNearLeft_Phase1 (){
         Phase1= drive.trajectorySequenceBuilder(new Pose2d())
                 .forward(28.0)
-                .turn(Math.toRadians(90) + 1e-6)
+                .turn(Math.toRadians(130) + 1e-6)
                 .forward(5.0)
 //                .strafeLeft(BlueNearLeft_Phase1Strafe)
 //                .forward(BlueNearLeft_Phase1Forward)
@@ -86,9 +86,9 @@ public class BuildBlueNearPaths {
     public static void BlueNearLeft_Phase2 (){
         Phase2= drive.trajectorySequenceBuilder(new Pose2d())
                 .back(10.0)
-                .turn(Math.toRadians(90) + 1e-6)
+                .turn(Math.toRadians(130) + 1e-6)
                 .forward(24.0)
-                .turn(Math.toRadians(-90)- 1e-6)
+                .turn(Math.toRadians(-130)- 1e-6)
                 .forward(38)
 //                .back(BlueNearLeft_Phase2back)
 //                .turn(BlueNearLeft_Phase2turn + 1e-6)
@@ -98,7 +98,7 @@ public class BuildBlueNearPaths {
     public static void BlueNearRight_Phase1 (){
         Phase1= drive.trajectorySequenceBuilder(new Pose2d())
                 .forward(28.0)
-                .turn(Math.toRadians(-90) - 1e-6)
+                .turn(Math.toRadians(-130) - 1e-6)
                 .forward(12.0)
 //                .forward(BlueNearRight_Phase1Forward)
 //                .turn(BlueNearRight_Phase1turn- 1e-6)
@@ -117,9 +117,9 @@ public class BuildBlueNearPaths {
     public static void BlueNearRight_Phase2 () {
         Phase2 = drive.trajectorySequenceBuilder(new Pose2d())
                 .back(8.0)
-                .turn(Math.toRadians(-90) - 1e-6)
+                .turn(Math.toRadians(-130) - 1e-6)
                 .forward(24.0)
-                .turn(Math.toRadians(-90)- 1e-6)
+                .turn(Math.toRadians(-130)- 1e-6)
                 .forward(38)
 //                .back(BlueNearRight_Phase2Back1)
 //                .strafeRight(BlueNearRight_Phase2StrafeRight)
