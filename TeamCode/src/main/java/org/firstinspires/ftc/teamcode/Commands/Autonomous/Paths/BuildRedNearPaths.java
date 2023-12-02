@@ -28,9 +28,9 @@ public class BuildRedNearPaths {
 
     }
     public static TrajectorySequence Phase1 , Phase2 ;
-    FalconMecanumDrive drive;
-    public void Build (FalconMecanumDrive drive , TeamPropPosition position){
-        this.drive = drive;
+    private static FalconMecanumDrive drive;
+    public static void Build (FalconMecanumDrive dr , TeamPropPosition position){
+        drive = dr;
         if ( position == TeamPropPosition.Center){
            RedNearCenter_Phase1();
             RedNearCenter_Phase2();
@@ -45,26 +45,26 @@ public class BuildRedNearPaths {
         }
     }
 
-    public void RedNearCenter_Phase1 (){
+    public static void RedNearCenter_Phase1 (){
         Phase1 = drive.trajectorySequenceBuilder(new Pose2d())
                 .strafeLeft(Params.RedNearCenter_Phase1Strafe)
                 .forward(Params.RedNearCenter_Phase1Forward)
                 .build();
     }
-    public void RedNearCenter_Phase2 (){
+    public static void RedNearCenter_Phase2 (){
        Phase2 = drive.trajectorySequenceBuilder(new Pose2d())
                 .back(Params.RedNearCenter_Phase2Back)
                 .turn(Math.toRadians(-90) - 1e-6)
                 .forward(Params.RedNearCenter_Phase2Forward)
                 .build();
     }
-    public void RedNearRight_Phase1(){
+    public static void RedNearRight_Phase1(){
         Phase1=drive.trajectorySequenceBuilder(new Pose2d())
                 .strafeRight(Params.RedNearRight_Phase1Strafe)
                 .forward(Params.RedNearRight_Phase1Forward)
                 .build();
     }
-    public void RedNearRight_Phase2(){
+    public static void RedNearRight_Phase2(){
         Phase2 = drive.trajectorySequenceBuilder(new Pose2d())
                 .back(Params.RedNearRight_Phase2Back)
                 .waitSeconds(1)
@@ -73,7 +73,7 @@ public class BuildRedNearPaths {
                 .forward(Params.RedNearRight_Phase2Forward)
                 .build();
     }
-    public void RedNearLeft_Phase1 (){
+    public static void RedNearLeft_Phase1 (){
        Phase1= drive.trajectorySequenceBuilder(new Pose2d())
                 .strafeLeft(Params.RedNearLeft_Phase1Strafe)
                 .forward(Params.RedNearLeft_Phase1Forward1)
@@ -81,7 +81,7 @@ public class BuildRedNearPaths {
                 .forward(Params.RedNearLeft_Phase1Forward2)
                 .build();
     }
-    public void RedNearLeft_Phase2 (){
+    public static void RedNearLeft_Phase2 (){
         Phase2= drive.trajectorySequenceBuilder(new Pose2d())
                 .back(Params.RedNearLeft_Phase2Back1)
                 .turn(Math.toRadians(-90) - 1e-6)
