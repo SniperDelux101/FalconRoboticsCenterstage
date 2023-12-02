@@ -38,15 +38,16 @@ public class VisionSubsystem extends FalconSubsystemBase {
     private AutonomousStartLocation startLocation;
 
     public VisionSubsystem (HardwareMap hm, Telemetry tel){
-        this(hm, tel, Alliance.Red, AutonomousStartLocation.Near);
+        this(hm, tel, Alliance.Red, AutonomousStartLocation.Near, false);
     }
 
-    public VisionSubsystem (HardwareMap hm, Telemetry tel, Alliance alli, AutonomousStartLocation location) {
+    public VisionSubsystem (HardwareMap hm, Telemetry tel, Alliance alli, AutonomousStartLocation location, boolean initTF) {
         super(tel);
         hardwareMap = hm;
         alliance = alli;
         startLocation = location;
-        initTfod(false);
+        if(initTF)
+            initTfod(false);
     }
 
     public void initTfod(boolean allowStreaming ){
@@ -95,7 +96,7 @@ public class VisionSubsystem extends FalconSubsystemBase {
         List<Recognition> currentRecognitions = getRecognitions();
         TeamPropPosition position = TeamPropPosition.Left;
         Recognition teamProp = null;
-        if(currentRecognitions != null){
+        if(currentRecognitions != null && currentRecognitions.size() > 0){
             telemetry.addData("Number of Team prop recognitions" , currentRecognitions.size());
             for (Recognition recognition : currentRecognitions){
 
@@ -117,21 +118,21 @@ public class VisionSubsystem extends FalconSubsystemBase {
                 // 1 -- Red Far && Blue Near
                 if ((alliance == Alliance.Red && startLocation == AutonomousStartLocation.Far) || (alliance == Alliance.Blue && startLocation == AutonomousStartLocation.Near)) {
                 if (x < Configuration.LEFT_UPPER_BOUND_1) {
-                    System.out.println("Left");
+                    position = TeamPropPosition.Left;
                 } else if (x > Configuration.LEFT_UPPER_BOUND_1 && x < Configuration.RIGHT_LOWER_BOUND_1) {
-                    System.out.println("Center");
+                    position = TeamPropPosition.Center;
                 } else
-                    System.out.println("Right");
+                    position = TeamPropPosition.Right;
             }
 
                 // 2 -- Red Near & Blue Far
                 if ((alliance == Alliance.Red && startLocation == AutonomousStartLocation.Near) || (alliance == Alliance.Blue && startLocation == AutonomousStartLocation.Far)) {
-                    if(x > Configuration.RIGHT_LOWER_BOUND_2) {
-                        System.out.println("Right");
-                    }   else if (x > Configuration.LEFT_UPPER_BOUND_2 && x < Configuration.RIGHT_LOWER_BOUND_2) {
-                        System.out.println("Center");
-                    }   else
-                        System.out.println("Left");
+                    if (x < Configuration.LEFT_UPPER_BOUND_2) {
+                        position = TeamPropPosition.Left;
+                    } else if (x > Configuration.LEFT_UPPER_BOUND_2 && x < Configuration.RIGHT_LOWER_BOUND_2) {
+                        position = TeamPropPosition.Center;
+                    } else
+                        position = TeamPropPosition.Right;
                 }
             }
         } else if (alliance == Alliance.Red && startLocation == AutonomousStartLocation.Near)

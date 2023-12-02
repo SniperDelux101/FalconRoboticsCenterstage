@@ -166,10 +166,10 @@ public class Configuration {
     //************************************************************
     // Confidence configuration for the vision
     public static double CONFIDENCE_SCORE = .75;
-    public static int LEFT_UPPER_BOUND_1 = 200;
-    public static int RIGHT_LOWER_BOUND_1 = 650;
-    public  static int LEFT_UPPER_BOUND_2 = 100;
-    public static int RIGHT_LOWER_BOUND_2 = 350;
+    public static int LEFT_UPPER_BOUND_1 = 250;
+    public static int RIGHT_LOWER_BOUND_1 = 550;
+    public  static int LEFT_UPPER_BOUND_2 = 50;
+    public static int RIGHT_LOWER_BOUND_2 = 375;
 
     //***************************************************************
     // Offset for blue vision

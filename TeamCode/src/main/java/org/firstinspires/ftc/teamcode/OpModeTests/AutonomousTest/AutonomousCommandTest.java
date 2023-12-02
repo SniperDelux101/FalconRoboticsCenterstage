@@ -41,7 +41,7 @@ import org.firstinspires.ftc.teamcode.Subsystems.drive.TrajectorySequence.Trajec
 import java.security.PublicKey;
 import java.util.HashMap;
 
-@Autonomous
+@Autonomous(preselectTeleOp = "Drivebase_Op")
 @Config
 public class AutonomousCommandTest extends CommandOpMode {
     ///region Subsystems
@@ -73,7 +73,7 @@ public class AutonomousCommandTest extends CommandOpMode {
         visionSubsystem = new VisionSubsystem(hardwareMap, telemetry);
 
         register(driveBaseSubsystem, airplaneLauncherSubsystem, climbSubsystem, extakeSubsystem, linearSlideSubsystem, odometryControlSubsystem, intakeMotorSubsystem, visionSubsystem);
-        visionSubsystem.initTfod(true);
+        visionSubsystem.initTfod(false);
     }
 
     @Override
@@ -112,7 +112,7 @@ public class AutonomousCommandTest extends CommandOpMode {
         waitForStart();
 
 
-        visionSubsystem.closeVisionPortal();
+        visionSubsystem.stopStreaming();
         TrajectorySequence phase1, phase2;
 
         if(startLocation == AutonomousStartLocation.Near && alliance == Alliance.Blue) {
