@@ -5,9 +5,12 @@ import android.util.Size;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.checkerframework.checker.units.qual.A;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
+import org.firstinspires.ftc.teamcode.Commands.Autonomous.Alliance;
+import org.firstinspires.ftc.teamcode.Commands.Autonomous.AutonomousStartLocation;
 import org.firstinspires.ftc.teamcode.Commands.Autonomous.TeamPropPosition;
 import org.firstinspires.ftc.teamcode.Utilities.Configuration;
 import org.firstinspires.ftc.vision.VisionPortal;
@@ -31,13 +34,21 @@ public class VisionSubsystem extends FalconSubsystemBase {
 
     ///the variable to store our
     private VisionPortal visionPortal;
+    private Alliance alliance;
+    private AutonomousStartLocation startLocation;
 
     public VisionSubsystem (HardwareMap hm, Telemetry tel){
+        this(hm, tel, Alliance.Red, AutonomousStartLocation.Near);
+    }
+
+    public VisionSubsystem (HardwareMap hm, Telemetry tel, Alliance alli, AutonomousStartLocation location) {
         super(tel);
         hardwareMap = hm;
-
+        alliance = alli;
+        startLocation = location;
         initTfod(false);
     }
+
     public void initTfod(boolean allowStreaming ){
         tfod = new TfodProcessor.Builder()
                 .setModelFileName(TFOD_MODEL_FILE)
@@ -102,16 +113,37 @@ public class VisionSubsystem extends FalconSubsystemBase {
                 double y = (teamProp.getTop()+ teamProp.getBottom()) / 2;
                 telemetry.addData("X position : ", x);
                 telemetry.addData("Y positions :", y);
-                if (x< Configuration.LEFT_UPPER_BOUND){
-                    position = TeamPropPosition.Left;
-                }
-                else if  (x > Configuration.LEFT_UPPER_BOUND && x < Configuration.RIGHT_LOWER_BOUND){
-                    position = TeamPropPosition.Center;
-                }
-                else if ( x > Configuration.RIGHT_LOWER_BOUND)
-                    position = TeamPropPosition.Right;
+
+                // 1 -- Red Far && Blue Near
+                if ((alliance == Alliance.Red && startLocation == AutonomousStartLocation.Far) || (alliance == Alliance.Blue && startLocation == AutonomousStartLocation.Near)) {
+                if (x < Configuration.LEFT_UPPER_BOUND_1) {
+                    System.out.println("Left");
+                } else if (x > Configuration.LEFT_UPPER_BOUND_1 && x < Configuration.RIGHT_LOWER_BOUND_1) {
+                    System.out.println("Center");
+                } else
+                    System.out.println("Right");
             }
-        }
+
+                // 2 -- Red Near & Blue Far
+                if ((alliance == Alliance.Red && startLocation == AutonomousStartLocation.Near) || (alliance == Alliance.Blue && startLocation == AutonomousStartLocation.Far)) {
+                    if(x > Configuration.RIGHT_LOWER_BOUND_2) {
+                        System.out.println("Right");
+                    }   else if (x > Configuration.LEFT_UPPER_BOUND_2 && x < Configuration.RIGHT_LOWER_BOUND_2) {
+                        System.out.println("Center");
+                    }   else
+                        System.out.println("Left");
+                }
+            }
+        } else if (alliance == Alliance.Red && startLocation == AutonomousStartLocation.Near)
+            position = TeamPropPosition.Left;
+        else if (alliance == Alliance.Red && startLocation == AutonomousStartLocation.Far)
+            position = TeamPropPosition.Right;
+        else if (alliance == Alliance.Blue && startLocation == AutonomousStartLocation.Far)
+            position = TeamPropPosition.Left;
+        else if (alliance == Alliance.Blue && startLocation == AutonomousStartLocation.Near)
+            position = TeamPropPosition.Right;
+
+
         telemetry.addData("Team prop position :", position);
         return position;
     }

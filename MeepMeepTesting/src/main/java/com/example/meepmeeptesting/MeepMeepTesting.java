@@ -6,8 +6,13 @@ import com.noahbres.meepmeep.MeepMeep;
 import com.noahbres.meepmeep.roadrunner.DefaultBotBuilder;
 import com.noahbres.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
 
+import java.sql.Statement;
+
+import jdk.javadoc.internal.tool.Start;
+
 public class MeepMeepTesting {
     public static void main(String[] args) {
+        testVisionLogic();
         MeepMeep meepMeep = new MeepMeep(800);
 
         RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
@@ -27,7 +32,67 @@ public class MeepMeepTesting {
                 .addEntity(myBot)
                 .start();
     }
+
+    public enum Alliance {
+        Blue, Red
+    }
+
+    public enum StartLocation {
+        Near, Far
+    }
+    public static int LEFT_UPPER_BOUND_1 = 200;
+    public static int RIGHT_LOWER_BOUND_1 = 650;
+    public  static int LEFT_UPPER_BOUND_2 = 100;
+    public static int RIGHT_LOWER_BOUND_2 = 350;
+    public static void testVisionLogic() {
+
+        int x = 0;
+        Alliance alliance = Alliance.Red;
+        StartLocation location = StartLocation.Far;
+
+
+        // 2
+        if (alliance == Alliance.Red && location == StartLocation.Near) {
+            if(x > RIGHT_LOWER_BOUND_2) {
+                System.out.println("Right");
+            }   else if (x > LEFT_UPPER_BOUND_2 && x < RIGHT_LOWER_BOUND_2) {
+                System.out.println("Center");
+            }   else
+                System.out.println("Left");
+        }
+
+        // 1
+        if (alliance == Alliance.Red && location == StartLocation.Far) {
+            if (x < LEFT_UPPER_BOUND_1) {
+                System.out.println("Left");
+            } else if (x > LEFT_UPPER_BOUND_1 && x < RIGHT_LOWER_BOUND_1) {
+                System.out.println("Center");
+            } else
+                System.out.println("Right");
+        }
+
+        // 1
+        if (alliance == Alliance.Blue && location == StartLocation.Near) {
+            if (x < LEFT_UPPER_BOUND_1) {
+                System.out.println("Left");
+            } else if (x > LEFT_UPPER_BOUND_1 && x < RIGHT_LOWER_BOUND_1) {
+                System.out.println("Center");
+            } else
+                System.out.println("Right");
+        }
+
+        // 2
+        if (alliance == Alliance.Blue && location == StartLocation.Far) {
+            if (x > RIGHT_LOWER_BOUND_2) {
+                System.out.println("Right");
+            } else if (x > LEFT_UPPER_BOUND_2 && x < RIGHT_LOWER_BOUND_2) {
+                System.out.println("Center");
+            } else
+                System.out.println("Left");
+        }
+    }
 }
+
 
 /*
 drive.trajectorySequenceBuilder(new Pose2d(17.00, -63.00, Math.toRadians(90.00)))
