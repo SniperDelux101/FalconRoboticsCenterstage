@@ -99,11 +99,13 @@ public class Configuration {
 
     public static double LINEAR_SLIDE_POWER = 0.75;
 
+
     public static int LINEAR_SLIDE_POS_HOME = 70;
     public static int LINEAR_SLIDE_POS_LO = -2700;
     public static int LINEAR_SLIDE_POS_MED = -3690;
     public static int LINEAR_SLIDE_POS_HI = -4200;
     public static int LINEAR_SLIDE_POS_TRANSFER = -150;
+
     public static int LINEAR_SLIDE_MULTIPLIER = 10;
 
     //****************************************************************************************************************//
