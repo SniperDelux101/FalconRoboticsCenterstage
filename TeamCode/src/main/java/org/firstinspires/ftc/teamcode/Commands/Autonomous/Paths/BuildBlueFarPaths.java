@@ -9,11 +9,14 @@ import org.firstinspires.ftc.teamcode.Subsystems.drive.TrajectorySequence.Trajec
 
 @Config
 public class BuildBlueFarPaths {
-    public static class Params {
         public static double BlueFarCenter_Phase1Forward= 50;
         public static double BlueFarCenter_Phase1Forward1 = 5;
         public static double BlueFarCenter_Phase2Back= 8;
         public static double BlueFarCenter_Phase2Forward2 = 90;
+        public static double BlueFarCenter_Phase1turn = 180;
+    public static double BlueFarCenter_Phase2turn = -130;
+
+
 
         // values for BlueNearLeft
         public static double BlueFarLeft_Phase1Forward = 29;
@@ -21,6 +24,7 @@ public class BuildBlueFarPaths {
         public static double BlueFarLeft_Phase2back = 5 ;
         public static double BlueFarLeft_Phase2StrafeRight = 22 ;
         public static double BluefarLeft_Phase2Forward2 = 90 ;
+    public static double BlueFarLeft_Phase1turn = 130;
 
         // values for the near right blue
         public static double BlueFarRight_Phase1Forward = 38;
@@ -28,8 +32,9 @@ public class BuildBlueFarPaths {
         public static double BlueFarRight_Phase2Back1= 8.0;
         public static double BlueFarRight_Phase2StrafeLeft = 25.0;
         public static double BlueFarRight_Phase2Back2 = 93 ;
+        public static double BlueFarRight_Phase1turn= -130;
 
-    }
+
     public static TrajectorySequence Phase1 , Phase2 ;
     private static FalconMecanumDrive drive;
     public static void Build (FalconMecanumDrive dr , TeamPropPosition position){
@@ -49,45 +54,45 @@ public class BuildBlueFarPaths {
     }
     public static void BlueFarCenter_Phase1(){
         Phase1= drive.trajectorySequenceBuilder(new Pose2d())
-                .forward(Params.BlueFarCenter_Phase1Forward)
-                .turn(Math.toRadians(180) + 1e-6)
-                .forward(Params.BlueFarCenter_Phase1Forward1)
+                .forward(BlueFarCenter_Phase1Forward)
+                .turn(BlueFarCenter_Phase1turn+ 1e-6)
+                .forward(BlueFarCenter_Phase1Forward1)
                 .build();
 
     }
     public static void BlueFarCenter_Phase2(){
         Phase2 = drive.trajectorySequenceBuilder(new Pose2d())
-                .back(Params.BlueFarCenter_Phase2Back)
-                .turn(Math.toRadians(-90) - 1e-6)
-                .forward(Params.BlueFarCenter_Phase2Forward2)
+                .back(BlueFarCenter_Phase2Back)
+                .turn(BlueFarCenter_Phase2turn - 1e-6)
+                .forward(BlueFarCenter_Phase2Forward2)
                 .build();
     }
     public static void BlueFarLeft_Phase1(){
        Phase1 = drive.trajectorySequenceBuilder(new Pose2d())
-                .forward(Params.BlueFarCenter_Phase1Forward)
-                .turn(Math.toRadians(90) + 1e-6)
-                .forward(Params.BlueFarLeft_Phase2Forward1)
+                .forward(BlueFarCenter_Phase1Forward)
+                .turn(BlueFarLeft_Phase1turn + 1e-6)
+                .forward(BlueFarLeft_Phase2Forward1)
                 .build();
     }
     public static void BlueFarLeft_Phase2() {
         Phase2 = drive.trajectorySequenceBuilder(new Pose2d())
-                .back(Params.BlueFarLeft_Phase2back)
-                .strafeRight(Params.BlueFarLeft_Phase2StrafeRight)
-                .forward(Params.BluefarLeft_Phase2Forward2)
+                .back(BlueFarLeft_Phase2back)
+                .strafeRight(BlueFarLeft_Phase2StrafeRight)
+                .forward(BluefarLeft_Phase2Forward2)
                 .build();
     }
     public static void BlueFarRight_Phase1 (){
         Phase1 = drive.trajectorySequenceBuilder(new Pose2d())
-                .forward(Params.BlueFarRight_Phase1Forward)
-                .turn(Math.toRadians(-90) - 1e-6)
+                .forward(BlueFarRight_Phase1Forward)
+                .turn(BlueFarRight_Phase1turn - 1e-6)
                 .build();
 
     }
     public static void BlueFarRight_Phase2 (){
         Phase2 = drive.trajectorySequenceBuilder(new Pose2d())
-                .back(Params.BlueFarRight_Phase2Back1)
-                .strafeLeft(Params.BlueFarRight_Phase2StrafeLeft)
-                .back(Params.BlueFarRight_Phase2Back2)
+                .back(BlueFarRight_Phase2Back1)
+                .strafeLeft(BlueFarRight_Phase2StrafeLeft)
+                .back(BlueFarRight_Phase2Back2)
                 .build();
     }
 
