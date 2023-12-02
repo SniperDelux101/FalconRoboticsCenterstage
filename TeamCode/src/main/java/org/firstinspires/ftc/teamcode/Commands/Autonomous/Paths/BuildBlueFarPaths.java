@@ -68,31 +68,67 @@ public class BuildBlueFarPaths {
                 .build();
     }
     public static void BlueFarLeft_Phase1(){
-       Phase1 = drive.trajectorySequenceBuilder(new Pose2d())
-                .forward(BlueFarCenter_Phase1Forward)
-                .turn(BlueFarLeft_Phase1turn + 1e-6)
-                .forward(BlueFarLeft_Phase2Forward1)
-                .build();
+        Phase1 = drive.trajectorySequenceBuilder(new Pose2d())
+        .forward(29.0)
+        .turn(Math.toRadians(90) + 1e-6)
+        .forward(7.0)
+        .build();
+//       Phase1 = drive.trajectorySequenceBuilder(new Pose2d())
+//                .forward(BlueFarCenter_Phase1Forward)
+//                .turn(BlueFarLeft_Phase1turn + 1e-6)
+//                .forward(BlueFarLeft_Phase2Forward1)
+       //.forward(29.0)
+        //                                .turn(Math.toRadians(90) + 1e-6)
+        //                                .forward(7.0)
+        //                                .back(9.0)
+        //                                .turn(Math.toRadians(-90) - 1e-6)
+        //                                .forward(22.0)
+        //                                .turn(Math.toRadians(90)+ 1e-6)
+        //                                .forward (90.0 )
+        //                                .build());
+
     }
     public static void BlueFarLeft_Phase2() {
         Phase2 = drive.trajectorySequenceBuilder(new Pose2d())
-                .back(BlueFarLeft_Phase2back)
-                .strafeRight(BlueFarLeft_Phase2StrafeRight)
-                .forward(BluefarLeft_Phase2Forward2)
+//                .back(BlueFarLeft_Phase2back)
+//                .strafeRight(BlueFarLeft_Phase2StrafeRight)
+//                .forward(BluefarLeft_Phase2Forward2)
+                .back(9.0)
+                 .turn(Math.toRadians(-90) - 1e-6)
+                 .forward(22.0)
+                 .turn(Math.toRadians(90)+ 1e-6)
+                 .forward (90.0 )
                 .build();
     }
     public static void BlueFarRight_Phase1 (){
         Phase1 = drive.trajectorySequenceBuilder(new Pose2d())
-                .forward(BlueFarRight_Phase1Forward)
-                .turn(BlueFarRight_Phase1turn - 1e-6)
+                .forward(29.0)
+                .turn(Math.toRadians(-90) - 1e-6)
+                 .forward(9.0)
+//                .forward(BlueFarRight_Phase1Forward)
+//                .turn(BlueFarRight_Phase1turn - 1e-6)
                 .build();
+        //.forward(29.0)
+        //                                .turn(Math.toRadians(-90) - 1e-6)
+        //                                .forward(9.0)
+        //                                .back(12.0)
+        //                                .turn(Math.toRadians(90) + 1e-6)
+        //                                .forward(22.0)
+        //                                .turn(Math.toRadians(90) + 1e-6)
+        //                                .forward(90.0)
+        //                                .build());
 
     }
     public static void BlueFarRight_Phase2 (){
         Phase2 = drive.trajectorySequenceBuilder(new Pose2d())
-                .back(BlueFarRight_Phase2Back1)
-                .strafeLeft(BlueFarRight_Phase2StrafeLeft)
-                .back(BlueFarRight_Phase2Back2)
+                .back(12.0)
+                .turn(Math.toRadians(90) + 1e-6)
+                .forward(22.0)
+                .turn(Math.toRadians(90) + 1e-6)
+                .forward(90.0)
+//                .back(BlueFarRight_Phase2Back1)
+//                .strafeLeft(BlueFarRight_Phase2StrafeLeft)
+//                .back(BlueFarRight_Phase2Back2)
                 .build();
     }
 
