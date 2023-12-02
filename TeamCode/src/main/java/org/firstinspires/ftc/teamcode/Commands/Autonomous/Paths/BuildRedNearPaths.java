@@ -17,15 +17,19 @@ public class BuildRedNearPaths {
         // values for BlueNearLeft
         public static double RedNearLeft_Phase1Strafe = 6;
         public static double RedNearLeft_Phase1Forward1 = 37;
-        public static double RedNearLeft_Phase1Forward2 = 4 ;
+        public static double RedNearLeft_Phase1Forward2 = 4;
         public static double RedNearLeft_Phase2Back1 = 6;
         public static double RedNearLeft_Phase2Back2 = 25;
     public static double RedNearLeft_Phase2Turn = -90;
+    public static double RedNearLeft_Phase1Turn2 = 130;
+    public static double RedNearLeft_Phase2Turn2 = -130;
         public static double RedNearLeft_Phase2Forward = 32;
+
         // values for the near right blue
-        public static double RedNearRight_Phase1Strafe = 10;
+
         public static double RedNearRight_Phase1Forward = 24 ;
         public static double RedNearRight_Phase2Back = 18 ;
+        public static double RedNearRight_Phase1turn = -90 ;
 
         public static double RedNearRight_Phase2Turn = -130;
         public static double RedNearRight_Phase2Forward= 23;
@@ -65,14 +69,14 @@ public class BuildRedNearPaths {
     public static void RedNearRight_Phase1(){
         Phase1=drive.trajectorySequenceBuilder(new Pose2d())
                 .forward(RedNearRight_Phase1Forward)
-                .turn(Math.toRadians(-90) - 1e-6)
+                .turn(RedNearRight_Phase1turn - 1e-6)
                 .build();
     }
     public static void RedNearRight_Phase2(){
         Phase2 = drive.trajectorySequenceBuilder(new Pose2d())
                 .back(RedNearRight_Phase2Back)
                 .waitSeconds(1)
-                .turn(Math.toRadians(-40) - 1e-6)
+                .turn(RedNearRight_Phase2Turn - 1e-6)
                 .waitSeconds(1)
                 .forward(RedNearRight_Phase2Forward)
                 .build();
@@ -81,16 +85,16 @@ public class BuildRedNearPaths {
        Phase1= drive.trajectorySequenceBuilder(new Pose2d())
                 .strafeLeft(RedNearLeft_Phase1Strafe)
                 .forward(RedNearLeft_Phase1Forward1)
-                .turn(Math.toRadians(130) + 1e-6)
+                .turn(RedNearLeft_Phase1Turn2+ 1e-6)
                 .forward(RedNearLeft_Phase1Forward2)
                 .build();
     }
     public static void RedNearLeft_Phase2 (){
         Phase2= drive.trajectorySequenceBuilder(new Pose2d())
                 .back(RedNearLeft_Phase2Back1)
-                .turn(Math.toRadians(-130) - 1e-6)
+                .turn(RedNearLeft_Phase2Turn - 1e-6)
                 .back(RedNearLeft_Phase2Back2)
-                .turn(Math.toRadians(-130) - 1e-6)
+                .turn(RedNearLeft_Phase2Turn2 - 1e-6)
                 .forward(RedNearLeft_Phase2Forward)
                 .build();
     }
