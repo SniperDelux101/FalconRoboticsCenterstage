@@ -29,6 +29,7 @@ public class PixelBoxIntakeTest_Op extends OpMode {
             telemetry.addLine("Stop");
             extakeSubsystem.pixelStop();
         }
+        extakeSubsystem.detectPixel();
         telemetry.update();
     }
 }
