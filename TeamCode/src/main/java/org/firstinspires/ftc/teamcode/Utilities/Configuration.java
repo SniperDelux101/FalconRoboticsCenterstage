@@ -171,7 +171,8 @@ public class Configuration {
     public  static int LEFT_UPPER_BOUND_2 = 50;
     public static int RIGHT_LOWER_BOUND_2 = 375;
 
-    //***************************************************************
-    // Offset for blue vision
-    public static double BLUE_VISION_OFFSET = 200;
+    public static double TEAM_PROP_WIDTH = 2.99213;
+    public static double FOCAL_LENGTH = 543.45;
+
+    //
 }
