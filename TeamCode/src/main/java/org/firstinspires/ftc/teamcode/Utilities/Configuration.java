@@ -169,5 +169,8 @@ public class Configuration {
     public  static int LEFT_UPPER_BOUND = 100;
     public static int RIGHT_LOWER_BOUND = 350;
 
+    public static double TEAM_PROP_WIDTH = 2.99213;
+    public static double FOCAL_LENGTH = 543.45;
+
     //
 }
