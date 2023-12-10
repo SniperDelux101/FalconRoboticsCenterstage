@@ -92,6 +92,15 @@ public class Callisto extends Robot {
         }
     }
 
+    public void init(Gamepad gamepad1, Gamepad gamepad2)
+    {
+        if (robotMode == RobotMode.AUTO) {
+            initAuto();
+        } else {
+            initTeleOp(gamepad1, gamepad2);
+        }
+    }
+
     private void initTeleOp(Gamepad gamepad1, Gamepad gamepad2) {
         driverGamepad = new GamepadEx(gamepad1);
         utilityGamepad = new GamepadEx(gamepad2);
@@ -102,7 +111,7 @@ public class Callisto extends Robot {
         utilityGamepad.getGamepadButton(GamepadKeys.Button.B)
                         .whenPressed(
                                 new SequentialCommandGroup(
-                                    new RunLinearSlideAndCenterPixelBoxCommand( extakeSubsystem,linearSlideSubsystem, Configuration.LINEAR_SLIDE_POS_HI).withTimeout(2000),
+                                    new RunLinearSlideAndCenterPixelBoxCommand( extakeSubsystem,linearSlideSubsystem, Configuration.LINEAR_SLIDE_POS_HI),
                                         new MovePixelBoxArmToPositionCommand(extakeSubsystem, PixelBoxArmPosition.Extake)
                                 )
                         );
@@ -110,7 +119,7 @@ public class Callisto extends Robot {
         utilityGamepad.getGamepadButton(GamepadKeys.Button.Y)
                         .whenPressed(
                                 new SequentialCommandGroup(
-                                    new RunLinearSlideAndCenterPixelBoxCommand(extakeSubsystem,linearSlideSubsystem, Configuration.LINEAR_SLIDE_POS_MED).withTimeout(2000),
+                                    new RunLinearSlideAndCenterPixelBoxCommand(extakeSubsystem,linearSlideSubsystem, Configuration.LINEAR_SLIDE_POS_MED),
                                         new MovePixelBoxArmToPositionCommand(extakeSubsystem, PixelBoxArmPosition.Extake)
                                 )
                         );
@@ -118,14 +127,14 @@ public class Callisto extends Robot {
         utilityGamepad.getGamepadButton(GamepadKeys.Button.X)
                         .whenPressed(
                                 new SequentialCommandGroup(
-                                    new RunLinearSlideAndCenterPixelBoxCommand(extakeSubsystem,linearSlideSubsystem, Configuration.LINEAR_SLIDE_POS_LO).withTimeout(2000),
+                                    new RunLinearSlideAndCenterPixelBoxCommand(extakeSubsystem,linearSlideSubsystem, Configuration.LINEAR_SLIDE_POS_LO),
                                         new MovePixelBoxArmToPositionCommand(extakeSubsystem, PixelBoxArmPosition.Extake)
                                 )
                         );
         //linear slide extends to transfer position
         utilityGamepad.getGamepadButton(GamepadKeys.Button.A)
                         .whenPressed(
-                                new ResetAndPrepForExchangeCommand(extakeSubsystem, linearSlideSubsystem).withTimeout(2000)
+                                new ResetAndPrepForExchangeCommand(extakeSubsystem, linearSlideSubsystem)
                         );
         // Drop the box
         utilityGamepad.getGamepadButton(GamepadKeys.Button.DPAD_UP)
@@ -229,7 +238,10 @@ public class Callisto extends Robot {
             {
                 linearSlideSubsystem.LinearStop();
             }
+            extakeSubsystem.detectPixel();
         }
+
+
 
 //        telemetry.addData("x", driveBaseSubsystem.getPoseEstimate().getX());
 //        telemetry.addData("y", driveBaseSubsystem.getPoseEstimate().getY());

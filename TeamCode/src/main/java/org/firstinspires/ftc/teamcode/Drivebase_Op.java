@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -34,8 +35,9 @@ public class Drivebase_Op extends OpMode {
             robot.run();
         }
         catch (Exception ex){
-            telemetry.addLine("Exception");
+            telemetry.addData("Exception: ", ex.getMessage());
             robot.reset();
+            robot.init(gamepad1, gamepad2);
         }
     }
 

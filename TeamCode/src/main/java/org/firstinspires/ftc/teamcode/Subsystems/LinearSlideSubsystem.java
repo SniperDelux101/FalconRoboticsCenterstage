@@ -61,8 +61,19 @@ public class LinearSlideSubsystem extends FalconSubsystemBase {
     }
 
     public boolean isSlideAtTargetPosition(){
+        boolean flag = false;
+        try{
+            flag = linearSlideMotor.atTargetPosition();
+        }
+        catch (Exception ex){
+            telemetry.addData("Exception: ", ex.getMessage());
+        }
 
-        return linearSlideMotor.atTargetPosition();
+        return flag;
+    }
+
+    public int getCurrentPosition(){
+        return linearSlideMotor.getCurrentPosition();
     }
 
     public void stop() {

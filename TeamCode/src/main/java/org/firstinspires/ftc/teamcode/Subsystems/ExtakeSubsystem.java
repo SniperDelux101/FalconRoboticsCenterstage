@@ -41,20 +41,20 @@ public class ExtakeSubsystem extends FalconSubsystemBase {
 
     public void detectPixel () {
         //if distance is greater than 20 MM no pixel, on average pixel was about 6-7 MM away
-        telemetry.addLine()
-                .addData("Distance sensor1 ", "%.3f", colorSensor1.getDistance(DistanceUnit.MM))
-                .addData("Sensor 2", "%.3f", colorSensor2.getDistance(DistanceUnit.MM));
+        //telemetry.addLine();
+        telemetry.addData("Distance sensor1 ", "%.3f", colorSensor1.getDistance(DistanceUnit.MM));
+        telemetry.addData("Sensor 2", "%.3f", colorSensor2.getDistance(DistanceUnit.MM));
         double sensor1Distance = colorSensor1.getDistance(DistanceUnit.MM);
         double sensor2Distance = colorSensor2.getDistance(DistanceUnit.MM);
         double distanceMax = 20.0;
         if (sensor1Distance > distanceMax && sensor2Distance > distanceMax) {
-            blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
+            blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.WHITE);
         } else if (sensor1Distance < 30.0 && sensor2Distance > 30.0) {
-            blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.COLOR_WAVES_PARTY_PALETTE);
+            blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
         } else if (sensor1Distance < distanceMax && sensor2Distance < distanceMax)
             blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
         else {
-            blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
+            blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.WHITE);
         }
     }
 
@@ -80,7 +80,12 @@ public class ExtakeSubsystem extends FalconSubsystemBase {
      */
     public void setControlArmPosition (double position){
 
-        controlArm1.setPosition(position);
+        try {
+            controlArm1.setPosition(position);
+        }
+        catch (Exception ex){
+            telemetry.addData("Exception: ", ex.getMessage());
+        }
         //controlArm2.setPosition(position);
         telemetry.addData(" Extake Control Arm 1 Position :", controlArm1.getPosition());
     }

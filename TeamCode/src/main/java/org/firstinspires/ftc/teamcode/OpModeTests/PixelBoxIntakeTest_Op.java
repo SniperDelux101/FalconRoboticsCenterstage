@@ -16,20 +16,22 @@ public class PixelBoxIntakeTest_Op extends OpMode {
 
     @Override
     public void loop() {
-
-        if(gamepad1.a)
-        {
-            telemetry.addLine("Intake");
-            extakeSubsystem.pixelIntake();
-        }else if(gamepad1.b){
-            telemetry.addLine("Eject");
-            extakeSubsystem.pixelEject();
+        try {
+            if (gamepad1.a) {
+                telemetry.addLine("Intake");
+                extakeSubsystem.pixelIntake();
+            } else if (gamepad1.b) {
+                telemetry.addLine("Eject");
+                extakeSubsystem.pixelEject();
+            } else if (gamepad1.x) {
+                telemetry.addLine("Stop");
+                extakeSubsystem.pixelStop();
+            }
+            extakeSubsystem.detectPixel();
         }
-        else if (gamepad1.x){
-            telemetry.addLine("Stop");
-            extakeSubsystem.pixelStop();
+        catch (Exception ex){
+            telemetry.addData("Exception: ", ex.getMessage());
         }
-        extakeSubsystem.detectPixel();
         telemetry.update();
     }
 }

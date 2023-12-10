@@ -102,11 +102,13 @@ public class Configuration {
 
     public static int LINEAR_SLIDE_POS_HOME = 70;
     public static int LINEAR_SLIDE_POS_LO = -2700;
-    public static int LINEAR_SLIDE_POS_MED = -3690;
+    public static int LINEAR_SLIDE_POS_MED = -3700;
     public static int LINEAR_SLIDE_POS_HI = -4200;
     public static int LINEAR_SLIDE_POS_TRANSFER = -150;
 
     public static int LINEAR_SLIDE_MULTIPLIER = 10;
+
+    public static int TICK_RANGE = 50;
 
     //****************************************************************************************************************//
     // Tuning values for odometry servos
@@ -171,8 +173,13 @@ public class Configuration {
     public  static int LEFT_UPPER_BOUND_2 = 50;
     public static int RIGHT_LOWER_BOUND_2 = 375;
 
-    public static double TEAM_PROP_WIDTH = 2.99213;
+    public static double TEAM_PROP_WIDTH = 3.182;
     public static double FOCAL_LENGTH = 543.45;
 
-    //
+    //*****************************************************************
+    //Camera Calibration
+
+    public static int CAMERA_WIDTH = 640;
+    public static int CAMERA_HEIGHT = 480;
+    public static int CAMERA_ZOOM = 1;
 }

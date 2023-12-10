@@ -4,6 +4,7 @@ import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 
 import org.firstinspires.ftc.teamcode.Subsystems.ExtakeSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.LinearSlideSubsystem;
+import org.firstinspires.ftc.teamcode.Utilities.Configuration;
 
 public class RunLinearSlideAndCenterPixelBoxCommand extends SequentialCommandGroup {
     private final ExtakeSubsystem extakeSubsystem;
