@@ -100,11 +100,6 @@ public class AutonomousCommandTest extends CommandOpMode {
                 startLocation = AutonomousStartLocation.Far;
             else if (gamepad1.dpad_down)
                 startLocation = AutonomousStartLocation.Near;
-//            else if (gamepad1.a)
-//                runAutonomous = true;
-//            else if (gamepad1.b)
-//                runAutonomous = false;
-
 
             teamPropPosition = visionSubsystem.getTeamPropPosition();
 

@@ -2,12 +2,14 @@ package org.firstinspires.ftc.teamcode.Subsystems;
 
 import android.util.Size;
 
-import com.acmerobotics.roadrunner.Pose2d;
+import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.checkerframework.checker.units.qual.A;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.CameraName;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.PtzControl;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Quaternion;
@@ -29,7 +31,7 @@ public class VisionSubsystem extends FalconSubsystemBase {
      * this subsystem uses a Tensor flow model file to be able to recognize the team props
      * then it sets the camera's resulotion
      */
-    private static  final String TFOD_MODEL_FILE = "/sdcard/FIRST/tflitemodels/model_20231017_212515.tflite";
+    private static  final String TFOD_MODEL_FILE = "/sdcard/FIRST/tflitemodels/model_20231031_151740.tflite";
 
     private static final String[] LABELS ={
             "TeamProp"
@@ -94,7 +96,7 @@ public class VisionSubsystem extends FalconSubsystemBase {
         alliance = alli;
         startLocation = location;
         if(initTF)
-            initTfod(false);
+            initTfod(true);
     }
 
     public void initTfod(boolean allowStreaming ){
@@ -110,15 +112,15 @@ public class VisionSubsystem extends FalconSubsystemBase {
 
         VisionPortal.Builder builder = new VisionPortal.Builder();
         builder.setCamera(hardwareMap.get(WebcamName.class, "Webcam 1"));
-        builder.setCameraResolution(new Size(640, 480));
+        builder.setCameraResolution(new Size(Configuration.CAMERA_WIDTH, Configuration.CAMERA_HEIGHT));
         builder.enableLiveView(allowStreaming);
         if (allowStreaming ){
             builder.setStreamFormat(VisionPortal.StreamFormat.YUY2);
         }
         builder.addProcessor(tfod);
 
-        initAprilTagProcessor();
-        builder.addProcessor(aprilTag);
+        //initAprilTagProcessor();
+        //builder.addProcessor(aprilTag);
 
         visionPortal = builder.build();
         tfod.setMinResultConfidence((float) Configuration.CONFIDENCE_SCORE);
@@ -154,7 +156,7 @@ public class VisionSubsystem extends FalconSubsystemBase {
     }
 
     public void setEnableDisableForAprilTagPortal(boolean enable){
-        aprilTagVisionPortal.setProcessorEnabled(aprilTag, enable);
+        //aprilTagVisionPortal.setProcessorEnabled(aprilTag, enable);
     }
 
     public void enableTfod (boolean ennabled ){
@@ -231,7 +233,7 @@ public class VisionSubsystem extends FalconSubsystemBase {
         telemetry.addData("Team prop position :", position);
         return position;
     }
-
+/*
     public boolean findAprilTag(TeamPropPosition position){
         List<AprilTagDetection> currentDetections = aprilTag.getDetections();
         telemetry.addData("# AprilTags Detected", currentDetections.size());
@@ -251,6 +253,7 @@ public class VisionSubsystem extends FalconSubsystemBase {
             }
         }   // end for() loop
     }
+
 
     private Pose2d DeterminePoseFromAprilTag(AprilTagID tag) {
 
@@ -310,6 +313,7 @@ public class VisionSubsystem extends FalconSubsystemBase {
 
         return yawDegrees;
     }
+    */
 
 }
 

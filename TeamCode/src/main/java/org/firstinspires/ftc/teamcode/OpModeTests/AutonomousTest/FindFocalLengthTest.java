@@ -18,6 +18,7 @@ import java.util.List;
 public class FindFocalLengthTest extends LinearOpMode {
     private VisionSubsystem visionSubsystem;
     public static double distanceToPropInInches = 24;
+    public static boolean useConfigFocalPoint = true;
     @Override
     public void runOpMode() throws InterruptedException {
         visionSubsystem = new VisionSubsystem(hardwareMap, telemetry);
@@ -34,7 +35,11 @@ public class FindFocalLengthTest extends LinearOpMode {
                 for (Recognition recognition : visionSubsystem.getRecognitions()) {
                     //Focal length(inches) = (Pixel Width * Distance to object(inches))/Actual width(inches)
                     pixelWidthOfProp = Double.valueOf(recognition.getWidth());
-                    focalLength = ( pixelWidthOfProp * distanceToPropInInches)/ Configuration.TEAM_PROP_WIDTH;
+                    telemetry.addData("Pixel Width: ", pixelWidthOfProp);
+                    if(useConfigFocalPoint)
+                        focalLength = Configuration.FOCAL_LENGTH;
+                    else
+                        focalLength = ( pixelWidthOfProp * distanceToPropInInches)/ Configuration.TEAM_PROP_WIDTH;
                     telemetry.addData("Focal Length: ", focalLength);
                     distanceToObjectInInches = (Configuration.TEAM_PROP_WIDTH * focalLength)/pixelWidthOfProp;
                     telemetry.addData("Distance to TeamProp: ", distanceToObjectInInches);
