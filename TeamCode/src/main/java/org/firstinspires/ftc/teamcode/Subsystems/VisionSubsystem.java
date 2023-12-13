@@ -7,9 +7,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.checkerframework.checker.units.qual.A;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.CameraName;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.PtzControl;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Quaternion;
@@ -31,7 +29,7 @@ public class VisionSubsystem extends FalconSubsystemBase {
      * this subsystem uses a Tensor flow model file to be able to recognize the team props
      * then it sets the camera's resulotion
      */
-    private static  final String TFOD_MODEL_FILE = "/sdcard/FIRST/tflitemodels/model_20231031_151740.tflite";
+    private static  final String TFOD_MODEL_FILE = "/sdcard/FIRST/tflitemodels/model_20231017_212515.tflite";
 
     private static final String[] LABELS ={
             "TeamProp"
@@ -254,7 +252,6 @@ public class VisionSubsystem extends FalconSubsystemBase {
         }   // end for() loop
     }
 
-
     private Pose2d DeterminePoseFromAprilTag(AprilTagID tag) {
 
         //get the field position of the AprilTag on the field and store it in a float vector (VectorF)
@@ -313,7 +310,6 @@ public class VisionSubsystem extends FalconSubsystemBase {
 
         return yawDegrees;
     }
-    */
+ */
 
 }
-

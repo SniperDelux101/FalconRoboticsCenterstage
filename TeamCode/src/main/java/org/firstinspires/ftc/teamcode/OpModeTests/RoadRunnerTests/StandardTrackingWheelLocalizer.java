@@ -45,9 +45,9 @@ public class StandardTrackingWheelLocalizer extends ThreeTrackingWheelLocalizer 
 
     public StandardTrackingWheelLocalizer(HardwareMap hardwareMap, List<Integer> lastTrackingEncPositions, List<Integer> lastTrackingEncVels) {
         super(Arrays.asList(
-                new Pose2d(0, Configuration.LATERAL_DISTANCE / 2, 0), // left
-                new Pose2d(0, -Configuration.LATERAL_DISTANCE / 2, 0), // right
-                new Pose2d(Configuration.FORWARD_OFFSET, 0, Math.toRadians(90)) // rear
+                new Pose2d(Configuration.ODO_PARALLEL_WHEELS_OFFSET, Configuration.LATERAL_DISTANCE / 2, 0), // left
+                new Pose2d(Configuration.ODO_PARALLEL_WHEELS_OFFSET, -Configuration.LATERAL_DISTANCE / 2, 0), // right
+                new Pose2d(Configuration.FORWARD_OFFSET, Configuration.FORWARD_OFFSET_Y, Math.toRadians(90)) // rear
         ));
 
         lastEncPositions = lastTrackingEncPositions;

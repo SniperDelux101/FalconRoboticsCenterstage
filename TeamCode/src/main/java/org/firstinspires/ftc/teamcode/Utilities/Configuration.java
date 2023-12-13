@@ -4,13 +4,19 @@ import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+
 @Config
 public class Configuration {
 
     // TRACKWIDTH is the distance between mecanum wheels
-    public static double TRACKWIDTH = 10.281731791974025; //11.6003937; //5.33
-    public static double FORWARD_OFFSET = -5.00; //-5.983669448819
-    public static double LATERAL_DISTANCE = 10.32263261;
+    public static double TRACKWIDTH = DistanceUnit.INCH.fromMm(294.65); //10.281731791974025; //11.6003937; //5.33
+    public static double WHEELBASE = DistanceUnit.INCH.fromMm(312);
+    public static double FORWARD_OFFSET = DistanceUnit.INCH.fromMm(-151.2); //-5.00; //-5.983669448819
+    public static double FORWARD_OFFSET_Y = DistanceUnit.INCH.fromMm(15.429);
+    public static double LATERAL_DISTANCE = DistanceUnit.INCH.fromMm(260.65);   //10.32263261;
+    public static double ODO_PARALLEL_WHEELS_OFFSET = DistanceUnit.INCH.fromMm(-23.091);
+
     public static double WHEEL_RADIUS = 0.686;
     public static double X_MULTIPLIER = 0.3661492939362129;
     public static double Y_MULTIPLIER = 0.42423620866;
@@ -54,8 +60,8 @@ public class Configuration {
      */
     public static double MAX_VEL = 66.3358551600406; //0.07703451419276926
     public static double MAX_ACCEL = 60;
-    public static double MAX_ANG_VEL = Math.toRadians(283.45147911747597); // Or the value should be 7.995426528314827
-    public static double MAX_ANG_ACCEL = Math.toRadians(240);
+    public static double MAX_ANG_VEL = Math.toRadians(54.98425989336563); // Or the value should be 7.995426528314827
+    public static double MAX_ANG_ACCEL = Math.toRadians(240);   //sh
 
 
     public static double encoderTicksToInches(double ticks) {

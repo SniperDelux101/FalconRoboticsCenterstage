@@ -30,6 +30,7 @@ import org.firstinspires.ftc.teamcode.Commands.TrajectorySequenceFollowerCommand
 import org.firstinspires.ftc.teamcode.Subsystems.AirplaneLauncherSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.ClimbSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.ExtakeSubsystem;
+import org.firstinspires.ftc.teamcode.Subsystems.GyroSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.IntakeMotorSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.LinearSlideSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.MecanumDriveSubsystem;
@@ -53,6 +54,7 @@ public class AutonomousCommandTest extends CommandOpMode {
     private OdometryControlSubsystem odometryControlSubsystem;
     private IntakeMotorSubsystem intakeMotorSubsystem;
     private VisionSubsystem visionSubsystem;
+    private GyroSubsystem gyroSubsystem;
     ///endregion
 
     public static Alliance alliance = Alliance.Blue;
@@ -60,12 +62,14 @@ public class AutonomousCommandTest extends CommandOpMode {
     public static TeamPropPosition teamPropPosition = TeamPropPosition.Center;
 
     public static boolean runAutonomous = true;
+    public static boolean useVision = false;
 
 
     @Override
     public void initialize() {
         CommandScheduler.getInstance().reset();
 
+        gyroSubsystem = new GyroSubsystem(hardwareMap, telemetry);
         driveBaseSubsystem = new MecanumDriveSubsystem(new FalconMecanumDrive(hardwareMap), false);
         odometryControlSubsystem = new OdometryControlSubsystem(hardwareMap, telemetry);
         airplaneLauncherSubsystem = new AirplaneLauncherSubsystem(hardwareMap, telemetry);
@@ -100,8 +104,8 @@ public class AutonomousCommandTest extends CommandOpMode {
                 startLocation = AutonomousStartLocation.Far;
             else if (gamepad1.dpad_down)
                 startLocation = AutonomousStartLocation.Near;
-
-            teamPropPosition = visionSubsystem.getTeamPropPosition();
+            if(useVision)
+                teamPropPosition = visionSubsystem.getTeamPropPosition();
 
             telemetry.addData("Run atonomous ; " , runAutonomous);
             telemetry.addData("Team Prop Position: ", teamPropPosition);
@@ -112,8 +116,8 @@ public class AutonomousCommandTest extends CommandOpMode {
 
         waitForStart();
 
-
-        visionSubsystem.stopStreaming();
+        if(useVision)
+            visionSubsystem.stopStreaming();
         TrajectorySequence phase1, phase2;
 
         if(startLocation == AutonomousStartLocation.Near && alliance == Alliance.Blue) {
@@ -149,6 +153,8 @@ public class AutonomousCommandTest extends CommandOpMode {
         // run the scheduler
         while (!isStopRequested() && opModeIsActive()) {
             run();
+            telemetry.addData("Gyro Reading: ", gyroSubsystem.getHeading());
+            telemetry.update();
         }
         reset();
     }

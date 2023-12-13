@@ -9,6 +9,7 @@ import com.acmerobotics.roadrunner.drive.MecanumDrive;
 import com.acmerobotics.roadrunner.followers.HolonomicPIDVAFollower;
 import com.acmerobotics.roadrunner.followers.TrajectoryFollower;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.localization.ThreeTrackingWheelLocalizer;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.acmerobotics.roadrunner.trajectory.TrajectoryBuilder;
 import com.acmerobotics.roadrunner.trajectory.constraints.AngularVelocityConstraint;
@@ -18,12 +19,10 @@ import com.acmerobotics.roadrunner.trajectory.constraints.ProfileAccelerationCon
 import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryAccelerationConstraint;
 import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryVelocityConstraint;
 import com.qualcomm.hardware.lynx.LynxModule;
-import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-//import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
@@ -45,6 +44,7 @@ import static org.firstinspires.ftc.teamcode.Utilities.Configuration.MAX_VEL;
 import static org.firstinspires.ftc.teamcode.Utilities.Configuration.MOTOR_VELO_PID;
 import static org.firstinspires.ftc.teamcode.Utilities.Configuration.RUN_USING_ENCODER;
 import static org.firstinspires.ftc.teamcode.Utilities.Configuration.TRACKWIDTH;
+import static org.firstinspires.ftc.teamcode.Utilities.Configuration.WHEELBASE;
 import static org.firstinspires.ftc.teamcode.Utilities.Configuration.encoderTicksToInches;
 import static org.firstinspires.ftc.teamcode.Utilities.Configuration.kA;
 import static org.firstinspires.ftc.teamcode.Utilities.Configuration.kStatic;
@@ -81,7 +81,8 @@ public class FalconMecanumDrive extends MecanumDrive {
     private List<Integer> lastEncVels = new ArrayList<>();
 
     public FalconMecanumDrive(HardwareMap hardwareMap) {
-        super(kV, kA, kStatic, TRACKWIDTH, TRACKWIDTH, LATERAL_MULTIPLIER);
+        //Changed the 5th parameter to an independent constant since our robot is not square
+        super(kV, kA, kStatic, TRACKWIDTH, WHEELBASE, LATERAL_MULTIPLIER);
 
         follower = new HolonomicPIDVAFollower(TRANSLATIONAL_PID, TRANSLATIONAL_PID, HEADING_PID,
                 new Pose2d(0.5, 0.5, Math.toRadians(5.0)), 0.5);
@@ -95,10 +96,10 @@ public class FalconMecanumDrive extends MecanumDrive {
         }
 
         // TODO: adjust the names of the following hardware devices to match your configuration
-        imu = hardwareMap.get(IMU.class, "imu");
-        IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
-                Configuration.LOGO_FACING_DIR, Configuration.USB_FACING_DIR));
-        imu.initialize(parameters);
+//        imu = hardwareMap.get(IMU.class, "imu");
+//        IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
+//                Configuration.LOGO_FACING_DIR, Configuration.USB_FACING_DIR));
+//        imu.initialize(parameters);
 
         leftFront = hardwareMap.get(DcMotorEx.class, "Left_Front_Wheel");
         leftRear = hardwareMap.get(DcMotorEx.class, "Left_Rear_Wheel");
