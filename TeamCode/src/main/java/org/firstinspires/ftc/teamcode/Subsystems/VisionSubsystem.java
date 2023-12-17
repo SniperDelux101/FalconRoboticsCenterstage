@@ -29,9 +29,9 @@ public class VisionSubsystem extends FalconSubsystemBase {
      * this subsystem uses a Tensor flow model file to be able to recognize the team props
      * then it sets the camera's resulotion
      */
-    private static  final String TFOD_MODEL_FILE = "/sdcard/FIRST/tflitemodels/model_20231017_212515.tflite";
+    private static final String TFOD_MODEL_FILE = "/sdcard/FIRST/tflitemodels/model_20231017_212515.tflite";
 
-    private static final String[] LABELS ={
+    private static final String[] LABELS = {
             "TeamProp"
     };
     private final HardwareMap hardwareMap;
@@ -61,7 +61,6 @@ public class VisionSubsystem extends FalconSubsystemBase {
         private boolean isDetected;
         private double timestamp;
         private AprilTagDetection detection;
-
         AprilTagID(int id) {
             this.id = id;
             this.isDetected = false;
@@ -84,20 +83,20 @@ public class VisionSubsystem extends FalconSubsystemBase {
         }
     }
 
-    public VisionSubsystem (HardwareMap hm, Telemetry tel){
+    public VisionSubsystem(HardwareMap hm, Telemetry tel) {
         this(hm, tel, Alliance.Red, AutonomousStartLocation.Near, false);
     }
 
-    public VisionSubsystem (HardwareMap hm, Telemetry tel, Alliance alli, AutonomousStartLocation location, boolean initTF) {
+    public VisionSubsystem(HardwareMap hm, Telemetry tel, Alliance alli, AutonomousStartLocation location, boolean initTF) {
         super(tel);
         hardwareMap = hm;
         alliance = alli;
         startLocation = location;
-        if(initTF)
+        if (initTF)
             initTfod(true);
     }
 
-    public void initTfod(boolean allowStreaming ){
+    public void initTfod(boolean allowStreaming) {
         tfod = new TfodProcessor.Builder()
                 .setModelFileName(TFOD_MODEL_FILE)
                 .setModelLabels(LABELS)
@@ -112,19 +111,19 @@ public class VisionSubsystem extends FalconSubsystemBase {
         builder.setCamera(hardwareMap.get(WebcamName.class, "Webcam 1"));
         builder.setCameraResolution(new Size(Configuration.CAMERA_WIDTH, Configuration.CAMERA_HEIGHT));
         builder.enableLiveView(allowStreaming);
-        if (allowStreaming ){
+        if (allowStreaming) {
             builder.setStreamFormat(VisionPortal.StreamFormat.YUY2);
         }
         builder.addProcessor(tfod);
 
-        //initAprilTagProcessor();
-        //builder.addProcessor(aprilTag);
+        initAprilTagProcessor();
+        builder.addProcessor(aprilTag);
 
         visionPortal = builder.build();
         tfod.setMinResultConfidence((float) Configuration.CONFIDENCE_SCORE);
     }
 
-    private void initAprilTagProcessor(){
+    private void initAprilTagProcessor() {
         // Create the AprilTag processor.
         aprilTag = new AprilTagProcessor.Builder()
                 // The following default settings are available to un-comment and edit as needed.
@@ -153,60 +152,63 @@ public class VisionSubsystem extends FalconSubsystemBase {
         aprilTag.setDecimation(3);
     }
 
-    public void setEnableDisableForAprilTagPortal(boolean enable){
+    public void setEnableDisableForAprilTagPortal(boolean enable) {
         //aprilTagVisionPortal.setProcessorEnabled(aprilTag, enable);
     }
 
-    public void enableTfod (boolean ennabled ){
+    public void enableTfod(boolean ennabled) {
         ///TODO: Come back and do type checking for null values
         visionPortal.setProcessorEnabled(tfod, ennabled);
     }
-    public void stopStreaming(){
+
+    public void stopStreaming() {
         visionPortal.stopStreaming();
     }
-    public void resumeStreaming(){
+
+    public void resumeStreaming() {
         visionPortal.resumeStreaming();
     }
-    public void closeVisionPortal(){
+
+    public void closeVisionPortal() {
         visionPortal.close();
     }
 
-    public List<Recognition> getRecognitions (){
+    public List<Recognition> getRecognitions() {
         List<Recognition> recognitionList = tfod.getRecognitions();
         return recognitionList;
     }
-    public TeamPropPosition getTeamPropPosition(){
+
+    public TeamPropPosition getTeamPropPosition() {
         List<Recognition> currentRecognitions = getRecognitions();
         TeamPropPosition position = TeamPropPosition.Left;
         Recognition teamProp = null;
-        if(currentRecognitions != null && currentRecognitions.size() > 0){
-            telemetry.addData("Number of Team prop recognitions" , currentRecognitions.size());
-            for (Recognition recognition : currentRecognitions){
+        if (currentRecognitions != null && currentRecognitions.size() > 0) {
+            telemetry.addData("Number of Team prop recognitions", currentRecognitions.size());
+            for (Recognition recognition : currentRecognitions) {
 
-                if (teamProp == null){
+                if (teamProp == null) {
+                    teamProp = recognition;
+                } else if (recognition.getConfidence() > teamProp.getConfidence()) {
                     teamProp = recognition;
                 }
-                else if (recognition.getConfidence()> teamProp.getConfidence()){
-                    teamProp = recognition;
-                }
-                telemetry.addData("Confidence score" , teamProp.getConfidence());
+                telemetry.addData("Confidence score", teamProp.getConfidence());
             }
 
-            if (teamProp != null ) {
-                double x= (teamProp.getLeft()+ teamProp.getRight()) /2 ;
-                double y = (teamProp.getTop()+ teamProp.getBottom()) / 2;
+            if (teamProp != null) {
+                double x = (teamProp.getLeft() + teamProp.getRight()) / 2;
+                double y = (teamProp.getTop() + teamProp.getBottom()) / 2;
                 telemetry.addData("X position : ", x);
                 telemetry.addData("Y positions :", y);
 
                 // 1 -- Red Far && Blue Near
                 if ((alliance == Alliance.Red && startLocation == AutonomousStartLocation.Far) || (alliance == Alliance.Blue && startLocation == AutonomousStartLocation.Near)) {
-                if (x < Configuration.LEFT_UPPER_BOUND_1) {
-                    position = TeamPropPosition.Left;
-                } else if (x > Configuration.LEFT_UPPER_BOUND_1 && x < Configuration.RIGHT_LOWER_BOUND_1) {
-                    position = TeamPropPosition.Center;
-                } else
-                    position = TeamPropPosition.Right;
-            }
+                    if (x < Configuration.LEFT_UPPER_BOUND_1) {
+                        position = TeamPropPosition.Left;
+                    } else if (x > Configuration.LEFT_UPPER_BOUND_1 && x < Configuration.RIGHT_LOWER_BOUND_1) {
+                        position = TeamPropPosition.Center;
+                    } else
+                        position = TeamPropPosition.Right;
+                }
 
                 // 2 -- Red Near & Blue Far
                 if ((alliance == Alliance.Red && startLocation == AutonomousStartLocation.Near) || (alliance == Alliance.Blue && startLocation == AutonomousStartLocation.Far)) {
@@ -231,25 +233,30 @@ public class VisionSubsystem extends FalconSubsystemBase {
         telemetry.addData("Team prop position :", position);
         return position;
     }
-/*
-    public boolean findAprilTag(TeamPropPosition position){
+
+    public AprilTagDetection findAprilTag(int tagID) {
+        AprilTagDetection currentDetection = null;
         List<AprilTagDetection> currentDetections = aprilTag.getDetections();
         telemetry.addData("# AprilTags Detected", currentDetections.size());
 
         // Step through the list of detections and display info for each one.
         for (AprilTagDetection detection : currentDetections) {
-            if (detection.metadata != null) {
+            if (detection.metadata != null && detection.id == tagID) {
                 telemetry.addLine(String.format("\n==== (ID %d) %s", detection.id, detection.metadata.name));
                 telemetry.addLine(String.format("XYZ %6.1f %6.1f %6.1f  (inch)", detection.ftcPose.x, detection.ftcPose.y, detection.ftcPose.z));
                 telemetry.addLine(String.format("PRY %6.1f %6.1f %6.1f  (deg)", detection.ftcPose.pitch, detection.ftcPose.roll, detection.ftcPose.yaw));
                 telemetry.addLine(String.format("RBE %6.1f %6.1f %6.1f  (inch, deg, deg)", detection.ftcPose.range, detection.ftcPose.bearing, detection.ftcPose.elevation));
 
-                //if(detection.)
+               currentDetection = detection;
+               break;
             } else {
                 telemetry.addLine(String.format("\n==== (ID %d) Unknown", detection.id));
                 telemetry.addLine(String.format("Center %6.0f %6.0f   (pixels)", detection.center.x, detection.center.y));
             }
-        }   // end for() loop
+        }
+        // end for() loop
+
+        return currentDetection;
     }
 
     private Pose2d DeterminePoseFromAprilTag(AprilTagID tag) {
@@ -264,7 +271,7 @@ public class VisionSubsystem extends FalconSubsystemBase {
         double tagPosYOnField = tagVector.get(1);
 
         //the +90 rotates this tagheading to be facing the backdrop (it comes in at -90 for the backdrop)
-        double tagHeading = QuaternionToHeading(tag.detection.metadata.fieldOrientation)+90;
+        double tagHeading = QuaternionToHeading(tag.detection.metadata.fieldOrientation) + 90;
 
         //Look at Fig. 2 at https://ftc-docs.firstinspires.org/en/latest/apriltag/understanding_apriltag_detection_values/understanding-apriltag-detection-values.html
         //save tag.detection.ftPose.x into a distanceY variable;
@@ -279,19 +286,19 @@ public class VisionSubsystem extends FalconSubsystemBase {
         //save the tag.detection.ftPose.yaw as the cameraYaw
         double cameraYaw = tag.detection.ftcPose.yaw;
 
-        Pose2d newPose = new Pose2d(tagPosXOnField-distanceX, tagPosYOnField+distanceY, Robot.getInstance().getGyroSubsystem().currentRelativeYawRadians);
+        Pose2d newPose = new Pose2d(tagPosXOnField - distanceX, tagPosYOnField + distanceY, GyroSubsystem.getInstance(hardwareMap, telemetry).getHeading(AngleUnit.RADIANS));
 
         telemetry.addLine();
         telemetry.addData("Tag", tag.detection.metadata.name);
 //        telemetry.addData("Tag Pose", "X %5.2f, Y %5.2f, heading %5.2f ", tagPosXOnField, tagPosYOnField, tagHeading);
 //        telemetry.addData("DistToCamera", "X %5.2f, , Y %5.2f, yaw %5.2f,", distanceX, distanceY, cameraYaw);
 
-        telemetry.addData("New Pose", "X %5.2f, Y %5.2f, heading %5.2f ", newPose.position.x, newPose.position.y, Math.toDegrees(newPose.heading.log()));
+        telemetry.addData("New Pose", "X %5.2f, Y %5.2f, heading %5.2f ", newPose.getX(), newPose.getY(), Math.toDegrees(newPose.getHeading()));
 
         return newPose;
     }
 
-    public double QuaternionToHeading (Quaternion quaternion) {
+    public double QuaternionToHeading(Quaternion quaternion) {
 
         // Calculate yaw (heading) from quaternion
         double t0 = 2.0 * (quaternion.w * quaternion.z + quaternion.x * quaternion.y);
@@ -310,6 +317,4 @@ public class VisionSubsystem extends FalconSubsystemBase {
 
         return yawDegrees;
     }
- */
-
 }

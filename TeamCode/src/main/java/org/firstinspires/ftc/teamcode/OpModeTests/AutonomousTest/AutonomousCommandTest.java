@@ -1,31 +1,21 @@
 package org.firstinspires.ftc.teamcode.OpModeTests.AutonomousTest;
 
 import com.acmerobotics.dashboard.config.Config;
-import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.CommandScheduler;
-import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
-import com.arcrobotics.ftclib.command.SelectCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
-import com.arcrobotics.ftclib.command.WaitUntilCommand;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.Commands.Autonomous.Alliance;
-import org.firstinspires.ftc.teamcode.Commands.Autonomous.AutonomousDriveCommand;
-import org.firstinspires.ftc.teamcode.Commands.Autonomous.AutonomousPaths;
 import org.firstinspires.ftc.teamcode.Commands.Autonomous.AutonomousStartLocation;
 import org.firstinspires.ftc.teamcode.Commands.Autonomous.Paths.BuildBlueFarPaths;
 import org.firstinspires.ftc.teamcode.Commands.Autonomous.Paths.BuildBlueNearPaths;
 import org.firstinspires.ftc.teamcode.Commands.Autonomous.Paths.BuildRedFarPaths;
 import org.firstinspires.ftc.teamcode.Commands.Autonomous.Paths.BuildRedNearPaths;
 import org.firstinspires.ftc.teamcode.Commands.Autonomous.TeamPropPosition;
-import org.firstinspires.ftc.teamcode.Commands.IntakeCommand;
 import org.firstinspires.ftc.teamcode.Commands.PlacePixelOnSpikeCommand;
-import org.firstinspires.ftc.teamcode.Commands.TrajectoryFollowerCommand;
 import org.firstinspires.ftc.teamcode.Commands.TrajectorySequenceFollowerCommand;
 import org.firstinspires.ftc.teamcode.Subsystems.AirplaneLauncherSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.ClimbSubsystem;
@@ -38,9 +28,7 @@ import org.firstinspires.ftc.teamcode.Subsystems.OdometryControlSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.VisionSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.drive.FalconMecanumDrive;
 import org.firstinspires.ftc.teamcode.Subsystems.drive.TrajectorySequence.TrajectorySequence;
-
-import java.security.PublicKey;
-import java.util.HashMap;
+import org.firstinspires.ftc.teamcode.Utilities.MatchConfig;
 
 @Autonomous(preselectTeleOp = "Drivebase_Op")
 @Config
@@ -69,7 +57,7 @@ public class AutonomousCommandTest extends CommandOpMode {
     public void initialize() {
         CommandScheduler.getInstance().reset();
 
-        gyroSubsystem = new GyroSubsystem(hardwareMap, telemetry);
+        gyroSubsystem = GyroSubsystem.getInstance(hardwareMap, telemetry);
         driveBaseSubsystem = new MecanumDriveSubsystem(new FalconMecanumDrive(hardwareMap), false);
         odometryControlSubsystem = new OdometryControlSubsystem(hardwareMap, telemetry);
         airplaneLauncherSubsystem = new AirplaneLauncherSubsystem(hardwareMap, telemetry);
@@ -106,6 +94,10 @@ public class AutonomousCommandTest extends CommandOpMode {
                 startLocation = AutonomousStartLocation.Near;
             if(useVision)
                 teamPropPosition = visionSubsystem.getTeamPropPosition();
+
+            MatchConfig.Alliance = alliance;
+            MatchConfig.AutonomousStartLocation = startLocation;
+            MatchConfig.TeamPropPosition = teamPropPosition;
 
             telemetry.addData("Run atonomous ; " , runAutonomous);
             telemetry.addData("Team Prop Position: ", teamPropPosition);
@@ -153,7 +145,7 @@ public class AutonomousCommandTest extends CommandOpMode {
         // run the scheduler
         while (!isStopRequested() && opModeIsActive()) {
             run();
-            telemetry.addData("Gyro Reading: ", gyroSubsystem.getHeading());
+            telemetry.addData("Gyro Reading(Degrees): ", gyroSubsystem.getHeading(AngleUnit.DEGREES));
             telemetry.update();
         }
         reset();

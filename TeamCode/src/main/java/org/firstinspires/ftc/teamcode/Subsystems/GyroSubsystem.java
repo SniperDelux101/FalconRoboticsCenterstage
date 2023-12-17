@@ -11,6 +11,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 
 public class GyroSubsystem extends FalconSubsystemBase{
 
+    private static GyroSubsystem instance;
+
     private double          headingError  = 0;
     private IMU imu         = null;      // Control/Expansion Hub IMU
     // These constants define the desired driving/control characteristics
@@ -26,7 +28,7 @@ public class GyroSubsystem extends FalconSubsystemBase{
     static final double     P_TURN_GAIN            = 0.02;     // Larger is more responsive, but also less stable
     static final double     P_DRIVE_GAIN           = 0.03;     // Larger is more responsive, but also less stable
 
-    public GyroSubsystem(HardwareMap hardwareMap, Telemetry tel) {
+    private GyroSubsystem(HardwareMap hardwareMap, Telemetry tel) {
         super(tel);
 
         /* The next two lines define Hub orientation.
@@ -46,6 +48,13 @@ public class GyroSubsystem extends FalconSubsystemBase{
         imu.resetYaw();
     }
 
+    public static GyroSubsystem getInstance(HardwareMap hardwareMap, Telemetry tel)
+    {
+        if( instance == null )
+            instance = new GyroSubsystem(hardwareMap, tel);
+        return instance;
+    }
+
     /**
      * Use a Proportional Controller to determine how much steering correction is required.
      *
@@ -56,7 +65,7 @@ public class GyroSubsystem extends FalconSubsystemBase{
     public double getSteeringCorrection(double desiredHeading, double proportionalGain) {
 
         // Determine the heading current error
-        headingError = desiredHeading - getHeading();
+        headingError = desiredHeading - getHeading(AngleUnit.DEGREES);
 
         // Normalize the error to be within +/- 180 degrees
         while (headingError > 180)  headingError -= 360;
@@ -69,8 +78,8 @@ public class GyroSubsystem extends FalconSubsystemBase{
     /**
      * read the Robot heading directly from the IMU (in degrees)
      */
-    public double getHeading() {
+    public double getHeading(AngleUnit angleUnit) {
         YawPitchRollAngles orientation = imu.getRobotYawPitchRollAngles();
-        return orientation.getYaw(AngleUnit.DEGREES);
+        return orientation.getYaw(angleUnit);
     }
 }
