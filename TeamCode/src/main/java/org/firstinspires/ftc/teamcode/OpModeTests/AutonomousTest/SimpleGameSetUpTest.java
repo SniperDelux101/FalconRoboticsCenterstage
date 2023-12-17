@@ -1,18 +1,10 @@
 package org.firstinspires.ftc.teamcode.OpModeTests.AutonomousTest;
 
 import com.arcrobotics.ftclib.command.CommandOpMode;
-import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.Commands.Autonomous.Alliance;
 import org.firstinspires.ftc.teamcode.Commands.Autonomous.AutonomousStartLocation;
-import org.firstinspires.ftc.teamcode.Commands.Autonomous.Paths.BuildBlueFarPaths;
-import org.firstinspires.ftc.teamcode.Commands.Autonomous.Paths.BuildBlueNearPaths;
-import org.firstinspires.ftc.teamcode.Commands.Autonomous.Paths.BuildRedFarPaths;
-import org.firstinspires.ftc.teamcode.Commands.Autonomous.Paths.BuildRedNearPaths;
-import org.firstinspires.ftc.teamcode.Commands.PlacePixelOnSpikeCommand;
-import org.firstinspires.ftc.teamcode.Commands.TrajectorySequenceFollowerCommand;
-import org.firstinspires.ftc.teamcode.Subsystems.drive.TrajectorySequence.TrajectorySequence;
 
 @Autonomous
 public class SimpleGameSetUpTest extends CommandOpMode {

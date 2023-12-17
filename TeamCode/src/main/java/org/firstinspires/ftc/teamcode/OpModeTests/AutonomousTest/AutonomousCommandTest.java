@@ -11,9 +11,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.Commands.Autonomous.Alliance;
 import org.firstinspires.ftc.teamcode.Commands.Autonomous.AutonomousStartLocation;
 import org.firstinspires.ftc.teamcode.Commands.Autonomous.Paths.BuildBlueFarPaths;
-import org.firstinspires.ftc.teamcode.Commands.Autonomous.Paths.BuildBlueNearPaths;
+import org.firstinspires.ftc.teamcode.Commands.Autonomous.Paths.BuildNearPaths;
 import org.firstinspires.ftc.teamcode.Commands.Autonomous.Paths.BuildRedFarPaths;
-import org.firstinspires.ftc.teamcode.Commands.Autonomous.Paths.BuildRedNearPaths;
 import org.firstinspires.ftc.teamcode.Commands.Autonomous.TeamPropPosition;
 import org.firstinspires.ftc.teamcode.Commands.PlacePixelOnSpikeCommand;
 import org.firstinspires.ftc.teamcode.Commands.TrajectorySequenceFollowerCommand;
@@ -112,20 +111,16 @@ public class AutonomousCommandTest extends CommandOpMode {
             visionSubsystem.stopStreaming();
         TrajectorySequence phase1, phase2;
 
-        if(startLocation == AutonomousStartLocation.Near && alliance == Alliance.Blue) {
-            BuildBlueNearPaths.Build(driveBaseSubsystem.getDrive(), teamPropPosition);
-            phase1 = BuildBlueNearPaths.Phase1;
-            phase2 = BuildBlueNearPaths.Phase2;
+        if(startLocation == AutonomousStartLocation.Near) {
+            BuildNearPaths.Build(driveBaseSubsystem.getDrive(), teamPropPosition, alliance);
+            phase1 = BuildNearPaths.Phase1;
+            phase2 = BuildNearPaths.Phase2;
         } else if(startLocation == AutonomousStartLocation.Far  && alliance == Alliance.Blue){
             BuildBlueFarPaths.Build(driveBaseSubsystem.getDrive(), teamPropPosition);
             phase1 = BuildBlueFarPaths.Phase1;
             phase2 = BuildBlueFarPaths.Phase2;
         }
-        else if(startLocation == AutonomousStartLocation.Near && alliance == Alliance.Red){
-            BuildRedNearPaths.Build(driveBaseSubsystem.getDrive(), teamPropPosition);
-            phase1 = BuildRedNearPaths.Phase1;
-            phase2 = BuildRedNearPaths.Phase2;
-        } else{
+        else{
             BuildRedFarPaths.Build(driveBaseSubsystem.getDrive(), teamPropPosition);
             phase1 = BuildRedFarPaths.Phase1;
             phase2 = BuildRedFarPaths.Phase2;

@@ -1,24 +1,17 @@
 package org.firstinspires.ftc.teamcode.OpModeTests.AutonomousTest;
 
 import com.arcrobotics.ftclib.command.CommandOpMode;
-import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 
 import org.firstinspires.ftc.teamcode.Commands.Autonomous.Alliance;
 import org.firstinspires.ftc.teamcode.Commands.Autonomous.AutonomousStartLocation;
 import org.firstinspires.ftc.teamcode.Commands.Autonomous.DriveToTeamPropCommand;
 import org.firstinspires.ftc.teamcode.Commands.Autonomous.FindTeamPropCommand;
-import org.firstinspires.ftc.teamcode.Commands.Autonomous.Paths.BuildBlueFarPaths;
-import org.firstinspires.ftc.teamcode.Commands.Autonomous.Paths.BuildBlueNearPaths;
-import org.firstinspires.ftc.teamcode.Commands.Autonomous.Paths.BuildRedFarPaths;
-import org.firstinspires.ftc.teamcode.Commands.Autonomous.Paths.BuildRedNearPaths;
 import org.firstinspires.ftc.teamcode.Commands.PlacePixelOnSpikeCommand;
-import org.firstinspires.ftc.teamcode.Commands.TrajectorySequenceFollowerCommand;
 import org.firstinspires.ftc.teamcode.Subsystems.IntakeMotorSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.MecanumDriveSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.VisionSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.drive.FalconMecanumDrive;
-import org.firstinspires.ftc.teamcode.Subsystems.drive.TrajectorySequence.TrajectorySequence;
 
 public class DriveByVisionTest extends CommandOpMode {
 
