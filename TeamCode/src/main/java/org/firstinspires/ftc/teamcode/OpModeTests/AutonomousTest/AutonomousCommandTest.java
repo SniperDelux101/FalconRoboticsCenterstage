@@ -10,9 +10,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.Commands.Autonomous.Alliance;
 import org.firstinspires.ftc.teamcode.Commands.Autonomous.AutonomousStartLocation;
-import org.firstinspires.ftc.teamcode.Commands.Autonomous.Paths.BuildBlueFarPaths;
+import org.firstinspires.ftc.teamcode.Commands.Autonomous.Paths.BuildFarPaths;
 import org.firstinspires.ftc.teamcode.Commands.Autonomous.Paths.BuildNearPaths;
-import org.firstinspires.ftc.teamcode.Commands.Autonomous.Paths.BuildRedFarPaths;
 import org.firstinspires.ftc.teamcode.Commands.Autonomous.TeamPropPosition;
 import org.firstinspires.ftc.teamcode.Commands.PlacePixelOnSpikeCommand;
 import org.firstinspires.ftc.teamcode.Commands.TrajectorySequenceFollowerCommand;
@@ -115,15 +114,10 @@ public class AutonomousCommandTest extends CommandOpMode {
             BuildNearPaths.Build(driveBaseSubsystem.getDrive(), teamPropPosition, alliance);
             phase1 = BuildNearPaths.Phase1;
             phase2 = BuildNearPaths.Phase2;
-        } else if(startLocation == AutonomousStartLocation.Far  && alliance == Alliance.Blue){
-            BuildBlueFarPaths.Build(driveBaseSubsystem.getDrive(), teamPropPosition);
-            phase1 = BuildBlueFarPaths.Phase1;
-            phase2 = BuildBlueFarPaths.Phase2;
-        }
-        else{
-            BuildRedFarPaths.Build(driveBaseSubsystem.getDrive(), teamPropPosition);
-            phase1 = BuildRedFarPaths.Phase1;
-            phase2 = BuildRedFarPaths.Phase2;
+        } else{
+            BuildFarPaths.Build(driveBaseSubsystem.getDrive(), teamPropPosition, alliance);
+            phase1 = BuildFarPaths.Phase1;
+            phase2 = BuildFarPaths.Phase2;
         }
 
         schedule(
