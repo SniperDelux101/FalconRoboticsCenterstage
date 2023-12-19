@@ -61,7 +61,7 @@ public class Configuration {
     public static double MAX_VEL = 66.3358551600406; //0.07703451419276926
     public static double MAX_ACCEL = 60;
     public static double MAX_ANG_VEL = Math.toRadians(54.98425989336563); // Or the value should be 7.995426528314827
-    public static double MAX_ANG_ACCEL = Math.toRadians(240);   //sh
+    public static double MAX_ANG_ACCEL = Math.toRadians(54.98425989336563);   //sh
 
 
     public static double encoderTicksToInches(double ticks) {

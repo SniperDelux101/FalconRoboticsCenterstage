@@ -1,17 +1,15 @@
-package org.firstinspires.ftc.teamcode.Commands.Autonomous.Paths;
+package com.example.meepmeeptesting.Paths;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.noahbres.meepmeep.roadrunner.DriveShim;
+import com.noahbres.meepmeep.roadrunner.trajectorysequence.TrajectorySequence;
 
-import org.firstinspires.ftc.teamcode.Commands.Autonomous.Alliance;
-import org.firstinspires.ftc.teamcode.Commands.Autonomous.TeamPropPosition;
-import org.firstinspires.ftc.teamcode.Subsystems.drive.FalconMecanumDrive;
-import org.firstinspires.ftc.teamcode.Subsystems.drive.TrajectorySequence.TrajectorySequence;
 
 public class BuildNearPaths {
     public static TrajectorySequence Phase1, Phase2;
-    private static FalconMecanumDrive drive;
+    private static DriveShim drive;
 
-    public static void Build(FalconMecanumDrive dr, TeamPropPosition position, Alliance alliance){
+    public static void Build(DriveShim dr, TeamPropPosition position, Alliance alliance){
         drive = dr;
         if (position == TeamPropPosition.Center) {
             if(alliance == Alliance.Blue){

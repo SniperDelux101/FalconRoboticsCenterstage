@@ -1,17 +1,14 @@
-package org.firstinspires.ftc.teamcode.Commands.Autonomous.Paths;
+package com.example.meepmeeptesting.Paths;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.noahbres.meepmeep.roadrunner.DriveShim;
+import com.noahbres.meepmeep.roadrunner.trajectorysequence.TrajectorySequence;
 
-import org.firstinspires.ftc.teamcode.Commands.Autonomous.Alliance;
-import org.firstinspires.ftc.teamcode.Commands.Autonomous.TeamPropPosition;
-import org.firstinspires.ftc.teamcode.Subsystems.drive.FalconMecanumDrive;
-import org.firstinspires.ftc.teamcode.Subsystems.drive.TrajectorySequence.TrajectorySequence;
-
-public class BuildNearPaths {
+public class BuildFarPaths {
     public static TrajectorySequence Phase1, Phase2;
-    private static FalconMecanumDrive drive;
+    private static DriveShim drive;
 
-    public static void Build(FalconMecanumDrive dr, TeamPropPosition position, Alliance alliance){
+    public static void Build(DriveShim dr, TeamPropPosition position, Alliance alliance){
         drive = dr;
         if (position == TeamPropPosition.Center) {
             if(alliance == Alliance.Blue){
@@ -32,16 +29,17 @@ public class BuildNearPaths {
     private static class Blue{
         public static void CenterPhases() {
             Phase1 = drive.trajectorySequenceBuilder(drive.getPoseEstimate())
-                    .forward(CommonPathSettings.Center_SpikeMark_Distance)
+                    .forward(CommonPathSettings.Center_SpikeMark_Distance + CommonPathSettings.Far_Center_Offset)
+                    .turn(CommonPathSettings.TURN_RIGHT*2)
                     .build();
             Center_Phase2();
         }
 
         public static void Center_Phase2() {
             Phase2 = drive.trajectorySequenceBuilder(Phase1.end())
-                    .back(CommonPathSettings.Center_SpikeMark_Distance - CommonPathSettings.Park_Offset)
-                    .turn(CommonPathSettings.TURN_LEFT)
-                    .forward(CommonPathSettings.Near_Park_Distance)
+                    .back(CommonPathSettings.Tile_Width/2)
+                    .turn(CommonPathSettings.TURN_RIGHT)
+                    .forward(CommonPathSettings.Far_Park_Distance)
                     .build();
         }
 
@@ -66,14 +64,14 @@ public class BuildNearPaths {
             if(position == TeamPropPosition.Left){
                 Phase2 = drive.trajectorySequenceBuilder(Phase1.end().plus(new Pose2d(0,0,0)))
                         .back(CommonPathSettings.Distance_To_SpikeMark)
-                        .strafeLeft(CommonPathSettings.Center_SpikeMark_Distance - CommonPathSettings.Spike_Offset - CommonPathSettings.Park_Offset)
-                        .forward(CommonPathSettings.Near_Park_Distance)
+                        .strafeRight(CommonPathSettings.Tile_Width)
+                        .forward(CommonPathSettings.Far_Park_Distance)
                         .build();
             } else {
                 Phase2 = drive.trajectorySequenceBuilder(Phase1.end().plus(new Pose2d(0,0,0)))
                         .back(CommonPathSettings.Distance_To_SpikeMark)
-                        .strafeRight(CommonPathSettings.Center_SpikeMark_Distance - CommonPathSettings.Spike_Offset - CommonPathSettings.Park_Offset)
-                        .back(CommonPathSettings.Near_Park_Distance)
+                        .strafeLeft(CommonPathSettings.Tile_Width)
+                        .back(CommonPathSettings.Far_Park_Distance)
                         .build();
             }
         }
@@ -82,16 +80,17 @@ public class BuildNearPaths {
     private static class Red{
         public static void CenterPhases() {
             Phase1 = drive.trajectorySequenceBuilder(drive.getPoseEstimate())
-                    .forward(CommonPathSettings.Center_SpikeMark_Distance)
+                    .forward(CommonPathSettings.Center_SpikeMark_Distance + CommonPathSettings.Far_Center_Offset)
+                    .turn(CommonPathSettings.TURN_RIGHT*2)
                     .build();
             Center_Phase2();
         }
 
-        private static void Center_Phase2() {
+        public static void Center_Phase2() {
             Phase2 = drive.trajectorySequenceBuilder(Phase1.end())
-                    .back(CommonPathSettings.Center_SpikeMark_Distance - CommonPathSettings.Park_Offset)
-                    .turn(CommonPathSettings.TURN_RIGHT)
-                    .forward(CommonPathSettings.Near_Park_Distance)
+                    .back(CommonPathSettings.Tile_Width/2)
+                    .turn(CommonPathSettings.TURN_LEFT)
+                    .forward(CommonPathSettings.Far_Park_Distance)
                     .build();
         }
 
@@ -116,14 +115,14 @@ public class BuildNearPaths {
             if(position == TeamPropPosition.Left){
                 Phase2 = drive.trajectorySequenceBuilder(Phase1.end().plus(new Pose2d(0,0,0)))
                         .back(CommonPathSettings.Distance_To_SpikeMark)
-                        .strafeLeft(CommonPathSettings.Center_SpikeMark_Distance - CommonPathSettings.Spike_Offset - CommonPathSettings.Park_Offset)
-                        .back(CommonPathSettings.Near_Park_Distance)
+                        .strafeRight(CommonPathSettings.Center_SpikeMark_Distance - CommonPathSettings.Spike_Offset - CommonPathSettings.Park_Offset)
+                        .back(CommonPathSettings.Far_Park_Distance)
                         .build();
             } else {
                 Phase2 = drive.trajectorySequenceBuilder(Phase1.end().plus(new Pose2d(0,0,0)))
                         .back(CommonPathSettings.Distance_To_SpikeMark)
-                        .strafeRight(CommonPathSettings.Center_SpikeMark_Distance - CommonPathSettings.Spike_Offset - CommonPathSettings.Park_Offset)
-                        .forward(CommonPathSettings.Near_Park_Distance)
+                        .strafeLeft(CommonPathSettings.Center_SpikeMark_Distance - CommonPathSettings.Spike_Offset - CommonPathSettings.Park_Offset)
+                        .forward(CommonPathSettings.Far_Park_Distance)
                         .build();
             }
         }

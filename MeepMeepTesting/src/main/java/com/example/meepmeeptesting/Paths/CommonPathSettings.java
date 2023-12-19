@@ -1,11 +1,6 @@
-package org.firstinspires.ftc.teamcode.Commands.Autonomous.Paths;
+package com.example.meepmeeptesting.Paths;
 
-import com.acmerobotics.dashboard.config.Config;
 
-import org.firstinspires.ftc.teamcode.Utilities.Configuration;
-import org.firstinspires.ftc.teamcode.Utilities.Utility;
-
-@Config
 public class CommonPathSettings {
     public static double Tile_Width = 23;
     public static double TURN_RIGHT = Math.toRadians(-90);
@@ -14,7 +9,7 @@ public class CommonPathSettings {
     public static double Near_Park_Distance = 35;
 
     //common values for setting pixel on left & right spike marks
-    public static double Spike_Offset = 6;
+    public static double Spike_Offset = 3;
     public static double Distance_To_SpikeMark = (Tile_Width/2) + (Configuration.WHEELBASE/2);
     public static double Park_Offset = 5;
 

@@ -1,107 +1,86 @@
 package com.example.meepmeeptesting;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.trajectory.constraints.MecanumVelocityConstraint;
+import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryAccelerationConstraint;
+import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryVelocityConstraint;
 import com.noahbres.meepmeep.MeepMeep;
+import com.noahbres.meepmeep.core.colorscheme.ColorScheme;
+import com.noahbres.meepmeep.core.colorscheme.scheme.ColorSchemeBlueDark;
+import com.noahbres.meepmeep.roadrunner.Constraints;
 import com.noahbres.meepmeep.roadrunner.DefaultBotBuilder;
+import com.noahbres.meepmeep.roadrunner.DriveShim;
+import com.noahbres.meepmeep.roadrunner.DriveTrainType;
 import com.noahbres.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
+import com.example.meepmeeptesting.Paths.*;
+import com.noahbres.meepmeep.roadrunner.trajectorysequence.TrajectorySequence;
+import com.noahbres.meepmeep.roadrunner.trajectorysequence.TrajectorySequenceBuilder;
+import com.noahbres.meepmeep.roadrunner.trajectorysequence.sequencesegment.SequenceSegment;
+
+import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
 
 public class MeepMeepTesting {
+
+    public enum StartLocation {
+        Near, Far
+    }
+
     public static void main(String[] args) {
-        testVisionLogic();
         MeepMeep meepMeep = new MeepMeep(800);
+        StartLocation location = StartLocation.Near;
+        Alliance alliance = com.example.meepmeeptesting.Paths.Alliance.Red;
+        TeamPropPosition teamPropPosition = TeamPropPosition.Right;
+
+        double maxVel = 66.3358551600406;
+        double maxAccel = 60;
+        double maxAngVel = Math.toRadians(54.98425989336563);
+        double maxAngAccel = Math.toRadians(54.98425989336563);
+        double trackWidth = 11.6003937;
+        Constraints constraints = new Constraints(maxVel, maxAccel, maxAngVel, maxAngAccel, trackWidth);
+        TrajectorySequence phase1, phase2;
+        Pose2d startingPose;
+        DriveShim shim;
+
+        if(location == StartLocation.Near){
+            if(alliance == Alliance.Blue)
+                startingPose = new Pose2d(23 / 2, 60, Math.toRadians(270));
+            else
+                startingPose = new Pose2d(23 / 2, -60, Math.toRadians(90));
+            shim = new DriveShim(DriveTrainType.MECANUM, constraints, startingPose);
+            BuildNearPaths.Build(shim, teamPropPosition, alliance);
+            phase1 = BuildNearPaths.Phase1;
+            phase2 = BuildNearPaths.Phase2;
+        }
+        else {
+            if(alliance == Alliance.Blue)
+                startingPose = new Pose2d(-23  + -23/ 2, 60, Math.toRadians(270));
+            else
+                startingPose = new Pose2d(-23  + -23/ 2, -60, Math.toRadians(90));
+            shim = new DriveShim(DriveTrainType.MECANUM, constraints, startingPose);
+            BuildFarPaths.Build(shim, teamPropPosition, alliance);
+            phase1 = BuildFarPaths.Phase1;
+            phase2 = BuildFarPaths.Phase2;
+        }
 
         RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
-                .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 11)
-                .followTrajectorySequence(drive ->
-                        drive.trajectorySequenceBuilder(new Pose2d(16,-63,Math.toRadians(90)))
+                .setConstraints(constraints)
+                .build();
+        RoadRunnerBotEntity bot2 = new DefaultBotBuilder(meepMeep)
+                .setConstraints(constraints)
+                .setColorScheme(new ColorSchemeBlueDark())
+                        .build();
 
-                                .forward(29)
-                                .turn(Math.toRadians(-90.0)-1e-6)
-                                .forward(5)
-                                .back(11)
-                                .turn(Math.toRadians(-90) - 1e-6)
-                                .forward(24)
-                                .turn(Math.toRadians(90)+1e-6)
-                                .forward(30)
-
-
-                                .build());
-
-
+        myBot.followTrajectorySequence(phase1);
+        bot2.followTrajectorySequence(phase2);
 
         meepMeep.setBackground(MeepMeep.Background.FIELD_CENTERSTAGE_JUICE_DARK)
                 .setDarkMode(true)
                 .setBackgroundAlpha(0.95f)
                 .addEntity(myBot)
+                .addEntity(bot2)
                 .start();
     }
-
-    public enum Alliance {
-        Blue, Red
-    }
-
-    public enum StartLocation {
-        Near, Far
-    }
-    public static int LEFT_UPPER_BOUND_1 = 200;
-    public static int RIGHT_LOWER_BOUND_1 = 650;
-    public  static int LEFT_UPPER_BOUND_2 = 100;
-    public static int RIGHT_LOWER_BOUND_2 = 350;
-    public static void testVisionLogic() {
-
-        int x = 0;
-        Alliance alliance = Alliance.Red;
-        StartLocation location = StartLocation.Far;
-
-
-        // 2
-        if (alliance == Alliance.Red && location == StartLocation.Near) {
-            if(x > RIGHT_LOWER_BOUND_2) {
-                System.out.println("Right");
-            }   else if (x > LEFT_UPPER_BOUND_2 && x < RIGHT_LOWER_BOUND_2) {
-                System.out.println("Center");
-            }   else
-                System.out.println("Left");
-        }
-
-        // 1
-        if (alliance == Alliance.Red && location == StartLocation.Far) {
-            if (x < LEFT_UPPER_BOUND_1) {
-                System.out.println("Left");
-            } else if (x > LEFT_UPPER_BOUND_1 && x < RIGHT_LOWER_BOUND_1) {
-                System.out.println("Center");
-            } else
-                System.out.println("Right");
-        }
-
-        // 1
-        if (alliance == Alliance.Blue && location == StartLocation.Near) {
-            if (x < LEFT_UPPER_BOUND_1) {
-                System.out.println("Left");
-            } else if (x > LEFT_UPPER_BOUND_1 && x < RIGHT_LOWER_BOUND_1) {
-                System.out.println("Center");
-            } else
-                System.out.println("Right");
-        }
-
-        // 2
-        if (alliance == Alliance.Blue && location == StartLocation.Far) {
-            if (x > RIGHT_LOWER_BOUND_2) {
-                System.out.println("Right");
-            } else if (x > LEFT_UPPER_BOUND_2 && x < RIGHT_LOWER_BOUND_2) {
-                System.out.println("Center");
-            } else
-                System.out.println("Left");
-        }
-    }
 }
-
-
-/*
-drive.trajectorySequenceBuilder(new Pose2d(17.00, -63.00, Math.toRadians(90.00)))
-    .lineToConstantHeading(new Vector2d(11, -36))
-    .lineToConstantHeading(new Vector2d(24,-36))
-    .lineToSplineHeading(new Pose2d(42,-36, Math.toRadians(180)))
-    .build());
-*/
