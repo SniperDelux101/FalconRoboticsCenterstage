@@ -1,11 +1,7 @@
 package com.example.meepmeeptesting;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.acmerobotics.roadrunner.trajectory.constraints.MecanumVelocityConstraint;
-import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryAccelerationConstraint;
-import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryVelocityConstraint;
 import com.noahbres.meepmeep.MeepMeep;
-import com.noahbres.meepmeep.core.colorscheme.ColorScheme;
 import com.noahbres.meepmeep.core.colorscheme.scheme.ColorSchemeBlueDark;
 import com.noahbres.meepmeep.roadrunner.Constraints;
 import com.noahbres.meepmeep.roadrunner.DefaultBotBuilder;
@@ -13,13 +9,8 @@ import com.noahbres.meepmeep.roadrunner.DriveShim;
 import com.noahbres.meepmeep.roadrunner.DriveTrainType;
 import com.noahbres.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
 import com.example.meepmeeptesting.Paths.*;
+import com.example.meepmeeptesting.Paths.V2.*;
 import com.noahbres.meepmeep.roadrunner.trajectorysequence.TrajectorySequence;
-import com.noahbres.meepmeep.roadrunner.trajectorysequence.TrajectorySequenceBuilder;
-import com.noahbres.meepmeep.roadrunner.trajectorysequence.sequencesegment.SequenceSegment;
-
-import org.jetbrains.annotations.NotNull;
-
-import java.util.ArrayList;
 
 public class MeepMeepTesting {
 
@@ -30,8 +21,8 @@ public class MeepMeepTesting {
     public static void main(String[] args) {
         MeepMeep meepMeep = new MeepMeep(800);
         StartLocation location = StartLocation.Near;
-        Alliance alliance = com.example.meepmeeptesting.Paths.Alliance.Red;
-        TeamPropPosition teamPropPosition = TeamPropPosition.Right;
+        Alliance alliance = Alliance.Blue;
+        TeamPropPosition teamPropPosition = TeamPropPosition.Left;
 
         double maxVel = 66.3358551600406;
         double maxAccel = 60;

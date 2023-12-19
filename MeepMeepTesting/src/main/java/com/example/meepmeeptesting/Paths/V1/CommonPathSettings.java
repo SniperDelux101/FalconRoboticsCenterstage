@@ -1,5 +1,7 @@
-package com.example.meepmeeptesting.Paths;
+package com.example.meepmeeptesting.Paths.V1;
 
+
+import com.example.meepmeeptesting.Paths.Configuration;
 
 public class CommonPathSettings {
     public static double Tile_Width = 23;

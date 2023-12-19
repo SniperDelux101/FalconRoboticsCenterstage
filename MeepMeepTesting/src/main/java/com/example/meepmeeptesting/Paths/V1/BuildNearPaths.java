@@ -1,6 +1,8 @@
-package com.example.meepmeeptesting.Paths;
+package com.example.meepmeeptesting.Paths.V1;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.example.meepmeeptesting.Paths.Alliance;
+import com.example.meepmeeptesting.Paths.TeamPropPosition;
 import com.noahbres.meepmeep.roadrunner.DriveShim;
 import com.noahbres.meepmeep.roadrunner.trajectorysequence.TrajectorySequence;
 

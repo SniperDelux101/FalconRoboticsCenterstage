@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Commands.Autonomous.Paths;
+package org.firstinspires.ftc.teamcode.Commands.Autonomous.Paths.V1;
 
 import com.acmerobotics.dashboard.config.Config;
 
