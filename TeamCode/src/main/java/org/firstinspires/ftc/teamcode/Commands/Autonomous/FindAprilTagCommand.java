@@ -2,13 +2,10 @@ package org.firstinspires.ftc.teamcode.Commands.Autonomous;
 
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.arcrobotics.ftclib.command.CommandBase;
-import com.qualcomm.robotcore.robocol.Command;
-
 import org.firstinspires.ftc.teamcode.Subsystems.MecanumDriveSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.VisionSubsystem;
 import org.firstinspires.ftc.teamcode.Utilities.MatchConfig;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
-import org.opencv.core.Mat;
 
 public class FindAprilTagCommand extends CommandBase {
     public enum Direction{
@@ -20,6 +17,7 @@ public class FindAprilTagCommand extends CommandBase {
     private final Direction strafeDirection;
     public static double APRIL_TAG_STRAFE_DISTANCE = 60;
     public double distance_to_Tag = 0.0;
+    private Trajectory trajectory;
 
 
     public FindAprilTagCommand(MecanumDriveSubsystem mecanumDriveSubsystem, VisionSubsystem visionSubsystem, Direction direction) {
@@ -32,12 +30,9 @@ public class FindAprilTagCommand extends CommandBase {
 
     @Override
     public void initialize() {
-        this.visionSubsystem.resumeStreaming();
-    }
 
-    @Override
-    public void execute() {
-        Trajectory trajectory = null;
+        this.visionSubsystem.resumeStreaming();
+
         if(this.strafeDirection == Direction.Right) {
             trajectory = this.mecanumDriveSubsystem.trajectoryBuilder(this.mecanumDriveSubsystem.getPoseEstimate())
                     .strafeRight(APRIL_TAG_STRAFE_DISTANCE)
@@ -48,6 +43,10 @@ public class FindAprilTagCommand extends CommandBase {
                     .strafeLeft(APRIL_TAG_STRAFE_DISTANCE)
                     .build();
         }
+    }
+
+    @Override
+    public void execute() {
         this.mecanumDriveSubsystem.followTrajectoryAsync(trajectory);
     }
 
@@ -74,7 +73,6 @@ public class FindAprilTagCommand extends CommandBase {
 
     private int GetAprilTagID()
     {
-        VisionSubsystem.AprilTagID aprilTagID;
         if(MatchConfig.Alliance == Alliance.Red) {
             return 5;
         }
