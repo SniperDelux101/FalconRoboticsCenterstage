@@ -3,7 +3,11 @@ package org.firstinspires.ftc.teamcode.OpModeTests.AutonomousTest;
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.CommandScheduler;
+import com.arcrobotics.ftclib.command.SequentialCommandGroup;
+
+import org.firstinspires.ftc.teamcode.Commands.Autonomous.DriveForwardToObjectCommand;
 import org.firstinspires.ftc.teamcode.Commands.Autonomous.FindAprilTagCommand;
+import org.firstinspires.ftc.teamcode.Subsystems.DistanceSensorSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.MecanumDriveSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.VisionSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.drive.FalconMecanumDrive;
@@ -13,6 +17,7 @@ import org.firstinspires.ftc.teamcode.Subsystems.drive.FalconMecanumDrive;
 public class AprilTagTest extends CommandOpMode {
 
     public static FindAprilTagCommand.Direction Direction = FindAprilTagCommand.Direction.Left;
+    public static double DistanceToBackDropStop = 5;
 
     @Override
     public void initialize() {
@@ -20,11 +25,13 @@ public class AprilTagTest extends CommandOpMode {
 
         MecanumDriveSubsystem mecanumDriveSubsystem = new MecanumDriveSubsystem(new FalconMecanumDrive(hardwareMap), false);
         VisionSubsystem visionSubsystem = new VisionSubsystem(hardwareMap, telemetry);
+        DistanceSensorSubsystem distanceSensorSubsystem = new DistanceSensorSubsystem(hardwareMap, telemetry);
 
-        FindAprilTagCommand command = new FindAprilTagCommand(mecanumDriveSubsystem, visionSubsystem, Direction);
-        schedule(command);
+        schedule(new SequentialCommandGroup(
+                new FindAprilTagCommand(mecanumDriveSubsystem, visionSubsystem, Direction),
+                new DriveForwardToObjectCommand(mecanumDriveSubsystem, distanceSensorSubsystem, DistanceToBackDropStop)
+                ));
 
-        register(mecanumDriveSubsystem, visionSubsystem);
-
+        register(mecanumDriveSubsystem, visionSubsystem, distanceSensorSubsystem);
     }
 }
