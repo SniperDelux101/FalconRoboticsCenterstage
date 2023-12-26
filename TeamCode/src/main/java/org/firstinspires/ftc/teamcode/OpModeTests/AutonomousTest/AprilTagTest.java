@@ -8,6 +8,7 @@ import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import org.firstinspires.ftc.teamcode.Commands.Autonomous.DriveForwardToObjectCommand;
 import org.firstinspires.ftc.teamcode.Commands.Autonomous.FindAprilTagCommand;
 import org.firstinspires.ftc.teamcode.Subsystems.DistanceSensorSubsystem;
+import org.firstinspires.ftc.teamcode.Subsystems.GyroSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.MecanumDriveSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.VisionSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.drive.FalconMecanumDrive;
@@ -29,7 +30,7 @@ public class AprilTagTest extends CommandOpMode {
 
         schedule(new SequentialCommandGroup(
                 new FindAprilTagCommand(mecanumDriveSubsystem, visionSubsystem, Direction),
-                new DriveForwardToObjectCommand(mecanumDriveSubsystem, distanceSensorSubsystem, DistanceToBackDropStop)
+                new DriveForwardToObjectCommand(mecanumDriveSubsystem, distanceSensorSubsystem, GyroSubsystem.getInstance(hardwareMap, telemetry), DistanceToBackDropStop)
                 ));
 
         register(mecanumDriveSubsystem, visionSubsystem, distanceSensorSubsystem);

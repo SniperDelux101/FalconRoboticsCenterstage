@@ -2,17 +2,22 @@ package org.firstinspires.ftc.teamcode.Commands.Autonomous;
 
 import com.arcrobotics.ftclib.command.CommandBase;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.Subsystems.DistanceSensorSubsystem;
+import org.firstinspires.ftc.teamcode.Subsystems.GyroSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.MecanumDriveSubsystem;
+import org.firstinspires.ftc.teamcode.Utilities.MatchConfig;
 
 public class DriveForwardToObjectCommand extends CommandBase {
     private final MecanumDriveSubsystem mecanumDriveSubsystem;
     private final DistanceSensorSubsystem distanceSensorSubsystem;
+    private final GyroSubsystem gyroSubsystem;
     private final double stopDistance;
 
-    public DriveForwardToObjectCommand(MecanumDriveSubsystem drive, DistanceSensorSubsystem dist, double stopDistance){
+    public DriveForwardToObjectCommand(MecanumDriveSubsystem drive, DistanceSensorSubsystem dist, GyroSubsystem gSubsystem, double stopDistance){
         mecanumDriveSubsystem = drive;
         distanceSensorSubsystem = dist;
+        gyroSubsystem = gSubsystem;
         this.stopDistance = stopDistance;
 
         addRequirements(mecanumDriveSubsystem, distanceSensorSubsystem);
@@ -65,6 +70,19 @@ public class DriveForwardToObjectCommand extends CommandBase {
             diff = Math.abs(a - b);
         }
         mecanumDriveSubsystem.stop();
+    }
+
+    private void SquareToGyro(){
+        double currentHeading = this.gyroSubsystem.getHeading(AngleUnit.DEGREES);
+        double error;
+        if( MatchConfig.Alliance == Alliance.Red){
+            error = 90 - currentHeading;
+
+        } else {
+            error = currentHeading - 270;
+        }
+
+        mecanumDriveSubsystem.turn(Math.toRadians(error));
     }
 
 }
