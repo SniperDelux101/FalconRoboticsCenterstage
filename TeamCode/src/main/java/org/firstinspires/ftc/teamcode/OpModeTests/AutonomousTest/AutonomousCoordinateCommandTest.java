@@ -12,11 +12,10 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.Commands.Autonomous.Alliance;
 import org.firstinspires.ftc.teamcode.Commands.Autonomous.AutonomousStartLocation;
-import org.firstinspires.ftc.teamcode.Commands.Autonomous.Paths.V3.BuildFarPaths;
-import org.firstinspires.ftc.teamcode.Commands.Autonomous.Paths.V3.BuildNearPaths;
+import org.firstinspires.ftc.teamcode.Commands.Autonomous.Paths.V1.BuildFarPaths;
+import org.firstinspires.ftc.teamcode.Commands.Autonomous.Paths.V1.BuildNearPaths;
 import org.firstinspires.ftc.teamcode.Commands.Autonomous.TeamPropPosition;
 import org.firstinspires.ftc.teamcode.Commands.PlacePixelOnSpikeCommand;
-import org.firstinspires.ftc.teamcode.Commands.TrajectoryFollowerCommand;
 import org.firstinspires.ftc.teamcode.Commands.TrajectorySequenceFollowerCommand;
 import org.firstinspires.ftc.teamcode.Subsystems.AirplaneLauncherSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.ClimbSubsystem;
@@ -33,7 +32,7 @@ import org.firstinspires.ftc.teamcode.Utilities.MatchConfig;
 
 @Autonomous(preselectTeleOp = "Drivebase_Op")
 @Config
-public class AutonomousCommandTest extends CommandOpMode {
+public class AutonomousCoordinateCommandTest extends CommandOpMode {
     ///region Subsystems
     private MecanumDriveSubsystem driveBaseSubsystem;
     private AirplaneLauncherSubsystem airplaneLauncherSubsystem;
@@ -117,12 +116,10 @@ public class AutonomousCommandTest extends CommandOpMode {
             BuildNearPaths.Build(driveBaseSubsystem.getDrive(), teamPropPosition, alliance);
             phase1 = BuildNearPaths.Phase1;
             phase2 = BuildNearPaths.Phase2;
-            park = BuildNearPaths.Park;
         } else{
             BuildFarPaths.Build(driveBaseSubsystem.getDrive(), teamPropPosition, alliance);
             phase1 = BuildFarPaths.Phase1;
             phase2 = BuildFarPaths.Phase2;
-            park = BuildFarPaths.Park;
         }
 
         schedule(
@@ -132,8 +129,7 @@ public class AutonomousCommandTest extends CommandOpMode {
                         new ParallelCommandGroup(
                                 new PlacePixelOnSpikeCommand(intakeMotorSubsystem).withTimeout(2000),
                                 new TrajectorySequenceFollowerCommand(driveBaseSubsystem, phase2)
-                        ),
-                        new TrajectorySequenceFollowerCommand(driveBaseSubsystem, park)
+                        )
                 )
         );
 
@@ -146,22 +142,19 @@ public class AutonomousCommandTest extends CommandOpMode {
         reset();
     }
 
-//    public TrajectorySequence BlueNearCenter_Phase1(){
-//       return driveBaseSubsystem.getDrive().trajectorySequenceBuilder(new Pose2d())
-//               .strafeRight(5)
-//               .forward(32)
-//                .build();
-//    }
-//
-//    public TrajectorySequence BlueNearCenter_Phase2(){
-//        return driveBaseSubsystem.getDrive().trajectorySequenceBuilder(new Pose2d())
-//                .back(28)
-//                .waitSeconds(1)
-//                .turn(Math.toRadians(90) + 1e-6)
-//                .waitSeconds(1)
-//                .forward(35)
-//                .build();
-//    }
+    public TrajectorySequence BlueNearCenter_Phase1(){
+       return driveBaseSubsystem.getDrive().trajectorySequenceBuilder(new Pose2d())
+                .lineTo(new Vector2d(12, 30))
+                .build();
+    }
+
+    public TrajectorySequence BlueNearCenter_Phase2(){
+        return driveBaseSubsystem.getDrive().trajectorySequenceBuilder(new Pose2d())
+                .lineTo(new Vector2d(12, 36))
+                .splineTo(new Vector2d(30, 36), Math.toRadians(0))
+                .lineTo(new Vector2d(40, 36))
+                .build();
+    }
     public TrajectorySequence BlueNearLeft_Phase1 (){
         return driveBaseSubsystem.getDrive().trajectorySequenceBuilder(new Pose2d())
                 .splineToConstantHeading(new Vector2d(30, 30), Math.toRadians(270))
@@ -173,177 +166,124 @@ public class AutonomousCommandTest extends CommandOpMode {
                 .lineTo(new Vector2d(40, 30))
                 .lineTo(new Vector2d(40, 36))
                 .splineToConstantHeading(new Vector2d(50,60), Math.toRadians(0))
-
                 .build();
     }
-
-    public TrajectorySequence BlueNearPark () {
-        return driveBaseSubsystem.getDrive().trajectorySequenceBuilder(new Pose2d())
-                .splineToConstantHeading(new Vector2d(50,60), Math.toRadians(0))
-                .build();
-    }
-    /*
     public TrajectorySequence BlueNearRight_Phase1 (){
         return driveBaseSubsystem.getDrive().trajectorySequenceBuilder(new Pose2d())
-         .forward(29.0)
-                .turn(Math.toRadians(-90) - 1e-6)
+                .splineTo(new Vector2d(9, 30), Math.toRadians(180))
                 .build();
     }
     public TrajectorySequence BlueNearRight_Phase2 (){
         return driveBaseSubsystem.getDrive().trajectorySequenceBuilder(new Pose2d())
-                .forward(9.0)
-                .back(5.0)
-                .strafeRight(25.0)
-                .back(35.0)
+                .lineToConstantHeading(new Vector2d(45,30))
                 .build();
     }
     public TrajectorySequence BlueFarCenter_Phase1(){
         return driveBaseSubsystem.getDrive().trajectorySequenceBuilder(new Pose2d())
-         .forward(50.0)
-                .turn(Math.toRadians(180) + 1e-6)
+
                 .build();
 
     }
     public TrajectorySequence BlueFarCenter_Phase2(){
         return driveBaseSubsystem.getDrive().trajectorySequenceBuilder(new Pose2d())
-                .forward(5.0)
-                .back(8.0)
-                .turn(Math.toRadians(-90) - 1e-6)
-                .forward(90.0)
+
                 .build();
 
     }
     public TrajectorySequence BlueFarLeft_Phase1(){
         return driveBaseSubsystem.getDrive().trajectorySequenceBuilder(new Pose2d())
          .forward(29.0)
-                .turn(Math.toRadians(90) + 1e-6)
-                .forward(7.0)
-                .back(5.0)
-                .strafeRight(22.0)
-                .forward(90.0)
+
                 .build();
 
     }
     public TrajectorySequence BlueFarLeft_Phase2(){
         return driveBaseSubsystem.getDrive().trajectorySequenceBuilder(new Pose2d())
-        .forward(7.0)
-                .back(5.0)
-                .strafeRight(22.0)
-                .forward(90.0)
+
                 .build();
 
     }
     public TrajectorySequence BlueFarRight_Phase1 (){
         return driveBaseSubsystem.getDrive().trajectorySequenceBuilder(new Pose2d())
-                .forward(29.0)
-                .turn(Math.toRadians(-90) - 1e-6)
+
                 .build();
 
     }
     public TrajectorySequence BlueFarRight_Phase2 (){
         return driveBaseSubsystem.getDrive().trajectorySequenceBuilder(new Pose2d())
-                .forward(9.0)
-                .back(8.0)
-                .strafeLeft(25.0)
-                .back(93.0)
+
                 .build();
     }
     public TrajectorySequence RedFarCenter_Phase1(){
         return driveBaseSubsystem.getDrive().trajectorySequenceBuilder(new Pose2d())
-                .forward(50.0)
-                .turn(Math.toRadians(180) + 1e-6)
+
                 .build();
 
     }
     public TrajectorySequence RedFarCenter_Phase2(){
         return driveBaseSubsystem.getDrive().trajectorySequenceBuilder(new Pose2d())
-                .forward(5.0)
-                .back(8.0)
-                .turn(Math.toRadians(90) + 1e-6)
-                .forward(90.0)
+
                 .build();
 
     }
     public TrajectorySequence RedFarLeft_Phase1(){
         return driveBaseSubsystem.getDrive().trajectorySequenceBuilder(new Pose2d())
-                .forward(29.0)
-                .turn(Math.toRadians(90) + 1e-6)
+
                 .build();
 
     }
     public TrajectorySequence RedFarLeft_Phase2(){
         return driveBaseSubsystem.getDrive().trajectorySequenceBuilder(new Pose2d())
-                .forward(9.0)
-                .back(8.0)
-                .strafeRight(25.0)
-                .back(93.0)
+
                 .build();
     }
 
 
     public TrajectorySequence RedFarRight_Phase1(){
         return driveBaseSubsystem.getDrive().trajectorySequenceBuilder(new Pose2d())
-         .forward(29.0)
-                .forward(29.0)
-                .turn(Math.toRadians(-90) - 1e-6)
+
                 .build();
     }
     public TrajectorySequence RedFarRight_Phase2 (){
         return driveBaseSubsystem.getDrive().trajectorySequenceBuilder(new Pose2d())
-                .forward(5.0)
-                .back(8.0)
-                .strafeLeft(25.0)
-                .forward(93.0)
+
                 .build();
     }
 
     public TrajectorySequence RedNearCenter_Phase1 (){
         return driveBaseSubsystem.getDrive().trajectorySequenceBuilder(new Pose2d())
-                .strafeLeft(6.0)
-                .forward(32.0)
+                .lineTo(new Vector2d(12, -30))
                 .build();
     }
     public TrajectorySequence RedNearCenter_Phase2 (){
         return driveBaseSubsystem.getDrive().trajectorySequenceBuilder(new Pose2d())
-                .back(27.0)
-                .turn(Math.toRadians(-90) - 1e-6)
-                .forward(32.0)
+                .lineTo(new Vector2d(12, -36))
+                .splineTo(new Vector2d(30, -36), Math.toRadians(0))
+                .lineTo(new Vector2d(45, -36))
                 .build();
     }
 
     public TrajectorySequence RedNearRight_Phase1(){
         return driveBaseSubsystem.getDrive().trajectorySequenceBuilder(new Pose2d())
-                .strafeRight(5)
-                .forward(24)
+
                 .build();
     }
     public TrajectorySequence RedNearRight_Phase2(){
         return driveBaseSubsystem.getDrive().trajectorySequenceBuilder(new Pose2d())
-                .back(18)
-                .waitSeconds(1)
-                .turn(Math.toRadians(-90) - 1e-6)
-                .waitSeconds(1)
-                .forward(23)
+
                 .build();
     }
 
     public TrajectorySequence RedNearLeft_Phase1 (){
         return driveBaseSubsystem.getDrive().trajectorySequenceBuilder(new Pose2d())
-                .strafeLeft(6.0)
-                .forward(32.0)
-                .turn(Math.toRadians(90) + 1e-6)
-                .forward(4)
+                .splineTo(new Vector2d(9, -30), Math.toRadians(180))
                 .build();
     }
     public TrajectorySequence RedNearLeft_Phase2 (){
         return driveBaseSubsystem.getDrive().trajectorySequenceBuilder(new Pose2d())
-                .back(6)
-                .turn(Math.toRadians(-90) - 1e-6)
-                .back(25.0)
-                .turn(Math.toRadians(-90) - 1e-6)
-                .forward(32.0)
+
                 .build();
     }
-*/
 }
+
 

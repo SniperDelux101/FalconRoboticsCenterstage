@@ -70,7 +70,7 @@ public final class LogFiles {
         public double mecHeadingP = FalconMecanumDrive.HEADING_PID.kP;
         public double mecHeadingI = FalconMecanumDrive.HEADING_PID.kI;
         public double mecHeadingD = FalconMecanumDrive.HEADING_PID.kD;
-        public double mecLateralMultiplier = FalconMecanumDrive.LATERAL_MULTIPLIER;
+        public double mecLateralMultiplier = Configuration.LATERAL_MULTIPLIER;
 
         public double tankAxialP = SampleTankDrive.AXIAL_PID.kP;
         public double tankAxialI = SampleTankDrive.AXIAL_PID.kI;
