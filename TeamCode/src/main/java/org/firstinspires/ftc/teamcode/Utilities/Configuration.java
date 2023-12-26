@@ -10,16 +10,16 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 public class Configuration {
 
     // TRACKWIDTH is the distance between mecanum wheels
-    public static double TRACKWIDTH = DistanceUnit.INCH.fromMm(294.65); //10.281731791974025; //11.6003937; //5.33
+    public static double TRACKWIDTH = DistanceUnit.INCH.fromMm(403.352); //15.88 inches
     public static double WHEELBASE = DistanceUnit.INCH.fromMm(312);
     public static double FORWARD_OFFSET = DistanceUnit.INCH.fromMm(-151.2); //-5.00; //-5.983669448819
     public static double FORWARD_OFFSET_Y = DistanceUnit.INCH.fromMm(15.429);
-    public static double LATERAL_DISTANCE = DistanceUnit.INCH.fromMm(260.65);   //10.32263261;
+    public static double LATERAL_DISTANCE = DistanceUnit.INCH.fromMm(268.7336781);   //10.32263261; 10.580066066788557
     public static double ODO_PARALLEL_WHEELS_OFFSET = DistanceUnit.INCH.fromMm(-23.091);
-
+    public static double LATERAL_MULTIPLIER = 3.57142857;
     public static double WHEEL_RADIUS = 0.686;
-    public static double X_MULTIPLIER = 0.3661492939362129;
-    public static double Y_MULTIPLIER = 0.42423620866;
+    public static double X_MULTIPLIER = 0.3732700064;
+    public static double Y_MULTIPLIER = 0.3687530368;
     public static double TICKS_PER_REV = 8192;
     //public static double DISTANCE_PER_PULSE = Math.PI * Configuration.WHEEL_RADIUS / Configuration.TICKS_PER_REV;
     public static double GEAR_RATIO = 3.0; // output (wheel) speed / input (motor) speed [Should be 4.5 or 0.2222222]
@@ -47,9 +47,9 @@ public class Configuration {
      * motor encoders or have elected not to use them for velocity control, these values should be
      * empirically tuned.
      */
-    public static double kV = 0.0115;   //1.0 / rpmToVelocity(MAX_RPM);
-    public static double kA = .0055;
-    public static double kStatic = 0.002;
+    public static double kV = 0.01;   //1.0 / rpmToVelocity(MAX_RPM);
+    public static double kA = 0.0055;
+    public static double kStatic = 0.008;
 
     /*
      * These values are used to generate the trajectories for you robot. To ensure proper operation,
@@ -60,7 +60,7 @@ public class Configuration {
      */
     public static double MAX_VEL = 66.3358551600406; //0.07703451419276926
     public static double MAX_ACCEL = 60;
-    public static double MAX_ANG_VEL = Math.toRadians(54.98425989336563); // Or the value should be 7.995426528314827
+    public static double MAX_ANG_VEL = Math.toRadians(314.0718057893606); // Or the value should be 5.4815870987085304
     public static double MAX_ANG_ACCEL = Math.toRadians(54.98425989336563);   //sh
 
 
@@ -107,7 +107,7 @@ public class Configuration {
 
 
     public static int LINEAR_SLIDE_POS_HOME = 70;
-    public static int LINEAR_SLIDE_POS_LO = -2700;
+    public static int LINEAR_SLIDE_POS_LO = -1900;
     public static int LINEAR_SLIDE_POS_MED = -3700;
     public static int LINEAR_SLIDE_POS_HI = -4200;
     public static int LINEAR_SLIDE_POS_TRANSFER = -150;
