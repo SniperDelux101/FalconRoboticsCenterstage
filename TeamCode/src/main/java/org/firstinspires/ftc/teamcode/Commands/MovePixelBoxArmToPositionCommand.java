@@ -34,6 +34,6 @@ public class MovePixelBoxArmToPositionCommand extends CommandBase {
     @Override
     public boolean isFinished(){
         double percentOff = Math.abs(extakeSubsystem.getControlArm1Position() - pixelBoxArmPosition.getValue())/ pixelBoxArmPosition.getValue();
-        return (percentOff <= .1);
+        return (percentOff <= .3);
     }
 }

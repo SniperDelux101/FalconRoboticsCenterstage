@@ -82,4 +82,7 @@ public class GyroSubsystem extends FalconSubsystemBase{
         YawPitchRollAngles orientation = imu.getRobotYawPitchRollAngles();
         return orientation.getYaw(angleUnit);
     }
+    public void ResetYaw(){
+        imu.resetYaw();
+    }
 }

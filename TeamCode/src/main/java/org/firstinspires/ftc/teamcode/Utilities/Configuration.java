@@ -111,9 +111,8 @@ public class Configuration {
     public static int LINEAR_SLIDE_POS_MED = -3700;
     public static int LINEAR_SLIDE_POS_HI = -4200;
     public static int LINEAR_SLIDE_POS_TRANSFER = -150;
-
+    public static int LINEAR_SLIDE_POS_AUTO = -2400;
     public static int LINEAR_SLIDE_MULTIPLIER = 10;
-
     public static int TICK_RANGE = 50;
 
     //****************************************************************************************************************//
@@ -185,7 +184,10 @@ public class Configuration {
     //*****************************************************************
     //Camera Calibration
 
-    public static int CAMERA_WIDTH = 640;
-    public static int CAMERA_HEIGHT = 480;
+    public static int CAMERA_WIDTH = 1600;
+    public static int CAMERA_HEIGHT = 896;
     public static int CAMERA_ZOOM = 1;
+
+    //*****************************************************************
+    public static int AUTO_VEL = 30;
 }

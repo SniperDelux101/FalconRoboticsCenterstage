@@ -5,8 +5,10 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.CommandScheduler;
+import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
+import com.arcrobotics.ftclib.command.WaitCommand;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -15,7 +17,11 @@ import org.firstinspires.ftc.teamcode.Commands.Autonomous.AutonomousStartLocatio
 import org.firstinspires.ftc.teamcode.Commands.Autonomous.Paths.V3.BuildFarPaths;
 import org.firstinspires.ftc.teamcode.Commands.Autonomous.Paths.V3.BuildNearPaths;
 import org.firstinspires.ftc.teamcode.Commands.Autonomous.TeamPropPosition;
+import org.firstinspires.ftc.teamcode.Commands.MovePixelBoxArmToPositionCommand;
+import org.firstinspires.ftc.teamcode.Commands.PixelBoxArmPosition;
 import org.firstinspires.ftc.teamcode.Commands.PlacePixelOnSpikeCommand;
+import org.firstinspires.ftc.teamcode.Commands.RunLinearSlideAndCenterPixelBoxCommand;
+import org.firstinspires.ftc.teamcode.Commands.StopPixelBoxReset;
 import org.firstinspires.ftc.teamcode.Commands.TrajectoryFollowerCommand;
 import org.firstinspires.ftc.teamcode.Commands.TrajectorySequenceFollowerCommand;
 import org.firstinspires.ftc.teamcode.Subsystems.AirplaneLauncherSubsystem;
@@ -29,6 +35,7 @@ import org.firstinspires.ftc.teamcode.Subsystems.OdometryControlSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.VisionSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.drive.FalconMecanumDrive;
 import org.firstinspires.ftc.teamcode.Subsystems.drive.TrajectorySequence.TrajectorySequence;
+import org.firstinspires.ftc.teamcode.Utilities.Configuration;
 import org.firstinspires.ftc.teamcode.Utilities.MatchConfig;
 
 @Autonomous(preselectTeleOp = "Drivebase_Op")
@@ -111,29 +118,42 @@ public class AutonomousCommandTest extends CommandOpMode {
 
         if(useVision)
             visionSubsystem.stopStreaming();
-        TrajectorySequence phase1, phase2, park;
+        TrajectorySequence phase1, phase2, phase3, park;
 
         if(startLocation == AutonomousStartLocation.Near) {
             BuildNearPaths.Build(driveBaseSubsystem.getDrive(), teamPropPosition, alliance);
             phase1 = BuildNearPaths.Phase1;
             phase2 = BuildNearPaths.Phase2;
+            phase3 = BuildNearPaths.Phase3;
             park = BuildNearPaths.Park;
         } else{
             BuildFarPaths.Build(driveBaseSubsystem.getDrive(), teamPropPosition, alliance);
             phase1 = BuildFarPaths.Phase1;
             phase2 = BuildFarPaths.Phase2;
+            phase3 = BuildFarPaths.Phase3;
             park = BuildFarPaths.Park;
         }
 
         schedule(
                 new SequentialCommandGroup(
                         new TrajectorySequenceFollowerCommand(driveBaseSubsystem, phase1),
+//                        new WaitCommand(2000),
                         // This places a pixel on the spike
                         new ParallelCommandGroup(
                                 new PlacePixelOnSpikeCommand(intakeMotorSubsystem).withTimeout(2000),
                                 new TrajectorySequenceFollowerCommand(driveBaseSubsystem, phase2)
                         ),
-                        new TrajectorySequenceFollowerCommand(driveBaseSubsystem, park)
+                        new SequentialCommandGroup(
+                                new RunLinearSlideAndCenterPixelBoxCommand(extakeSubsystem,linearSlideSubsystem, Configuration.LINEAR_SLIDE_POS_AUTO),
+                                new MovePixelBoxArmToPositionCommand(extakeSubsystem, PixelBoxArmPosition.Extake)
+                        ).withTimeout(1500),
+                        new WaitCommand(1000),
+                        new InstantCommand(extakeSubsystem::pixelEject, extakeSubsystem),
+                        new WaitCommand(2000),
+                        new TrajectorySequenceFollowerCommand(driveBaseSubsystem, phase3),
+                        new StopPixelBoxReset(extakeSubsystem, linearSlideSubsystem),
+                        new TrajectorySequenceFollowerCommand(driveBaseSubsystem, park),
+                        new InstantCommand(extakeSubsystem::pixelStop, extakeSubsystem)
                 )
         );
 

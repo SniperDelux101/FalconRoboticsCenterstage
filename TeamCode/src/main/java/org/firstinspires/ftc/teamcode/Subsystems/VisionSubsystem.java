@@ -29,7 +29,7 @@ public class VisionSubsystem extends FalconSubsystemBase {
      * this subsystem uses a Tensor flow model file to be able to recognize the team props
      * then it sets the camera's resulotion
      */
-    private static final String TFOD_MODEL_FILE = "/sdcard/FIRST/tflitemodels/model_20231017_212515.tflite";
+    private static final String TFOD_MODEL_FILE = "/sdcard/FIRST/tflitemodels/Green_122823.tflite";
 
     private static final String[] LABELS = {
             "TeamProp"

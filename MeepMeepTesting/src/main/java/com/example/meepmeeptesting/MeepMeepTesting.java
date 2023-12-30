@@ -18,17 +18,19 @@ public class MeepMeepTesting {
         MeepMeep meepMeep = new MeepMeep(800);
 
         RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
-                .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 15)
+                .setConstraints(30, 40, Math.toRadians(180), Math.toRadians(180), 15)
                 .followTrajectorySequence(drive ->
-                        drive.trajectorySequenceBuilder(Red_Near_Start_Pos)
+                        drive.trajectorySequenceBuilder(Blue_Far_Start_Pos)
 
                                 // Blue Near Left
                                 /*
-                                .splineTo(new Vector2d(36,38),Math.toRadians(270))
-                                .splineTo(new Vector2d(32,28), Math.toRadians(180))
-                                .lineTo(new Vector2d(30,28))
+                                .lineToConstantHeading(new Vector2d(30,28))
+                                .turn(Math.toRadians(-90))
 
-                                .lineToConstantHeading(new Vector2d(45, 42))
+                                .lineToConstantHeading(new Vector2d(40, 28))
+                                .lineToConstantHeading(new Vector2d(53, 39))
+
+                                .lineToConstantHeading(new Vector2d(40, 40))
 
                                 .splineToConstantHeading(new Vector2d(50,60), Math.toRadians(0))
 
@@ -36,11 +38,13 @@ public class MeepMeepTesting {
 
                                 //Blue Near Center
                                 /*
-                                .lineTo(new Vector2d(12, 30))
+                                .lineTo(new Vector2d(12, 28))
 
                                 .lineTo(new Vector2d(12, 36))
-                                .splineTo(new Vector2d(30, 36), Math.toRadians(0))
-                                .lineTo(new Vector2d(45, 36))
+                                .splineTo(new Vector2d(30, 32), Math.toRadians(0))
+                                .lineTo(new Vector2d(54, 32))
+
+                                .lineToConstantHeading(new Vector2d(45, 32))
 
                                 .lineToConstantHeading(new Vector2d(45, 50))
                                 .splineToConstantHeading(new Vector2d(60, 60), Math.toRadians(0))
@@ -50,9 +54,11 @@ public class MeepMeepTesting {
                                 /*
                                 .splineTo(new Vector2d(9, 30), Math.toRadians(180))
 
-                                .lineToConstantHeading(new Vector2d(45,30))
+                                .lineToConstantHeading(new Vector2d(53,28))
 
-                                .lineToConstantHeading(new Vector2d(45, 50))
+                                .lineToConstantHeading(new Vector2d(40, 28))
+
+                                .lineToConstantHeading(new Vector2d(40, 50))
                                 .splineToConstantHeading(new Vector2d(60, 60), Math.toRadians(0))
 
                                  */
@@ -63,9 +69,11 @@ public class MeepMeepTesting {
                                 /*
                                 .splineTo(new Vector2d(9, -30), Math.toRadians(180))
 
-                                .lineToConstantHeading(new Vector2d(45, -30))
+                                .lineToConstantHeading(new Vector2d(51.5, -30))
 
-                                .lineToConstantHeading(new Vector2d(45, -50))
+                                .lineToConstantHeading(new Vector2d(40, -30))
+
+                                .lineToConstantHeading(new Vector2d(40, -50))
                                 .splineToConstantHeading(new Vector2d(60, -60), Math.toRadians(0))
 
                                  */
@@ -76,24 +84,29 @@ public class MeepMeepTesting {
 
                                 .lineTo(new Vector2d(12, -36))
                                 .splineTo(new Vector2d(30, -36), Math.toRadians(0))
-                                .lineTo(new Vector2d(45, -36))
+                                .lineTo(new Vector2d(51.5, -36))
 
-                                .lineToConstantHeading(new Vector2d(45, -50))
+                                .lineToConstantHeading(new Vector2d(40, -36))
+
+                                .lineToConstantHeading(new Vector2d(40, -50))
                                 .splineToConstantHeading(new Vector2d(60, -60), Math.toRadians(0))
 
                                  */
 
                                 //  Red Near Right
-//                                /*
-                                .splineTo(new Vector2d(36,-38),Math.toRadians(90))
-                                .splineTo(new Vector2d(32,-28), Math.toRadians(180))
-                                .lineTo(new Vector2d(30,-28))
+                                /*
+                                .lineToConstantHeading(new Vector2d(30,-28))
+                                .turn(Math.toRadians(90))
 
-                                .lineToConstantHeading(new Vector2d(45, -42))
+                                .lineToConstantHeading(new Vector2d(40, -28))
+                                .splineToConstantHeading(new Vector2d(51.5, -42), Math.toRadians(0))
 
-                                .splineToConstantHeading(new Vector2d(50,-60), Math.toRadians(0))
+                                .lineToConstantHeading(new Vector2d(40, -42))
 
-//                                 */
+                                .lineToConstantHeading(new Vector2d(40, -50))
+                                .splineToConstantHeading(new Vector2d(60,-60), Math.toRadians(0))
+
+                                 */
 
 //              -------------------------------------------------------------------
 
@@ -144,47 +157,53 @@ public class MeepMeepTesting {
 
                                 //  Blue Far Left 2
                                 /*
-                                .splineTo(new Vector2d(-32, 30), Math.toRadians(0))
+                                .splineTo(new Vector2d(-32, 28), Math.toRadians(0))
 
-                                .lineTo(new Vector2d(-40, 30))
-                                .splineTo(new Vector2d(-40, 12), Math.toRadians(0))
-                                .lineToConstantHeading(new Vector2d(30, 12))
-                                .splineToConstantHeading(new Vector2d(45, 42), Math.toRadians(0))
+                                .lineTo(new Vector2d(-40, 28))
+                                .splineTo(new Vector2d(-40, 6), Math.toRadians(0))
+                                .lineToConstantHeading(new Vector2d(30, 6))
+                                .splineToConstantHeading(new Vector2d(54, 42), Math.toRadians(0))
+
+                                .lineToConstantHeading(new Vector2d(40, 42))
 
                                 .lineToConstantHeading(new Vector2d(40, 14))
-                                .splineToConstantHeading(new Vector2d(60, 12), Math.toRadians(0))
+                                .splineToConstantHeading(new Vector2d(60, 5), Math.toRadians(0))
 
-                                 */
+//                                 */
 
                                 // Blue Far Center 2
                                 /*
-                                .lineTo(new Vector2d(-36, 18))
+                                .lineTo(new Vector2d(-36, 16))
                                 .turn(Math.toRadians(180))
 
-                                .lineToConstantHeading(new Vector2d(-36, 12))
-                                .splineTo(new Vector2d(-20, 12), Math.toRadians(0))
-                                .lineToConstantHeading(new Vector2d(30, 12))
-                                .splineToConstantHeading(new Vector2d(45,35), Math.toRadians(0))
+                                .lineToConstantHeading(new Vector2d(-36, 8))
+                                .splineTo(new Vector2d(-20, 8), Math.toRadians(0))
+                                .lineToConstantHeading(new Vector2d(30, 8))
+                                .splineToConstantHeading(new Vector2d(54,35), Math.toRadians(0))
+
+                                .lineToConstantHeading(new Vector2d(40, 35))
 
                                 .lineToConstantHeading(new Vector2d(40, 14))
-                                .splineToConstantHeading(new Vector2d(60, 12), Math.toRadians(0))
+                                .splineToConstantHeading(new Vector2d(60, 9), Math.toRadians(0))
 
                                  */
 
                                 //  Blue Far Right 2
-                                /*
-                                .splineTo(new Vector2d(-40, 30), Math.toRadians(180))
+//                                /*
+                                .lineTo(new Vector2d(-46, 16))
+                                .turn(Math.toRadians(180))
 
-                                .lineTo(new Vector2d(-34, 30))
-                                .lineToConstantHeading(new Vector2d(-34, 14))
-                                .splineToConstantHeading(new Vector2d(-20, 12), Math.toRadians(0))
+                                .lineToConstantHeading(new Vector2d(-46, 8))
+                                .turn(Math.toRadians(90))
                                 .lineToConstantHeading(new Vector2d(30, 12))
-                                .splineToConstantHeading(new Vector2d(45,30), Math.toRadians(0))
+                                .splineToConstantHeading(new Vector2d(54,28), Math.toRadians(0))
+
+                                .lineToConstantHeading(new Vector2d(40, 28))
 
                                 .lineToConstantHeading(new Vector2d(40, 14))
-                                .splineToConstantHeading(new Vector2d(60, 12), Math.toRadians(0))
+                                .splineToConstantHeading(new Vector2d(60, 9), Math.toRadians(0))
 
-                                */
+//                                */
 
 //              -------------------------------------------------------------------
 
@@ -239,7 +258,9 @@ public class MeepMeepTesting {
                                 .lineToConstantHeading(new Vector2d(-34, -14))
                                 .splineToConstantHeading(new Vector2d(-20, -12), Math.toRadians(0))
                                 .lineToConstantHeading(new Vector2d(30, -12))
-                                .splineToConstantHeading(new Vector2d(45,-30), Math.toRadians(0))
+                                .splineToConstantHeading(new Vector2d(51.5,-30), Math.toRadians(0))
+
+                                .lineToConstantHeading(new Vector2d(40, -30))
 
                                 .lineToConstantHeading(new Vector2d(40, -14))
                                 .splineToConstantHeading(new Vector2d(60, -12), Math.toRadians(0))
@@ -250,10 +271,12 @@ public class MeepMeepTesting {
                                 .lineTo(new Vector2d(-36, -18))
                                 .turn(Math.toRadians(180))
 
-                                .lineToConstantHeading(new Vector2d(-36, -12))
-                                .splineTo(new Vector2d(-20, -12), Math.toRadians(0))
-                                .lineToConstantHeading(new Vector2d(30, -12))
-                                .splineToConstantHeading(new Vector2d(45,-35), Math.toRadians(0))
+                                .lineToConstantHeading(new Vector2d(-36, -8))
+                                .splineTo(new Vector2d(-20, -8), Math.toRadians(0))
+                                .lineToConstantHeading(new Vector2d(30, -8))
+                                .splineToConstantHeading(new Vector2d(51.5,-35), Math.toRadians(0))
+
+                                .lineToConstantHeading(new Vector2d(40, -35))
 
                                 .lineToConstantHeading(new Vector2d(40, -14))
                                 .splineToConstantHeading(new Vector2d(60, -12), Math.toRadians(0))
@@ -267,7 +290,9 @@ public class MeepMeepTesting {
                                 .lineTo(new Vector2d(-40, -30))
                                 .splineTo(new Vector2d(-40, -12), Math.toRadians(0))
                                 .lineToConstantHeading(new Vector2d(30, -12))
-                                .splineToConstantHeading(new Vector2d(45, -42), Math.toRadians(0))
+                                .splineToConstantHeading(new Vector2d(51.5, -42), Math.toRadians(0))
+
+                                .lineToConstantHeading(new Vector2d(40, -42))
 
                                 .lineToConstantHeading(new Vector2d(40, -14))
                                 .splineToConstantHeading(new Vector2d(60, -12), Math.toRadians(0))
