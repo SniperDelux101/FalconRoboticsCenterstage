@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.Commands;
 
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
+import com.arcrobotics.ftclib.command.WaitCommand;
 
 import org.firstinspires.ftc.teamcode.Subsystems.ExtakeSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.LinearSlideSubsystem;
@@ -21,6 +22,7 @@ public class StopPixelBoxReset extends SequentialCommandGroup {
                 }),
                 new MoveToPixelBoxPosition(extakeSubsystem, PixelBoxPosition.Center),
                 new MovePixelBoxArmToPositionCommand(extakeSubsystem, PixelBoxArmPosition.PrepExchange),
+                //new WaitCommand(500),
                 new RunLinearSlideToPosition(linearSlideSubsystem, Configuration.LINEAR_SLIDE_POS_TRANSFER),
                 new MovePixelBoxArmToPositionCommand(extakeSubsystem, PixelBoxArmPosition.Exchange),
                 new RunLinearSlideToPosition(linearSlideSubsystem, Configuration.LINEAR_SLIDE_POS_HOME),

@@ -200,25 +200,16 @@ public class VisionSubsystem extends FalconSubsystemBase {
                 telemetry.addData("X position : ", x);
                 telemetry.addData("Y positions :", y);
 
-                // 1 -- Red Far && Blue Near
-                if ((alliance == Alliance.Red && startLocation == AutonomousStartLocation.Far) || (alliance == Alliance.Blue && startLocation == AutonomousStartLocation.Near)) {
-                    if (x < Configuration.LEFT_UPPER_BOUND_1) {
-                        position = TeamPropPosition.Left;
-                    } else if (x > Configuration.LEFT_UPPER_BOUND_1 && x < Configuration.RIGHT_LOWER_BOUND_1) {
-                        position = TeamPropPosition.Center;
-                    } else
-                        position = TeamPropPosition.Right;
-                }
 
-                // 2 -- Red Near & Blue Far
-                if ((alliance == Alliance.Red && startLocation == AutonomousStartLocation.Near) || (alliance == Alliance.Blue && startLocation == AutonomousStartLocation.Far)) {
-                    if (x < Configuration.LEFT_UPPER_BOUND_2) {
+                if (x < Configuration.LEFT_UPPER_BOUND_1) {
                         position = TeamPropPosition.Left;
-                    } else if (x > Configuration.LEFT_UPPER_BOUND_2 && x < Configuration.RIGHT_LOWER_BOUND_2) {
-                        position = TeamPropPosition.Center;
-                    } else
+                   } else if (x > Configuration.LEFT_UPPER_BOUND_1 && x < Configuration.RIGHT_LOWER_BOUND_1) {
+                    position = TeamPropPosition.Center;
+                    } else if (x > Configuration.RIGHT_LOWER_BOUND_1)
                         position = TeamPropPosition.Right;
-                }
+                else
+                    position = TeamPropPosition.NoDetection;
+
             }
         } else if (alliance == Alliance.Red && startLocation == AutonomousStartLocation.Near)
             position = TeamPropPosition.Left;
