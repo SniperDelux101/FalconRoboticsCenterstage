@@ -18,10 +18,14 @@ public class DistanceSensorSubsystem extends FalconSubsystemBase {
         super(tel);
 
         distanceUnit = unit;
-        backLeft = map.get(Rev2mDistanceSensor.class, "backLeft");
-        backRight = map.get(Rev2mDistanceSensor.class, "backRight");
-        left = map.get(Rev2mDistanceSensor.class, "left");
-        right = map.get(Rev2mDistanceSensor.class, "right");
+        backLeft = map.get(Rev2mDistanceSensor.class, "Left_Rear_DSensor");
+        backRight = map.get(Rev2mDistanceSensor.class, "Right_Rear_DSensor");
+        left = map.get(Rev2mDistanceSensor.class, "Left_Front_DSensor");
+        right = map.get(Rev2mDistanceSensor.class, "Right_Front_DSensor");
+    }
+
+    public double getBackAverageDistance(){
+       return (getBackLeft() + getBackRight())/2.0;
     }
 
     public double getBackLeft(){

@@ -14,40 +14,45 @@ public class FindAprilTagCommand extends CommandBase {
     }
     private final MecanumDriveSubsystem mecanumDriveSubsystem;
     private final VisionSubsystem visionSubsystem;
-    private final Direction strafeDirection;
-    public static double APRIL_TAG_STRAFE_DISTANCE = 60;
+
     public double distance_to_Tag = 0.0;
     private Trajectory trajectory;
 
 
-    public FindAprilTagCommand(MecanumDriveSubsystem mecanumDriveSubsystem, VisionSubsystem visionSubsystem, Direction direction) {
+    public FindAprilTagCommand(MecanumDriveSubsystem mecanumDriveSubsystem, VisionSubsystem visionSubsystem) {
         this.mecanumDriveSubsystem = mecanumDriveSubsystem;
         this.visionSubsystem = visionSubsystem;
-        this.strafeDirection = direction;
 
         addRequirements(this.mecanumDriveSubsystem, this.visionSubsystem);
     }
 
     @Override
     public void initialize() {
-
         this.visionSubsystem.resumeStreaming();
-
-        if(this.strafeDirection == Direction.Right) {
-            trajectory = this.mecanumDriveSubsystem.trajectoryBuilder(this.mecanumDriveSubsystem.getPoseEstimate())
-                    .strafeRight(APRIL_TAG_STRAFE_DISTANCE)
-                    .build();
-        }
-        else{
-            trajectory = this.mecanumDriveSubsystem.trajectoryBuilder(this.mecanumDriveSubsystem.getPoseEstimate())
-                    .strafeLeft(APRIL_TAG_STRAFE_DISTANCE)
-                    .build();
-        }
     }
 
     @Override
     public void execute() {
-        this.mecanumDriveSubsystem.followTrajectoryAsync(trajectory);
+        AprilTagDetection detection = this.visionSubsystem.findAprilTag(GetAprilTagID());
+        if(detection != null) {
+            MatchConfig.telemetry.addLine("Tag ID " + GetAprilTagID());
+            MatchConfig.telemetry.addData("Bearing: ", detection.ftcPose.bearing);
+            MatchConfig.telemetry.addData("Range: ", detection.ftcPose.range);
+            MatchConfig.telemetry.addData("Yaw: ", detection.ftcPose.yaw);
+
+            if (detection.ftcPose.bearing > 0) {
+                trajectory = this.mecanumDriveSubsystem.trajectoryBuilder(this.mecanumDriveSubsystem.getPoseEstimate())
+                        .strafeLeft(10)
+                        .build();
+            } else {
+                trajectory = this.mecanumDriveSubsystem.trajectoryBuilder(this.mecanumDriveSubsystem.getPoseEstimate())
+                        .strafeRight(10)
+                        .build();
+            }
+            this.mecanumDriveSubsystem.followTrajectory(trajectory);
+        }
+        else
+            MatchConfig.telemetry.addLine("NO April tag found");
     }
 
     @Override
@@ -57,27 +62,32 @@ public class FindAprilTagCommand extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return FoundAprilTag();
-    }
-
-    private boolean FoundAprilTag() {
         AprilTagDetection detection = this.visionSubsystem.findAprilTag(GetAprilTagID());
-        if(detection == null)
-            return false;
-        else if(Math.abs(detection.ftcPose.bearing) < .05 ){
-            distance_to_Tag = detection.ftcPose.range;
-            return true;
-        }
-        return false;
+        MatchConfig.telemetry.addLine("Tag ID " + GetAprilTagID());
+        MatchConfig.telemetry.addData("Bearing: ", detection.ftcPose.bearing);
+        MatchConfig.telemetry.addData("Range: ", detection.ftcPose.range);
+        MatchConfig.telemetry.addData("Yaw: ", detection.ftcPose.yaw);
+
+        return (Math.abs(detection.ftcPose.bearing) < 1 );
     }
 
     private int GetAprilTagID()
     {
         if(MatchConfig.Alliance == Alliance.Red) {
-            return 5;
+            if(MatchConfig.TeamPropPosition == TeamPropPosition.Left)
+                return 4;
+            else if( MatchConfig.TeamPropPosition == TeamPropPosition.Center)
+                return 5;
+            else
+                return 6;
         }
         else {
-            return 2;
+            if(MatchConfig.TeamPropPosition == TeamPropPosition.Left)
+                return 1;
+            else if( MatchConfig.TeamPropPosition == TeamPropPosition.Center)
+                return 2;
+            else
+                return 3;
         }
     }
 }

@@ -6,6 +6,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.Subsystems.DistanceSensorSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.GyroSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.MecanumDriveSubsystem;
+import org.firstinspires.ftc.teamcode.Utilities.Configuration;
 import org.firstinspires.ftc.teamcode.Utilities.MatchConfig;
 
 public class DriveForwardToObjectCommand extends CommandBase {
@@ -25,18 +26,25 @@ public class DriveForwardToObjectCommand extends CommandBase {
 
     @Override
     public void initialize(){
-        this.squareUpRobot();
+        //this.squareUpRobot();
     }
 
     @Override
     public void execute(){
-        this.mecanumDriveSubsystem.drive(-.5,0,0,.3);
+        MatchConfig.telemetry.addData("Average Distance to Object: ", distanceSensorSubsystem.getBackAverageDistance());
+
+        if(distanceSensorSubsystem.getBackAverageDistance() > this.stopDistance)
+            this.mecanumDriveSubsystem.drive(-.5,0,0,.3);
+        else
+            this.mecanumDriveSubsystem.drive(.5,0,0,.3);
     }
 
     @Override
     public boolean isFinished(){
-        double avgDistance = (distanceSensorSubsystem.getBackLeft() + distanceSensorSubsystem.getBackRight())/2.0;
-        return avgDistance <= stopDistance;
+        double delta = Math.abs(distanceSensorSubsystem.getBackAverageDistance() - stopDistance);
+        MatchConfig.telemetry.addData("Average Distance to Object: ", distanceSensorSubsystem.getBackAverageDistance());
+        MatchConfig.telemetry.addData("Delta: ", delta);
+        return delta < Configuration.DISTANCE_ERROR_DISTANCE;
     }
 
     @Override

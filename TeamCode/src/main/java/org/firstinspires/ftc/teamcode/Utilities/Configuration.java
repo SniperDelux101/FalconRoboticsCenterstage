@@ -111,7 +111,7 @@ public class Configuration {
     public static int LINEAR_SLIDE_POS_MED = -3700;
     public static int LINEAR_SLIDE_POS_HI = -4200;
     public static int LINEAR_SLIDE_POS_TRANSFER = -150;
-    public static int LINEAR_SLIDE_POS_AUTO = -2400;
+    public static int LINEAR_SLIDE_POS_AUTO = -2100;
     public static int LINEAR_SLIDE_MULTIPLIER = 10;
     public static int TICK_RANGE = 50;
 
@@ -190,4 +190,8 @@ public class Configuration {
 
     //*****************************************************************
     public static int AUTO_VEL = 30;
+
+    //*****************************************************************
+    public static double DISTANCE_ERROR_DISTANCE = 0.1; //inches
+
 }
