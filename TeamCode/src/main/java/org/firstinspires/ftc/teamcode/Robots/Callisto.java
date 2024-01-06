@@ -31,6 +31,7 @@ import org.firstinspires.ftc.teamcode.Subsystems.OdometryControlSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.VisionSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.drive.FalconMecanumDrive;
 import org.firstinspires.ftc.teamcode.Utilities.Configuration;
+import org.firstinspires.ftc.teamcode.Utilities.MatchConfig;
 
 public class Callisto extends Robot {
     //region Subsystems
@@ -59,12 +60,12 @@ public class Callisto extends Robot {
     private final AutonomousStartLocation autonomousStartLocation;
     private final RobotMode robotMode;
     //endregion
-    public Callisto(RobotMode mode, HardwareMap map, Gamepad gamepad1, Gamepad gamepad2, Telemetry tel , Alliance p_alliance , AutonomousStartLocation path) {
+    public Callisto(RobotMode mode, HardwareMap map, Gamepad gamepad1, Gamepad gamepad2, Telemetry tel) {
         hMap = map;
         telemetry = tel;
         robotMode = mode;
-        alliance = p_alliance;
-        autonomousStartLocation = path;
+        alliance = MatchConfig.Alliance;
+        autonomousStartLocation = MatchConfig.AutonomousStartLocation;
         FTC_driverGamepad = gamepad1;
         FTC_utilityGamepad = gamepad2;
 

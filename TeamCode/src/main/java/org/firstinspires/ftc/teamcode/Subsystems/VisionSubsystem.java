@@ -5,7 +5,6 @@ import android.util.Size;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.checkerframework.checker.units.qual.A;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -16,6 +15,7 @@ import org.firstinspires.ftc.teamcode.Commands.Autonomous.Alliance;
 import org.firstinspires.ftc.teamcode.Commands.Autonomous.AutonomousStartLocation;
 import org.firstinspires.ftc.teamcode.Commands.Autonomous.TeamPropPosition;
 import org.firstinspires.ftc.teamcode.Utilities.Configuration;
+import org.firstinspires.ftc.teamcode.Utilities.MatchConfig;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagGameDatabase;
@@ -41,10 +41,8 @@ public class VisionSubsystem extends FalconSubsystemBase {
     private AprilTagProcessor aprilTag;
 
     ///the variable to store our
-    private VisionPortal visionPortal;
-    private Alliance alliance;
-    private AutonomousStartLocation startLocation;
-
+    private VisionPortal tensorVisionPortal;
+    private VisionPortal aprilTagVisionPortal;
     public enum AprilTagID {
         BLUE_BACKDROP_LEFT_TAG(1),
         BLUE_BACKDROP_CENTER_TAG(2),
@@ -84,16 +82,16 @@ public class VisionSubsystem extends FalconSubsystemBase {
     }
 
     public VisionSubsystem(HardwareMap hm, Telemetry tel) {
-        this(hm, tel, Alliance.Red, AutonomousStartLocation.Near, false);
+        this(hm, tel, false);
     }
 
-    public VisionSubsystem(HardwareMap hm, Telemetry tel, Alliance alli, AutonomousStartLocation location, boolean initTF) {
+    public VisionSubsystem(HardwareMap hm, Telemetry tel, boolean initVisionPortals) {
         super(tel);
         hardwareMap = hm;
-        alliance = alli;
-        startLocation = location;
-        if (initTF)
+        if (initVisionPortals) {
             initTfod(true);
+            initAprilTagProcessor();
+        }
     }
 
     public void initTfod(boolean allowStreaming) {
@@ -119,7 +117,7 @@ public class VisionSubsystem extends FalconSubsystemBase {
         initAprilTagProcessor();
         builder.addProcessor(aprilTag);
 
-        visionPortal = builder.build();
+        tensorVisionPortal = builder.build();
         tfod.setMinResultConfidence((float) Configuration.CONFIDENCE_SCORE);
     }
 
@@ -127,10 +125,10 @@ public class VisionSubsystem extends FalconSubsystemBase {
         // Create the AprilTag processor.
         aprilTag = new AprilTagProcessor.Builder()
                 // The following default settings are available to un-comment and edit as needed.
-                //.setDrawAxes(false)
-                //.setDrawCubeProjection(false)
-                //.setDrawTagOutline(true)
-                //.setTagFamily(AprilTagProcessor.TagFamily.TAG_36h11)
+                .setDrawAxes(false)
+                .setDrawCubeProjection(false)
+                .setDrawTagOutline(true)
+                .setTagFamily(AprilTagProcessor.TagFamily.TAG_36h11)
                 .setTagLibrary(AprilTagGameDatabase.getCenterStageTagLibrary())
                 .setOutputUnits(DistanceUnit.INCH, AngleUnit.DEGREES)
 
@@ -139,7 +137,6 @@ public class VisionSubsystem extends FalconSubsystemBase {
                 // to load a predefined calibration for your camera.
                 //.setLensIntrinsics(578.272, 578.272, 402.145, 221.506)
                 // ... these parameters are fx, fy, cx, cy.
-
                 .build();
 
         // Adjust Image Decimation to trade-off detection-range for detection-rate.
@@ -150,27 +147,71 @@ public class VisionSubsystem extends FalconSubsystemBase {
         // Decimation = 3 ..  Detect 5" Tag from 10 feet away at 30 Frames Per Second (default)
         // Note: Decimation can be changed on-the-fly to adapt during a match.
         aprilTag.setDecimation(3);
+
+        // Create the vision portal by using a builder.
+        VisionPortal.Builder builder = new VisionPortal.Builder();
+
+        // Set the camera (webcam vs. built-in RC phone camera).
+        builder.setCamera(hardwareMap.get(WebcamName.class, "Webcam 2"));
+
+        // Choose a camera resolution. Not all cameras support all resolutions.
+        //builder.setCameraResolution(new Size(640, 480));
+
+        // Enable the RC preview (LiveView).  Set "false" to omit camera monitoring.
+        //builder.enableLiveView(true);
+
+        // Set the stream format; MJPEG uses less bandwidth than default YUY2.
+        //builder.setStreamFormat(VisionPortal.StreamFormat.YUY2);
+
+        // Choose whether or not LiveView stops if no processors are enabled.
+        // If set "true", monitor shows solid orange screen if no processors enabled.
+        // If set "false", monitor shows camera view without annotations.
+        //builder.setAutoStopLiveView(false);
+
+        // Set and enable the processor.
+        builder.addProcessor(aprilTag);
+
+        // Build the Vision Portal, using the above settings.
+        aprilTagVisionPortal = builder.build();
+
+        // Disable or re-enable the aprilTag processor at any time.
+        aprilTagVisionPortal.setProcessorEnabled(aprilTag, true);
     }
 
     public void setEnableDisableForAprilTagPortal(boolean enable) {
-        //aprilTagVisionPortal.setProcessorEnabled(aprilTag, enable);
+        aprilTagVisionPortal.setProcessorEnabled(aprilTag, enable);
     }
 
     public void enableTfod(boolean ennabled) {
         ///TODO: Come back and do type checking for null values
-        visionPortal.setProcessorEnabled(tfod, ennabled);
+        tensorVisionPortal.setProcessorEnabled(tfod, ennabled);
     }
 
-    public void stopStreaming() {
-        visionPortal.stopStreaming();
+    public void stopTensorStreaming() {
+        tensorVisionPortal.stopStreaming();
+    }
+    public void stopAprilStreaming(){
+        aprilTagVisionPortal.stopStreaming();
+    }
+    public void stopAllVisionPortalStreaming(){
+        stopTensorStreaming();
+        stopAprilStreaming();
     }
 
-    public void resumeStreaming() {
-        visionPortal.resumeStreaming();
+    public void resumeTensorStreaming() {
+        tensorVisionPortal.resumeStreaming();
+    }
+    public void resumeAprilStreaming(){
+        aprilTagVisionPortal.resumeStreaming();
+    }
+    public void resumeAllVisionPortalStreaming(){
+        resumeTensorStreaming();
+        resumeAprilStreaming();
     }
 
     public void closeVisionPortal() {
-        visionPortal.close();
+        tensorVisionPortal.close();
+        aprilTagVisionPortal.close();
     }
 
     public List<Recognition> getRecognitions() {
@@ -211,13 +252,13 @@ public class VisionSubsystem extends FalconSubsystemBase {
                     position = TeamPropPosition.NoDetection;
 
             }
-        } else if (alliance == Alliance.Red && startLocation == AutonomousStartLocation.Near)
+        } else if (MatchConfig.Alliance == Alliance.Red && MatchConfig.AutonomousStartLocation == AutonomousStartLocation.Near)
             position = TeamPropPosition.Left;
-        else if (alliance == Alliance.Red && startLocation == AutonomousStartLocation.Far)
+        else if (MatchConfig.Alliance == Alliance.Red && MatchConfig.AutonomousStartLocation == AutonomousStartLocation.Far)
             position = TeamPropPosition.Right;
-        else if (alliance == Alliance.Blue && startLocation == AutonomousStartLocation.Far)
+        else if (MatchConfig.Alliance == Alliance.Blue && MatchConfig.AutonomousStartLocation == AutonomousStartLocation.Far)
             position = TeamPropPosition.Left;
-        else if (alliance == Alliance.Blue && startLocation == AutonomousStartLocation.Near)
+        else if (MatchConfig.Alliance == Alliance.Blue && MatchConfig.AutonomousStartLocation == AutonomousStartLocation.Near)
             position = TeamPropPosition.Right;
 
 

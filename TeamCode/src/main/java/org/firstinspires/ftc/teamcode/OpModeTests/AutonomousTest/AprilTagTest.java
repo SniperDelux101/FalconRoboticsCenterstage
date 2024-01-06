@@ -35,7 +35,7 @@ public class AprilTagTest extends CommandOpMode {
         MatchConfig.telemetry = telemetry;
 
         MecanumDriveSubsystem mecanumDriveSubsystem = new MecanumDriveSubsystem(new FalconMecanumDrive(hardwareMap), false);
-        VisionSubsystem visionSubsystem = new VisionSubsystem(hardwareMap, telemetry);
+        VisionSubsystem visionSubsystem = new VisionSubsystem(hardwareMap, telemetry, true);
         DistanceSensorSubsystem distanceSensorSubsystem = new DistanceSensorSubsystem(hardwareMap, telemetry);
 
         schedule(new SequentialCommandGroup(

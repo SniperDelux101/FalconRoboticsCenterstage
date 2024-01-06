@@ -24,7 +24,6 @@ import org.firstinspires.ftc.teamcode.Commands.PixelBoxArmPosition;
 import org.firstinspires.ftc.teamcode.Commands.PlacePixelOnSpikeCommand;
 import org.firstinspires.ftc.teamcode.Commands.RunLinearSlideAndCenterPixelBoxCommand;
 import org.firstinspires.ftc.teamcode.Commands.StopPixelBoxReset;
-import org.firstinspires.ftc.teamcode.Commands.TrajectoryFollowerCommand;
 import org.firstinspires.ftc.teamcode.Commands.TrajectorySequenceFollowerCommand;
 import org.firstinspires.ftc.teamcode.Subsystems.AirplaneLauncherSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.ClimbSubsystem;
@@ -121,7 +120,7 @@ public class AutonomousCommandTest extends CommandOpMode {
         waitForStart();
 
         if(useVision)
-            visionSubsystem.stopStreaming();
+            visionSubsystem.stopTensorStreaming();
         TrajectorySequence phase1, phase2, phase3, park;
 
         if(startLocation == AutonomousStartLocation.Near) {

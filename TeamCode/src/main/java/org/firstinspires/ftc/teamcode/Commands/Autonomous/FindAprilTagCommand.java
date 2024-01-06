@@ -28,7 +28,7 @@ public class FindAprilTagCommand extends CommandBase {
 
     @Override
     public void initialize() {
-        this.visionSubsystem.resumeStreaming();
+        //this.visionSubsystem.resumeStreaming();
     }
 
     @Override

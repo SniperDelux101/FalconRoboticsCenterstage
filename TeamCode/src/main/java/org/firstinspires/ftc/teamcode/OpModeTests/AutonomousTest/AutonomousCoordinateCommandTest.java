@@ -109,7 +109,7 @@ public class AutonomousCoordinateCommandTest extends CommandOpMode {
         waitForStart();
 
         if(useVision)
-            visionSubsystem.stopStreaming();
+            visionSubsystem.stopTensorStreaming();
         TrajectorySequence phase1, phase2, park;
 
         if(startLocation == AutonomousStartLocation.Near) {

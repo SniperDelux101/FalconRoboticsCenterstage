@@ -56,7 +56,7 @@ public class FindTeamPropCommand extends CommandBase {
 
     @Override
     public void end(boolean interrupted) {
-        visionSubsystem.stopStreaming();
+        visionSubsystem.stopTensorStreaming();
         drive.stop();
     }
 }

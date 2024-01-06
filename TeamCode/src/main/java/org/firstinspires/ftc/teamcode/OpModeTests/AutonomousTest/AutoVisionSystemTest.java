@@ -12,6 +12,7 @@ import org.firstinspires.ftc.teamcode.Commands.Autonomous.AutonomousStartLocatio
 import org.firstinspires.ftc.teamcode.Commands.Autonomous.TeamPropPosition;
 import org.firstinspires.ftc.teamcode.Subsystems.VisionSubsystem;
 import org.firstinspires.ftc.teamcode.Utilities.Configuration;
+import org.firstinspires.ftc.teamcode.Utilities.MatchConfig;
 
 import java.util.List;
 
@@ -27,8 +28,12 @@ public class AutoVisionSystemTest extends OpMode {
 
     @Override
     public void init() {
+
+        MatchConfig.Alliance = alliance;
+        MatchConfig.AutonomousStartLocation = autonomousStartLocation;
+
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
-         visionSubsystem= new VisionSubsystem(hardwareMap, telemetry, alliance, autonomousStartLocation, true);
+         visionSubsystem= new VisionSubsystem(hardwareMap, telemetry, true);
 
     }
     @Override

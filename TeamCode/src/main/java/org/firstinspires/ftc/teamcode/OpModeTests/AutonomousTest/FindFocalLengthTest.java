@@ -1,16 +1,13 @@
 package org.firstinspires.ftc.teamcode.OpModeTests.AutonomousTest;
 
 import com.acmerobotics.dashboard.config.Config;
-import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.teamcode.Subsystems.VisionSubsystem;
 import org.firstinspires.ftc.teamcode.Utilities.Configuration;
 
-import java.util.GregorianCalendar;
 import java.util.List;
 
 @TeleOp
@@ -48,6 +45,6 @@ public class FindFocalLengthTest extends LinearOpMode {
             }
         }
 
-        visionSubsystem.stopStreaming();
+        visionSubsystem.stopTensorStreaming();
     }
 }

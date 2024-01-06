@@ -26,7 +26,7 @@ public class DriveForwardToObjectCommand extends CommandBase {
 
     @Override
     public void initialize(){
-        //this.squareUpRobot();
+        this.squareUpRobot();
     }
 
     @Override

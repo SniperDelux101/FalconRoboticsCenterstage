@@ -77,10 +77,9 @@ public class Autonomous_V3 extends CommandOpMode {
         extakeSubsystem = new ExtakeSubsystem(hardwareMap, telemetry);
         linearSlideSubsystem = new LinearSlideSubsystem(hardwareMap, telemetry);
         intakeMotorSubsystem = new IntakeMotorSubsystem(hardwareMap, telemetry);
-        visionSubsystem = new VisionSubsystem(hardwareMap, telemetry);
+        visionSubsystem = new VisionSubsystem(hardwareMap, telemetry, true);
 
         register(driveBaseSubsystem, airplaneLauncherSubsystem, climbSubsystem, extakeSubsystem, linearSlideSubsystem, odometryControlSubsystem, intakeMotorSubsystem, visionSubsystem);
-        visionSubsystem.initTfod(true);
     }
 
     @Override
@@ -121,7 +120,7 @@ public class Autonomous_V3 extends CommandOpMode {
         waitForStart();
 
         if(useVision)
-            visionSubsystem.stopStreaming();
+            visionSubsystem.stopTensorStreaming();
         TrajectorySequence phase1, phase2, phase3, park;
 
         if(startLocation == AutonomousStartLocation.Near) {
@@ -174,6 +173,7 @@ public class Autonomous_V3 extends CommandOpMode {
             telemetry.addData("Gyro Reading(Degrees): ", gyroSubsystem.getHeading(AngleUnit.DEGREES));
             telemetry.update();
         }
+        visionSubsystem.stopAllVisionPortalStreaming();
         reset();
     }
 
