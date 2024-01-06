@@ -167,17 +167,14 @@ public class Configuration {
 
     public static double LAUNCHING_MIN = 0;
     public static double LAUNCHING_MAX = 90;
-    public static double LAUNCH_RELEASE = .5;
+    public static double LAUNCH_RELEASE = -.5;
     public static double LAUNCH_RETRACT = 0;
 
     //************************************************************
     // Confidence configuration for the vision
-    public static double CONFIDENCE_SCORE = .75;
-    public static int LEFT_UPPER_BOUND_1 = 250;
-    public static int RIGHT_LOWER_BOUND_1 = 550;
-    public  static int LEFT_UPPER_BOUND_2 = 50;
-    public static int RIGHT_LOWER_BOUND_2 = 375;
-
+    public static double CONFIDENCE_SCORE = .55;
+    public static int LEFT_UPPER_BOUND_1 = 550;
+    public static int RIGHT_LOWER_BOUND_1 = 1050;
     public static double TEAM_PROP_WIDTH = 3.182;
     public static double FOCAL_LENGTH = 543.45;
 
