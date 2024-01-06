@@ -1,19 +1,27 @@
 package org.firstinspires.ftc.teamcode.Commands.Autonomous;
 
+import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.roadrunner.trajectory.Trajectory;
+import com.acmerobotics.roadrunner.trajectory.constraints.MecanumVelocityConstraint;
 import com.arcrobotics.ftclib.command.CommandBase;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.Subsystems.DistanceSensorSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.GyroSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.MecanumDriveSubsystem;
+import org.firstinspires.ftc.teamcode.Subsystems.drive.TrajectorySequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.Utilities.Configuration;
 import org.firstinspires.ftc.teamcode.Utilities.MatchConfig;
+import org.opencv.core.Mat;
 
+@Config
 public class DriveForwardToObjectCommand extends CommandBase {
     private final MecanumDriveSubsystem mecanumDriveSubsystem;
     private final DistanceSensorSubsystem distanceSensorSubsystem;
     private final GyroSubsystem gyroSubsystem;
     private final double stopDistance;
+    private boolean hasExecuted = false;
 
     public DriveForwardToObjectCommand(MecanumDriveSubsystem drive, DistanceSensorSubsystem dist, GyroSubsystem gSubsystem, double stopDistance){
         mecanumDriveSubsystem = drive;
@@ -26,17 +34,31 @@ public class DriveForwardToObjectCommand extends CommandBase {
 
     @Override
     public void initialize(){
-        this.squareUpRobot();
+        //this.squareUpRobot();
     }
 
     @Override
     public void execute(){
         MatchConfig.telemetry.addData("Average Distance to Object: ", distanceSensorSubsystem.getBackAverageDistance());
-
-        if(distanceSensorSubsystem.getBackAverageDistance() > this.stopDistance)
-            this.mecanumDriveSubsystem.drive(-.5,0,0,.3);
-        else
-            this.mecanumDriveSubsystem.drive(.5,0,0,.3);
+        MatchConfig.telemetry.update();
+        if(!hasExecuted && distanceSensorSubsystem.getBackAverageDistance() < 36) {
+            TrajectorySequence t;
+            if (distanceSensorSubsystem.getBackAverageDistance() < this.stopDistance) {
+                //this.mecanumDriveSubsystem.drive(X, 0, 0, POWER);
+                t = mecanumDriveSubsystem.getDrive().trajectorySequenceBuilder(mecanumDriveSubsystem.getPoseEstimate())
+                        .setVelConstraint(new MecanumVelocityConstraint(Configuration.VISION_VEL, Configuration.TRACKWIDTH))
+                        .forward(stopDistance - distanceSensorSubsystem.getBackAverageDistance())
+                        .build();
+            } else {
+                //this.mecanumDriveSubsystem.drive(-X, 0, 0, POWER);
+                t = mecanumDriveSubsystem.getDrive().trajectorySequenceBuilder(mecanumDriveSubsystem.getPoseEstimate())
+                        .setVelConstraint(new MecanumVelocityConstraint(Configuration.VISION_VEL, Configuration.TRACKWIDTH))
+                        .back(distanceSensorSubsystem.getBackAverageDistance() - stopDistance)
+                        .build();
+            }
+            hasExecuted = true;
+            mecanumDriveSubsystem.getDrive().followTrajectorySequence(t);
+        }
     }
 
     @Override
@@ -44,6 +66,7 @@ public class DriveForwardToObjectCommand extends CommandBase {
         double delta = Math.abs(distanceSensorSubsystem.getBackAverageDistance() - stopDistance);
         MatchConfig.telemetry.addData("Average Distance to Object: ", distanceSensorSubsystem.getBackAverageDistance());
         MatchConfig.telemetry.addData("Delta: ", delta);
+        MatchConfig.telemetry.update();
         return delta < Configuration.DISTANCE_ERROR_DISTANCE;
     }
 

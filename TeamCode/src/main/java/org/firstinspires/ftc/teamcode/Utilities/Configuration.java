@@ -187,8 +187,10 @@ public class Configuration {
 
     //*****************************************************************
     public static int AUTO_VEL = 30;
+    public static int VISION_VEL = 10;
 
     //*****************************************************************
     public static double DISTANCE_ERROR_DISTANCE = 0.1; //inches
+    public static double BACKDROP_DISTANCE = 4.0;
 
 }
