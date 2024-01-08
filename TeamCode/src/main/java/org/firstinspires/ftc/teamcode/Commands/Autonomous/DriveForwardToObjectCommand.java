@@ -4,6 +4,8 @@ import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.acmerobotics.roadrunner.trajectory.constraints.MecanumVelocityConstraint;
 import com.arcrobotics.ftclib.command.CommandBase;
+import com.arcrobotics.ftclib.command.CommandScheduler;
+import com.arcrobotics.ftclib.command.InstantCommand;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -22,6 +24,7 @@ public class DriveForwardToObjectCommand extends CommandBase {
     private final GyroSubsystem gyroSubsystem;
     private final double stopDistance;
     private boolean hasExecuted = false;
+    private boolean shakeRobot = false;
 
     public DriveForwardToObjectCommand(MecanumDriveSubsystem drive, DistanceSensorSubsystem dist, GyroSubsystem gSubsystem, double stopDistance){
         mecanumDriveSubsystem = drive;
@@ -41,7 +44,7 @@ public class DriveForwardToObjectCommand extends CommandBase {
     public void execute(){
         MatchConfig.telemetry.addData("Average Distance to Object: ", distanceSensorSubsystem.getBackAverageDistance());
         MatchConfig.telemetry.update();
-        if(!hasExecuted && distanceSensorSubsystem.getBackAverageDistance() < 36) {
+        if(!hasExecuted && distanceSensorSubsystem.getBackAverageDistance() < 36 && !mecanumDriveSubsystem.isBusy()) {
             TrajectorySequence t;
             if (distanceSensorSubsystem.getBackAverageDistance() < this.stopDistance) {
                 //this.mecanumDriveSubsystem.drive(X, 0, 0, POWER);
@@ -58,6 +61,19 @@ public class DriveForwardToObjectCommand extends CommandBase {
             }
             hasExecuted = true;
             mecanumDriveSubsystem.getDrive().followTrajectorySequence(t);
+        }
+        else{
+            if(!shakeRobot && !hasExecuted)
+            {
+                double turnRadians = Math.toRadians(Configuration.SHAKE_DEGREES);
+                TrajectorySequence ts = mecanumDriveSubsystem.getDrive().trajectorySequenceBuilder(mecanumDriveSubsystem.getPoseEstimate())
+                        .turn(turnRadians)
+                        .turn(-turnRadians*2)
+                        .turn(turnRadians)
+                        .build();
+                mecanumDriveSubsystem.getDrive().followTrajectorySequence(ts);
+                shakeRobot = true;
+            }
         }
     }
 

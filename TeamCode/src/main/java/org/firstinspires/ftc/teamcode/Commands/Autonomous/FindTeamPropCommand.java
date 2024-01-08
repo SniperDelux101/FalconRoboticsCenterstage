@@ -4,6 +4,7 @@ import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.CommandBase;
 
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
+import org.firstinspires.ftc.teamcode.Subsystems.ExtakeSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.MecanumDriveSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.VisionSubsystem;
 
@@ -29,7 +30,12 @@ public class FindTeamPropCommand extends CommandBase {
 
     @Override
     public void initialize(){
-        visionSubsystem.initTfod(true);
+        try {
+            visionSubsystem.initTfod(true);
+        }
+        catch(Exception ex){
+
+        }
     }
 
     @Override

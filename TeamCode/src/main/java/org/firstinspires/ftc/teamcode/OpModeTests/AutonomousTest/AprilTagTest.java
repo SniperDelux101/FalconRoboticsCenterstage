@@ -43,8 +43,8 @@ public class AprilTagTest extends CommandOpMode {
 
 
         schedule(new SequentialCommandGroup(
-                new FindAprilTagCommand(mecanumDriveSubsystem, visionSubsystem),
-                new DriveForwardToObjectCommand(mecanumDriveSubsystem, distanceSensorSubsystem, GyroSubsystem.getInstance(hardwareMap, telemetry), Configuration.BACKDROP_DISTANCE)
+                new FindAprilTagCommand(mecanumDriveSubsystem, visionSubsystem)
+//                new DriveForwardToObjectCommand(mecanumDriveSubsystem, distanceSensorSubsystem, GyroSubsystem.getInstance(hardwareMap, telemetry), Configuration.BACKDROP_DISTANCE)
                 ));
 
         register(mecanumDriveSubsystem, visionSubsystem, distanceSensorSubsystem);

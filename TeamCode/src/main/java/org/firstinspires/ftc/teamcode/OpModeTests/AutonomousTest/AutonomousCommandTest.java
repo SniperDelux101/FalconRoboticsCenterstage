@@ -16,6 +16,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.Commands.Autonomous.Alliance;
 import org.firstinspires.ftc.teamcode.Commands.Autonomous.AutonomousStartLocation;
+import org.firstinspires.ftc.teamcode.Commands.Autonomous.DriveForwardToObjectCommand;
+import org.firstinspires.ftc.teamcode.Commands.Autonomous.FindAprilTagCommand;
 import org.firstinspires.ftc.teamcode.Commands.Autonomous.Paths.V3.BuildFarPaths;
 import org.firstinspires.ftc.teamcode.Commands.Autonomous.Paths.V3.BuildNearPaths;
 import org.firstinspires.ftc.teamcode.Commands.Autonomous.TeamPropPosition;
@@ -27,6 +29,7 @@ import org.firstinspires.ftc.teamcode.Commands.StopPixelBoxReset;
 import org.firstinspires.ftc.teamcode.Commands.TrajectorySequenceFollowerCommand;
 import org.firstinspires.ftc.teamcode.Subsystems.AirplaneLauncherSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.ClimbSubsystem;
+import org.firstinspires.ftc.teamcode.Subsystems.DistanceSensorSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.ExtakeSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.GyroSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.IntakeMotorSubsystem;
@@ -54,6 +57,7 @@ public class AutonomousCommandTest extends CommandOpMode {
     private IntakeMotorSubsystem intakeMotorSubsystem;
     private VisionSubsystem visionSubsystem;
     private GyroSubsystem gyroSubsystem;
+    private DistanceSensorSubsystem distanceSensorSubsystem;
     ///endregion
 
     public static Alliance alliance = Alliance.Blue;
@@ -76,10 +80,12 @@ public class AutonomousCommandTest extends CommandOpMode {
         extakeSubsystem = new ExtakeSubsystem(hardwareMap, telemetry);
         linearSlideSubsystem = new LinearSlideSubsystem(hardwareMap, telemetry);
         intakeMotorSubsystem = new IntakeMotorSubsystem(hardwareMap, telemetry);
-        visionSubsystem = new VisionSubsystem(hardwareMap, telemetry);
+        visionSubsystem = new VisionSubsystem(hardwareMap, telemetry, true);
+        distanceSensorSubsystem = new DistanceSensorSubsystem(hardwareMap, telemetry);
 
-        register(driveBaseSubsystem, airplaneLauncherSubsystem, climbSubsystem, extakeSubsystem, linearSlideSubsystem, odometryControlSubsystem, intakeMotorSubsystem, visionSubsystem);
-        visionSubsystem.initTfod(true);
+
+        register(driveBaseSubsystem, airplaneLauncherSubsystem, climbSubsystem, extakeSubsystem, linearSlideSubsystem, odometryControlSubsystem, intakeMotorSubsystem, visionSubsystem, distanceSensorSubsystem);
+//        visionSubsystem.initTfod(true);
     }
 
     @Override
@@ -109,6 +115,7 @@ public class AutonomousCommandTest extends CommandOpMode {
             MatchConfig.Alliance = alliance;
             MatchConfig.AutonomousStartLocation = startLocation;
             MatchConfig.TeamPropPosition = teamPropPosition;
+            MatchConfig.telemetry = telemetry;
 
             telemetry.addData("Run atonomous ; " , runAutonomous);
             telemetry.addData("Team Prop Position: ", teamPropPosition);
@@ -145,7 +152,13 @@ public class AutonomousCommandTest extends CommandOpMode {
                         new ParallelCommandGroup(
                                 new PlacePixelOnSpikeCommand(intakeMotorSubsystem).withTimeout(2000),
                                 new TrajectorySequenceFollowerCommand(driveBaseSubsystem, phase2)
+
                         ),
+                        new SequentialCommandGroup(
+                                new FindAprilTagCommand(driveBaseSubsystem, visionSubsystem),
+                                new DriveForwardToObjectCommand(driveBaseSubsystem, distanceSensorSubsystem, GyroSubsystem.getInstance(hardwareMap, telemetry), Configuration.BACKDROP_DISTANCE)
+                        ).withTimeout(1000),
+
                         new SequentialCommandGroup(
                                 new RunLinearSlideAndCenterPixelBoxCommand(extakeSubsystem,linearSlideSubsystem, Configuration.LINEAR_SLIDE_POS_AUTO),
                                 new MovePixelBoxArmToPositionCommand(extakeSubsystem, PixelBoxArmPosition.Extake)

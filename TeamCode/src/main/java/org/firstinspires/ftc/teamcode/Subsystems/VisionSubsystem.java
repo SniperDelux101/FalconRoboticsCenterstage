@@ -5,6 +5,7 @@ import android.util.Size;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.robotcore.external.JavaUtil;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -22,6 +23,8 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagGameDatabase;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 import org.firstinspires.ftc.vision.tfod.TfodProcessor;
 import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
+
+import java.io.File;
 import java.util.List;
 
 public class VisionSubsystem extends FalconSubsystemBase {
@@ -29,7 +32,7 @@ public class VisionSubsystem extends FalconSubsystemBase {
      * this subsystem uses a Tensor flow model file to be able to recognize the team props
      * then it sets the camera's resulotion
      */
-    private static final String TFOD_MODEL_FILE = "/sdcard/FIRST/tflitemodels/Green_122823.tflite"; // "/sdcard/FIRST/tflitemodels/Green_122823.tflite";
+    private static final String TFOD_MODEL_FILE = "/sdcard/FIRST/tflitemodels/" + Configuration.TENSOR_FILE;
 
     private static final String[] LABELS = {
             "TeamProp"
@@ -43,6 +46,9 @@ public class VisionSubsystem extends FalconSubsystemBase {
     ///the variable to store our
     private VisionPortal tensorVisionPortal;
     private VisionPortal aprilTagVisionPortal;
+    private int tensorflowVisionPortal_ID, apriltagVisionPortal_ID;
+
+    VisionPortal.Builder visionPortalBuilder;
     public enum AprilTagID {
         BLUE_BACKDROP_LEFT_TAG(1),
         BLUE_BACKDROP_CENTER_TAG(2),
@@ -89,12 +95,26 @@ public class VisionSubsystem extends FalconSubsystemBase {
         super(tel);
         hardwareMap = hm;
         if (initVisionPortals) {
-            //initTfod(true);
+            initMultiPortals();
+            initTfod(true);
             initAprilTagProcessor();
         }
     }
 
+    private void initMultiPortals(){
+        List portalList;
+
+        portalList = JavaUtil.makeIntegerList(VisionPortal.makeMultiPortalView(2, VisionPortal.MultiPortalLayout.HORIZONTAL));
+        tensorflowVisionPortal_ID = ((Integer) JavaUtil.inListGet(portalList, JavaUtil.AtMode.FROM_START, 0, false)).intValue();
+        apriltagVisionPortal_ID = ((Integer) JavaUtil.inListGet(portalList, JavaUtil.AtMode.FROM_START, 1, false)).intValue();
+    }
+
     public void initTfod(boolean allowStreaming) {
+
+        File f = new File(TFOD_MODEL_FILE);
+        if(!f.exists())
+            telemetry.addLine("Tensor file " + TFOD_MODEL_FILE + " does not exist");
+
         tfod = new TfodProcessor.Builder()
                 .setModelFileName(TFOD_MODEL_FILE)
                 .setModelLabels(LABELS)
@@ -103,18 +123,20 @@ public class VisionSubsystem extends FalconSubsystemBase {
                 .setModelInputSize(300)
                 .setModelAspectRatio(16.0 / 9.0)
                 .build();
-
-
-        VisionPortal.Builder builder = new VisionPortal.Builder();
-        builder.setCamera(hardwareMap.get(WebcamName.class, "Webcam 1"));
-        builder.setCameraResolution(new Size(Configuration.CAMERA_WIDTH, Configuration.CAMERA_HEIGHT));
-        builder.enableLiveView(allowStreaming);
-        if (allowStreaming) {
-            builder.setStreamFormat(VisionPortal.StreamFormat.YUY2);
-        }
-        builder.addProcessor(tfod);
-        tensorVisionPortal = builder.build();
         tfod.setMinResultConfidence((float) Configuration.CONFIDENCE_SCORE);
+
+
+        visionPortalBuilder = new VisionPortal.Builder();
+        visionPortalBuilder.setCamera(hardwareMap.get(WebcamName.class, "Webcam 1"));
+        visionPortalBuilder.setCameraResolution(new Size(Configuration.CAMERA_WIDTH, Configuration.CAMERA_HEIGHT));
+        visionPortalBuilder.enableLiveView(allowStreaming);
+        visionPortalBuilder.setStreamFormat(VisionPortal.StreamFormat.YUY2);
+
+        visionPortalBuilder.addProcessor(tfod);
+        visionPortalBuilder.setLiveViewContainerId(tensorflowVisionPortal_ID);
+
+        tensorVisionPortal = visionPortalBuilder.build();
+        tensorVisionPortal.setProcessorEnabled(tfod,true);
     }
 
     private void initAprilTagProcessor() {
@@ -145,30 +167,32 @@ public class VisionSubsystem extends FalconSubsystemBase {
         aprilTag.setDecimation(3);
 
         // Create the vision portal by using a builder.
-        VisionPortal.Builder builder = new VisionPortal.Builder();
+       // VisionPortal.Builder builder = new VisionPortal.Builder();
 
         // Set the camera (webcam vs. built-in RC phone camera).
-        builder.setCamera(hardwareMap.get(WebcamName.class, "Webcam 2"));
+        visionPortalBuilder.setCamera(hardwareMap.get(WebcamName.class, "Webcam 2"));
 
         // Choose a camera resolution. Not all cameras support all resolutions.
-        //builder.setCameraResolution(new Size(640, 480));
+        visionPortalBuilder.setCameraResolution(new Size(320, 240));
 
         // Enable the RC preview (LiveView).  Set "false" to omit camera monitoring.
-        builder.enableLiveView(true);
+        visionPortalBuilder.enableLiveView(true);
 
         // Set the stream format; MJPEG uses less bandwidth than default YUY2.
-        builder.setStreamFormat(VisionPortal.StreamFormat.YUY2);
+        visionPortalBuilder.setStreamFormat(VisionPortal.StreamFormat.YUY2);
 
         // Choose whether or not LiveView stops if no processors are enabled.
         // If set "true", monitor shows solid orange screen if no processors enabled.
         // If set "false", monitor shows camera view without annotations.
-        builder.setAutoStopLiveView(false);
+        visionPortalBuilder.setAutoStopLiveView(false);
 
         // Set and enable the processor.
-        builder.addProcessor(aprilTag);
+        visionPortalBuilder.addProcessor(aprilTag);
+
+        visionPortalBuilder.setLiveViewContainerId(apriltagVisionPortal_ID);
 
         // Build the Vision Portal, using the above settings.
-        aprilTagVisionPortal = builder.build();
+        aprilTagVisionPortal = visionPortalBuilder.build();
 
         // Disable or re-enable the aprilTag processor at any time.
         aprilTagVisionPortal.setProcessorEnabled(aprilTag, true);

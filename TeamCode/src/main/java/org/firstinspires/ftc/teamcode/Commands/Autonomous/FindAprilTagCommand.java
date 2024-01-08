@@ -4,6 +4,7 @@ import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.arcrobotics.ftclib.command.CommandBase;
 import org.firstinspires.ftc.teamcode.Subsystems.MecanumDriveSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.VisionSubsystem;
+import org.firstinspires.ftc.teamcode.Utilities.Configuration;
 import org.firstinspires.ftc.teamcode.Utilities.MatchConfig;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 
@@ -17,6 +18,7 @@ public class FindAprilTagCommand extends CommandBase {
 
     public double distance_to_Tag = 0.0;
     private Trajectory trajectory;
+    private Trajectory forwardTrajectory;
     private boolean hasExecuted = false;
 
 
@@ -40,20 +42,30 @@ public class FindAprilTagCommand extends CommandBase {
             MatchConfig.telemetry.addData("Bearing: ", detection.ftcPose.bearing);
             MatchConfig.telemetry.addData("Range: ", detection.ftcPose.range);
             MatchConfig.telemetry.addData("Yaw: ", detection.ftcPose.yaw);
-            double strafeDistance = Math.abs(detection.ftcPose.range * (Math.sin(Math.toRadians(detection.ftcPose.bearing))));
+
+            double strafeSin = Math.sin(Math.toRadians(detection.ftcPose.bearing));
+            double backCos = Math.cos(detection.ftcPose.bearing);
+            double strafeDistance = Math.abs(detection.ftcPose.range * (strafeSin));
+            double backDistance = ((Math.abs(detection.ftcPose.range * (backCos))) - Configuration.BACKDROP_DISTANCE);
 
             if (detection.ftcPose.bearing > 0) {
                 trajectory = this.mecanumDriveSubsystem.trajectoryBuilder(this.mecanumDriveSubsystem.getPoseEstimate())
                         .strafeRight(strafeDistance)
-//                        .forward(detection.ftcPose.range * (Math.cos(detection.ftcPose.bearing)))
+                        .build();
+                forwardTrajectory = this.mecanumDriveSubsystem.trajectoryBuilder(trajectory.end())
+                        .back(backDistance)
                         .build();
             } else {
                 trajectory = this.mecanumDriveSubsystem.trajectoryBuilder(this.mecanumDriveSubsystem.getPoseEstimate())
                         .strafeLeft(strafeDistance)
                         .build();
+                forwardTrajectory = this.mecanumDriveSubsystem.trajectoryBuilder(trajectory.end())
+                        .back(backDistance)
+                        .build();
             }
             hasExecuted = true;
             this.mecanumDriveSubsystem.followTrajectory(trajectory);
+            this.mecanumDriveSubsystem.followTrajectory(forwardTrajectory);
         }
         else
             MatchConfig.telemetry.addLine("NO April tag found");
@@ -75,10 +87,14 @@ public class FindAprilTagCommand extends CommandBase {
             MatchConfig.telemetry.addData("Bearing: ", detection.ftcPose.bearing);
             MatchConfig.telemetry.addData("Range: ", detection.ftcPose.range);
             MatchConfig.telemetry.addData("Yaw: ", detection.ftcPose.yaw);
+            MatchConfig.telemetry.update();
 
-            return (Math.abs(detection.ftcPose.bearing) < 1);
+//            return (Math.abs(detection.ftcPose.bearing) < 1
+//                    && Math.abs(Configuration.BACKDROP_DISTANCE - detection.ftcPose.range) <= Configuration.DISTANCE_ERROR_DISTANCE);
         }
-        return false;
+//        return false;
+
+        return !this.mecanumDriveSubsystem.getDrive().isBusy();
     }
 
     private int GetAprilTagID()

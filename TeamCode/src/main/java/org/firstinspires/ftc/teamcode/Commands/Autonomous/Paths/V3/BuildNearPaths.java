@@ -41,42 +41,42 @@ public class BuildNearPaths {
     private static class Blue{
         public static void CenterPhases() {
             Phase1 = drive.trajectorySequenceBuilder(Blue_Near_Start_Pose)
-                    .lineTo(new Vector2d(BN_Center_X_12, BN_Center_Y_30))
+                    .lineTo(new Vector2d(12, 30))
                     .build();
             Center_Phase2();
         }
         public static void Center_Phase2() {
             Phase2 = drive.trajectorySequenceBuilder(Phase1.end())
                     .setVelConstraint(new MecanumVelocityConstraint(Configuration.AUTO_VEL, Configuration.TRACKWIDTH))
-                    .lineTo(new Vector2d(CommonPathSettings.BN_Center_X_12, BN_Center_Y_32))
-                    .splineTo((new Vector2d(BN_Center_X_30, CommonPathSettings.BN_Center_Y_32)), BN_Center_Ph2_H1)
-                    .lineTo(new Vector2d(BN_Center_X_54, CommonPathSettings.BN_Center_Y_32))
+                    .lineTo(new Vector2d(12, 32))
+                    .splineTo((new Vector2d(30, 32)), BN_Center_Ph2_H1)
+                    .lineTo(new Vector2d(40, 32))
                     .build();
             Center_Phase3();
         }
         public static void Center_Phase3(){
             Phase3 = drive.trajectorySequenceBuilder(Phase2.end())
                     .setVelConstraint(new MecanumVelocityConstraint(Configuration.AUTO_VEL, Configuration.TRACKWIDTH))
-                    .lineToConstantHeading(new Vector2d(BN_Center_X_45, CommonPathSettings.BN_Center_Y_32))
+                    .lineToConstantHeading(new Vector2d(45, 32))
                     .build();
             Center_Park();
         }
         public static void Center_Park() {
             Park = drive.trajectorySequenceBuilder(Phase2.end())
                     .setVelConstraint(new MecanumVelocityConstraint(Configuration.AUTO_VEL, Configuration.TRACKWIDTH))
-                    .lineToConstantHeading(new Vector2d(CommonPathSettings.BN_Center_X_45, BN_Center_Y_50))
-                    .splineToConstantHeading(new Vector2d(BN_Center_X_60, BN_Center_Y_60), BN_Center_Park_H1)
+                    .lineToConstantHeading(new Vector2d(45, 50))
+                    .splineToConstantHeading(new Vector2d(60, 60), BN_Center_Park_H1)
                     .build();
         }
         public static void Left_Right_Phases(TeamPropPosition position) {
             if (position == TeamPropPosition.Left) {
                 Phase1 = drive.trajectorySequenceBuilder(Blue_Near_Start_Pose)
-                        .lineToConstantHeading(new Vector2d(BN_Left_X_30, BN_Left_Y_28))
+                        .lineToConstantHeading(new Vector2d(30, 28))
                         .turn(BN_Left_Spike_Turn1)
                         .build();
             } else {
                 Phase1 = drive.trajectorySequenceBuilder(Blue_Near_Start_Pose)
-                        .splineTo(new Vector2d(BN_Right_X_9, BN_Right_Y_30), BN_Right_Spike_H1)
+                        .splineTo(new Vector2d(9, 30), BN_Right_Spike_H1)
                         .build();
             }
             Left_Right_Phase2(position);
@@ -85,12 +85,12 @@ public class BuildNearPaths {
             if(position == TeamPropPosition.Left){
                 Phase2 = drive.trajectorySequenceBuilder(Phase1.end())
                         .setVelConstraint(new MecanumVelocityConstraint(Configuration.AUTO_VEL, Configuration.TRACKWIDTH))
-                        .lineToConstantHeading(new Vector2d(BN_Left_X_40, CommonPathSettings.BN_Left_Y_28))
-                        .lineToConstantHeading(new Vector2d(BN_Left_X_54, BN_Left_Y_39))
+                        .lineToConstantHeading(new Vector2d(40, 28))
+                        .lineToConstantHeading(new Vector2d(40, 32))
                         .build();
             } else {
                 Phase2 = drive.trajectorySequenceBuilder(Phase1.end())
-                        .lineToConstantHeading(new Vector2d(BN_Right_X_54, BN_Right_Y_32))
+                        .lineToConstantHeading(new Vector2d(40, 32))
                         .build();
             }
             Left_Right_Phase3(position);
@@ -99,11 +99,11 @@ public class BuildNearPaths {
             if(position == TeamPropPosition.Left){
                 Phase3 = drive.trajectorySequenceBuilder(Phase2.end())
                         .setVelConstraint(new MecanumVelocityConstraint(Configuration.AUTO_VEL, Configuration.TRACKWIDTH))
-                        .lineToConstantHeading(new Vector2d(CommonPathSettings.BN_Left_X_40, BN_Left_Y_40))
+                        .lineToConstantHeading(new Vector2d(40.01, 40))
                         .build();
             } else {
                 Phase3 = drive.trajectorySequenceBuilder(Phase2.end())
-                        .lineToConstantHeading(new Vector2d(BN_Right_X_40, CommonPathSettings.BN_Right_Y_32))
+                        .lineToConstantHeading(new Vector2d(40.01, 32))
                         .build();
             }
             Left_Right_Park(position);
@@ -112,12 +112,12 @@ public class BuildNearPaths {
             if(position == TeamPropPosition.Left){
                 Park = drive.trajectorySequenceBuilder(Phase3.end())
                         .setVelConstraint(new MecanumVelocityConstraint(Configuration.AUTO_VEL, Configuration.TRACKWIDTH))
-                        .splineToConstantHeading(new Vector2d(BN_Left_X_50, BN_Left_Y_60), BN_Left_Park_H1)
+                        .splineToConstantHeading(new Vector2d(50, 60), BN_Left_Park_H1)
                         .build();
             } else {
                 Park = drive.trajectorySequenceBuilder(Phase3.end())
                         .setVelConstraint(new MecanumVelocityConstraint(Configuration.AUTO_VEL, Configuration.TRACKWIDTH))
-                        .lineToConstantHeading(new Vector2d(CommonPathSettings.BN_Right_X_40, BN_Right_Park_C2))
+                        .lineToConstantHeading(new Vector2d(40, BN_Right_Park_C2))
                         .splineToConstantHeading(new Vector2d(BN_Right_Park_C3, BN_Right_Park_C4), BN_Right_Park_H1)
                         .build();
             }

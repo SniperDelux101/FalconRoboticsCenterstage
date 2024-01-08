@@ -178,6 +178,8 @@ public class Configuration {
     public static double TEAM_PROP_WIDTH = 3.182;
     public static double FOCAL_LENGTH = 543.45;
 
+    public static String TENSOR_FILE = "Green_1062024.tflite";
+
     //*****************************************************************
     //Camera Calibration
 
@@ -191,6 +193,7 @@ public class Configuration {
 
     //*****************************************************************
     public static double DISTANCE_ERROR_DISTANCE = 0.1; //inches
-    public static double BACKDROP_DISTANCE = 4.0;
+    public static double BACKDROP_DISTANCE = 3.0;
 
+    public static double SHAKE_DEGREES = 5;
 }
