@@ -56,8 +56,8 @@ public class AutonomousPathTest extends OpMode {
 //            mecanumDriveSubsystem.followTrajectorySequenceAsync(AutonomousPaths.BlueAlliancePhaseOne(mecanumDriveSubsystem.getDrive() , TeamPropPosition.Center , startLocation));
 //            mecanumDriveSubsystem.followTrajectorySequenceAsync(AutonomousPaths.BlueAlliancePhaseOne( mecanumDriveSubsystem.getDrive(), TeamPropPosition.Right, startLocation));
 
-            mecanumDriveSubsystem.getDrive().followTrajectorySequence(
-                    mecanumDriveSubsystem.getDrive().trajectorySequenceBuilder(new Pose2d())
+            mecanumDriveSubsystem.followTrajectorySequence(
+                    mecanumDriveSubsystem.trajectorySequenceBuilder(new Pose2d())
                             .forward(Forward1)
                             .waitSeconds(2)
                             .back(Back)

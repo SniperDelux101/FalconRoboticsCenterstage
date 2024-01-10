@@ -11,6 +11,7 @@ import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 
 import org.firstinspires.ftc.teamcode.Subsystems.drive.FalconMecanumDrive;
 import org.firstinspires.ftc.teamcode.Subsystems.drive.TrajectorySequence.TrajectorySequence;
+import org.firstinspires.ftc.teamcode.Subsystems.drive.TrajectorySequence.TrajectorySequenceBuilder;
 import org.firstinspires.ftc.teamcode.Utilities.Configuration;
 
 import java.util.List;
@@ -86,6 +87,10 @@ public class MecanumDriveSubsystem extends SubsystemBase {
         return drive.trajectoryBuilder(startPose);
     }
 
+    public TrajectorySequenceBuilder trajectorySequenceBuilder(Pose2d startPose){
+        return drive.trajectorySequenceBuilder(startPose);
+    }
+
     public TrajectoryBuilder trajectoryBuilder(Pose2d startPose, boolean reversed) {
         return drive.trajectoryBuilder(startPose, reversed);
     }
@@ -102,15 +107,26 @@ public class MecanumDriveSubsystem extends SubsystemBase {
         drive.followTrajectoryAsync(trajectory);
     }
 
+    public void followTrajectorySequence(TrajectorySequence sequence){
+        drive.followTrajectorySequence(sequence);
+    }
+
     public void followTrajectorySequenceAsync(TrajectorySequence sequence) {
         drive.followTrajectorySequenceAsync(sequence);
+    }
+
+    public void breakFollowing(){
+        this.drive.breakFollowing();
     }
 
     public boolean isBusy() {
         return drive.isBusy();
     }
 
-    public void turn(double radians) {
+    public void turn(double radians){
+        drive.turn(radians);
+    }
+    public void turnAsync(double radians) {
         drive.turnAsync(radians);
     }
 

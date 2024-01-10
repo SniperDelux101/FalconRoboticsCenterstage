@@ -17,7 +17,7 @@ public class DriveToTeamPropCommand extends CommandBase {
 
     @Override
     public void initialize(){
-        trajectorySequence = mecanumDriveSubsystem.getDrive().trajectorySequenceBuilder(mecanumDriveSubsystem.getPoseEstimate())
+        trajectorySequence = mecanumDriveSubsystem.trajectorySequenceBuilder(mecanumDriveSubsystem.getPoseEstimate())
                 .forward(AutonomousState.getInstance().determineDistanceToTeamProp())
                 .build();
         mecanumDriveSubsystem.followTrajectorySequenceAsync(trajectorySequence);

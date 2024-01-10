@@ -100,7 +100,7 @@ public class AutonomousDriveCommand extends SequentialCommandGroup {
     @Override
     public void execute(){
         /// TODO:
-       mecanumDriveSubsystem.getDrive().followTrajectorySequence(trajectorySequence);
+       mecanumDriveSubsystem.followTrajectorySequence(trajectorySequence);
     }
     @Override
     public boolean isFinished(){

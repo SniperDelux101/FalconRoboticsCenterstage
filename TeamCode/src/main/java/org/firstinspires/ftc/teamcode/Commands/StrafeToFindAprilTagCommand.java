@@ -36,13 +36,13 @@ public class StrafeToFindAprilTagCommand extends CommandBase {
         visionSubsystem.resumeAprilStreaming();
 
         if(MatchConfig.Alliance == Alliance.Blue) {
-            sequence = mecanumDriveSubsystem.getDrive().trajectorySequenceBuilder(mecanumDriveSubsystem.getPoseEstimate())
+            sequence = mecanumDriveSubsystem.trajectorySequenceBuilder(mecanumDriveSubsystem.getPoseEstimate())
                     .setVelConstraint(new MecanumVelocityConstraint(Configuration.STRAFE_TO_APRIL_TAG_VEL, Configuration.TRACKWIDTH))
                     .strafeRight(Configuration.VISION_STRAFE_DIS)
                     .build();
         }
         else {
-            sequence = mecanumDriveSubsystem.getDrive().trajectorySequenceBuilder(mecanumDriveSubsystem.getPoseEstimate())
+            sequence = mecanumDriveSubsystem.trajectorySequenceBuilder(mecanumDriveSubsystem.getPoseEstimate())
                     .setVelConstraint(new MecanumVelocityConstraint(Configuration.STRAFE_TO_APRIL_TAG_VEL, Configuration.TRACKWIDTH))
                     .strafeLeft(Configuration.VISION_STRAFE_DIS)
                     .build();
@@ -59,7 +59,7 @@ public class StrafeToFindAprilTagCommand extends CommandBase {
             AprilTagDetection detection = this.visionSubsystem.findAprilTag();
             if(detection != null) {
                 mecanumDriveSubsystem.stop();
-                mecanumDriveSubsystem.getDrive().breakFollowing();
+                mecanumDriveSubsystem.breakFollowing();
                 MatchConfig.telemetry.addLine("FOUND Tag " + visionSubsystem.GetAprilTagID());
 //                if(MatchConfig.Alliance == Alliance.Blue) {
 //                    sequence = mecanumDriveSubsystem.getDrive().trajectorySequenceBuilder(mecanumDriveSubsystem.getPoseEstimate())
@@ -73,7 +73,7 @@ public class StrafeToFindAprilTagCommand extends CommandBase {
 //                            .strafeRight(2)
 //                            .build();
 //                }
-                mecanumDriveSubsystem.getDrive().followTrajectorySequence(sequence);
+//                mecanumDriveSubsystem.getDrive().followTrajectorySequence(sequence);
                 isFinished = true;
             }
         }
@@ -90,7 +90,8 @@ public class StrafeToFindAprilTagCommand extends CommandBase {
     }
     @Override
     public void end(boolean interrupted) {
-        //mecanumDriveSubsystem.stop();
+        if(interrupted && mecanumDriveSubsystem.isBusy())
+            mecanumDriveSubsystem.breakFollowing();
         visionSubsystem.stopAprilStreaming();
     }
 }

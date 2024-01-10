@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.Commands;
 
-import android.service.autofill.FieldClassification;
-
 import com.arcrobotics.ftclib.command.CommandBase;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -15,11 +13,13 @@ public class GyroSquareCommand extends CommandBase {
     private final GyroSubsystem gyroSubsystem;
     private final MecanumDriveSubsystem mecanumDriveSubsystem;
     private final double finalDegreeAngle;
+    private boolean hasExecuted;
 
     public GyroSquareCommand(GyroSubsystem gSystem, MecanumDriveSubsystem mSystem, double degree) {
         gyroSubsystem = gSystem;
         mecanumDriveSubsystem = mSystem;
         finalDegreeAngle = degree;
+        hasExecuted = false;
 
         addRequirements(gyroSubsystem, mecanumDriveSubsystem);
     }
@@ -37,13 +37,19 @@ public class GyroSquareCommand extends CommandBase {
         MatchConfig.telemetry.addData("Error: ", error);
 
         mecanumDriveSubsystem.turn(Math.toRadians(error));
-        mecanumDriveSubsystem.update();
     }
     @Override
     public void execute() {
-        if(!mecanumDriveSubsystem.isBusy()) {
+        if(!hasExecuted) {
             SquareToGyro();
+            hasExecuted = true;
         }
+        MatchConfig.telemetry.update();
+    }
+
+    @Override
+    public boolean isFinished() {
+        return this.gyroSubsystem.getHeading(AngleUnit.DEGREES) < finalDegreeAngle + 1.5 && this.gyroSubsystem.getHeading(AngleUnit.DEGREES) > finalDegreeAngle - 1.5;
     }
 
     @Override
@@ -51,8 +57,5 @@ public class GyroSquareCommand extends CommandBase {
         mecanumDriveSubsystem.stop();
     }
 
-    @Override
-    public boolean isFinished() {
-        return this.gyroSubsystem.getHeading(AngleUnit.DEGREES) < finalDegreeAngle + 1.5 && this.gyroSubsystem.getHeading(AngleUnit.DEGREES) > finalDegreeAngle - 1.5;
-    }
+
 }

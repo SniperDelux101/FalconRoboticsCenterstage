@@ -156,7 +156,7 @@ public class AutonomousCommandTest extends CommandOpMode {
                                 new PlacePixelOnSpikeCommand(intakeMotorSubsystem).withTimeout(2000),
                                 new TrajectorySequenceFollowerCommand(driveBaseSubsystem, phase2)
                         ),
-                        //new GyroSquareCommand(gyroSubsystem, driveBaseSubsystem, getSquareDegree()).withTimeout(1000),
+                        new GyroSquareCommand(gyroSubsystem, driveBaseSubsystem, getSquareDegree()).withTimeout(1000),
                         new StrafeToFindAprilTagCommand(driveBaseSubsystem, visionSubsystem),
                         new FindAprilTagCommand(driveBaseSubsystem, visionSubsystem),
                         new DriveForwardToObjectCommand(driveBaseSubsystem, distanceSensorSubsystem, GyroSubsystem.getInstance(hardwareMap, telemetry), Configuration.BACKDROP_DISTANCE),
@@ -219,13 +219,13 @@ public class AutonomousCommandTest extends CommandOpMode {
 //                .build();
 //    }
     public TrajectorySequence BlueNearLeft_Phase1 (){
-        return driveBaseSubsystem.getDrive().trajectorySequenceBuilder(new Pose2d())
+        return driveBaseSubsystem.trajectorySequenceBuilder(new Pose2d())
                 .splineToConstantHeading(new Vector2d(30, 30), Math.toRadians(270))
                 .turn(Math.toRadians(-90))
                 .build();
     }
     public TrajectorySequence BlueNearLeft_Phase2 (){
-        return driveBaseSubsystem.getDrive().trajectorySequenceBuilder(new Pose2d())
+        return driveBaseSubsystem.trajectorySequenceBuilder(new Pose2d())
                 .lineTo(new Vector2d(40, 30))
                 .lineTo(new Vector2d(40, 36))
                 .splineToConstantHeading(new Vector2d(50,60), Math.toRadians(0))
@@ -234,7 +234,7 @@ public class AutonomousCommandTest extends CommandOpMode {
     }
 
     public TrajectorySequence BlueNearPark () {
-        return driveBaseSubsystem.getDrive().trajectorySequenceBuilder(new Pose2d())
+        return driveBaseSubsystem.trajectorySequenceBuilder(new Pose2d())
                 .splineToConstantHeading(new Vector2d(50,60), Math.toRadians(0))
                 .build();
     }

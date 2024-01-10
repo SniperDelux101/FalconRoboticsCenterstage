@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode.OpModeTests.AutonomousTest;
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.Commands.Autonomous.Alliance;
@@ -63,6 +62,6 @@ public class GyroTest extends OpMode {
 
         telemetry.addData("Error: ", error);
 
-        mecanumDriveSubsystem.turn(Math.toRadians(error));
+        mecanumDriveSubsystem.turnAsync(Math.toRadians(error));
     }
 }

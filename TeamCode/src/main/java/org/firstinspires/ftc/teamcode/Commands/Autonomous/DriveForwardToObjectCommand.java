@@ -44,34 +44,35 @@ public class DriveForwardToObjectCommand extends CommandBase {
     public void execute(){
         MatchConfig.telemetry.addLine("Executing " + this.getClass().getName());
         MatchConfig.telemetry.addData("Average Distance to Object: ", distanceSensorSubsystem.getBackAverageDistance());
-        MatchConfig.telemetry.update();
+
         if(!hasExecuted && distanceSensorSubsystem.getBackAverageDistance() < 36) {
             TrajectorySequence t;
             if (distanceSensorSubsystem.getBackAverageDistance() < this.stopDistance) {
-                t = mecanumDriveSubsystem.getDrive().trajectorySequenceBuilder(mecanumDriveSubsystem.getPoseEstimate())
+                t = mecanumDriveSubsystem.trajectorySequenceBuilder(mecanumDriveSubsystem.getPoseEstimate())
                         .setVelConstraint(new MecanumVelocityConstraint(Configuration.VISION_VEL, Configuration.TRACKWIDTH))
                         .forward(stopDistance - distanceSensorSubsystem.getBackAverageDistance())
                         .build();
             } else {
-                t = mecanumDriveSubsystem.getDrive().trajectorySequenceBuilder(mecanumDriveSubsystem.getPoseEstimate())
+                t = mecanumDriveSubsystem.trajectorySequenceBuilder(mecanumDriveSubsystem.getPoseEstimate())
                         .setVelConstraint(new MecanumVelocityConstraint(Configuration.VISION_VEL, Configuration.TRACKWIDTH))
                         .back(distanceSensorSubsystem.getBackAverageDistance() - stopDistance)
                         .build();
             }
             hasExecuted = true;
-            mecanumDriveSubsystem.getDrive().followTrajectorySequence(t);
+            //mecanumDriveSubsystem.getDrive().followTrajectorySequence(t);
+            mecanumDriveSubsystem.followTrajectorySequenceAsync(t);
         }
         else{
-            MatchConfig.telemetry.addLine("No Tag Found");
+            MatchConfig.telemetry.addLine("Bad distance sensor read shake? " + shakeRobot);
             if(!shakeRobot && !hasExecuted)
             {
                 double turnRadians = Math.toRadians(Configuration.SHAKE_DEGREES);
-                TrajectorySequence ts = mecanumDriveSubsystem.getDrive().trajectorySequenceBuilder(mecanumDriveSubsystem.getPoseEstimate())
+                TrajectorySequence ts = mecanumDriveSubsystem.trajectorySequenceBuilder(mecanumDriveSubsystem.getPoseEstimate())
                         .turn(turnRadians)
                         .turn(-turnRadians*2)
                         .turn(turnRadians)
                         .build();
-                mecanumDriveSubsystem.getDrive().followTrajectorySequence(ts);
+                mecanumDriveSubsystem.followTrajectorySequence(ts);
                 shakeRobot = true;
             }
         }
@@ -80,8 +81,9 @@ public class DriveForwardToObjectCommand extends CommandBase {
 
     @Override
     public boolean isFinished(){
-        double delta = Math.abs(distanceSensorSubsystem.getBackAverageDistance() - stopDistance);
-        MatchConfig.telemetry.addData("Average Distance to Object: ", distanceSensorSubsystem.getBackAverageDistance());
+        double distance = distanceSensorSubsystem.getBackAverageDistance();
+        double delta = Math.abs( distance - stopDistance);
+        MatchConfig.telemetry.addData("Average Distance to Object: ", distance);
         MatchConfig.telemetry.addData("Delta: ", delta);
         MatchConfig.telemetry.update();
         return delta < Configuration.DISTANCE_ERROR_DISTANCE;
@@ -90,6 +92,8 @@ public class DriveForwardToObjectCommand extends CommandBase {
     @Override
     public void end(boolean interrupted){
         this.mecanumDriveSubsystem.stop();
+        if(this.mecanumDriveSubsystem.isBusy())
+            this.mecanumDriveSubsystem.breakFollowing();
     }
 
     private void squareUpRobot(){
