@@ -8,6 +8,7 @@ import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
+import com.arcrobotics.ftclib.command.ParallelRaceGroup;
 import com.arcrobotics.ftclib.command.SelectCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
@@ -21,11 +22,13 @@ import org.firstinspires.ftc.teamcode.Commands.Autonomous.FindAprilTagCommand;
 import org.firstinspires.ftc.teamcode.Commands.Autonomous.Paths.V3.BuildFarPaths;
 import org.firstinspires.ftc.teamcode.Commands.Autonomous.Paths.V3.BuildNearPaths;
 import org.firstinspires.ftc.teamcode.Commands.Autonomous.TeamPropPosition;
+import org.firstinspires.ftc.teamcode.Commands.GyroSquareCommand;
 import org.firstinspires.ftc.teamcode.Commands.MovePixelBoxArmToPositionCommand;
 import org.firstinspires.ftc.teamcode.Commands.PixelBoxArmPosition;
 import org.firstinspires.ftc.teamcode.Commands.PlacePixelOnSpikeCommand;
 import org.firstinspires.ftc.teamcode.Commands.RunLinearSlideAndCenterPixelBoxCommand;
 import org.firstinspires.ftc.teamcode.Commands.StopPixelBoxReset;
+import org.firstinspires.ftc.teamcode.Commands.StrafeToFindAprilTagCommand;
 import org.firstinspires.ftc.teamcode.Commands.TrajectorySequenceFollowerCommand;
 import org.firstinspires.ftc.teamcode.Subsystems.AirplaneLauncherSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.ClimbSubsystem;
@@ -134,12 +137,14 @@ public class AutonomousCommandTest extends CommandOpMode {
             BuildNearPaths.Build(driveBaseSubsystem.getDrive(), teamPropPosition, alliance);
             phase1 = BuildNearPaths.Phase1;
             phase2 = BuildNearPaths.Phase2;
+//            phase_Strafe = BuildNearPaths.Phase_Strafe;
             phase3 = BuildNearPaths.Phase3;
             park = BuildNearPaths.Park;
         } else{
             BuildFarPaths.Build(driveBaseSubsystem.getDrive(), teamPropPosition, alliance);
             phase1 = BuildFarPaths.Phase1;
             phase2 = BuildFarPaths.Phase2;
+//            phase_Strafe = BuildFarPaths.Phase_Strafe;
             phase3 = BuildFarPaths.Phase3;
             park = BuildFarPaths.Park;
         }
@@ -147,18 +152,14 @@ public class AutonomousCommandTest extends CommandOpMode {
         schedule(
                 new SequentialCommandGroup(
                         new TrajectorySequenceFollowerCommand(driveBaseSubsystem, phase1),
-//                        new WaitCommand(2000),
-                        // This places a pixel on the spike
                         new ParallelCommandGroup(
                                 new PlacePixelOnSpikeCommand(intakeMotorSubsystem).withTimeout(2000),
                                 new TrajectorySequenceFollowerCommand(driveBaseSubsystem, phase2)
-
                         ),
-                        new SequentialCommandGroup(
-                                new FindAprilTagCommand(driveBaseSubsystem, visionSubsystem),
-                                new DriveForwardToObjectCommand(driveBaseSubsystem, distanceSensorSubsystem, GyroSubsystem.getInstance(hardwareMap, telemetry), Configuration.BACKDROP_DISTANCE)
-                        ).withTimeout(1000),
-
+                        //new GyroSquareCommand(gyroSubsystem, driveBaseSubsystem, getSquareDegree()).withTimeout(1000),
+                        new StrafeToFindAprilTagCommand(driveBaseSubsystem, visionSubsystem),
+                        new FindAprilTagCommand(driveBaseSubsystem, visionSubsystem),
+                        new DriveForwardToObjectCommand(driveBaseSubsystem, distanceSensorSubsystem, GyroSubsystem.getInstance(hardwareMap, telemetry), Configuration.BACKDROP_DISTANCE),
                         new SequentialCommandGroup(
                                 new RunLinearSlideAndCenterPixelBoxCommand(extakeSubsystem,linearSlideSubsystem, Configuration.LINEAR_SLIDE_POS_AUTO),
                                 new MovePixelBoxArmToPositionCommand(extakeSubsystem, PixelBoxArmPosition.Extake)
@@ -173,13 +174,12 @@ public class AutonomousCommandTest extends CommandOpMode {
                                 this::getTeamPropPosition
                         ),
                         new InstantCommand(extakeSubsystem::pixelEject, extakeSubsystem),
-                        new WaitCommand(2000),
+                        new WaitCommand(1000),
                         new TrajectorySequenceFollowerCommand(driveBaseSubsystem, phase3),
                         new StopPixelBoxReset(extakeSubsystem, linearSlideSubsystem),
                         new TrajectorySequenceFollowerCommand(driveBaseSubsystem, park),
                         new InstantCommand(extakeSubsystem::pixelStop, extakeSubsystem)
-                )
-        );
+        ));
 
         // run the scheduler
         while (!isStopRequested() && opModeIsActive()) {
@@ -190,6 +190,14 @@ public class AutonomousCommandTest extends CommandOpMode {
         reset();
     }
 
+    private double getSquareDegree() {
+        if(MatchConfig.Alliance == Alliance.Blue) {
+            return 270;
+        }
+        else {
+            return 90;
+        }
+    }
     private TeamPropPosition getTeamPropPosition(){
         return teamPropPosition;
     }

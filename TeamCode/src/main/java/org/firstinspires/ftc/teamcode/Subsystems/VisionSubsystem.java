@@ -49,6 +49,29 @@ public class VisionSubsystem extends FalconSubsystemBase {
     private int tensorflowVisionPortal_ID, apriltagVisionPortal_ID;
 
     VisionPortal.Builder visionPortalBuilder;
+
+    public int GetAprilTagID()
+    {
+        if(MatchConfig.Alliance == Alliance.Red) {
+            return 5;
+//            if(MatchConfig.TeamPropPosition == TeamPropPosition.Left)
+//                return 4;
+//            else if( MatchConfig.TeamPropPosition == TeamPropPosition.Center)
+//                return 5;
+//            else
+//                return 6;
+        }
+        else {
+            return 2;
+//            if(MatchConfig.TeamPropPosition == TeamPropPosition.Left)
+//                return 1;
+//            else if( MatchConfig.TeamPropPosition == TeamPropPosition.Center)
+//                return 2;
+//            else
+//                return 3;
+        }
+    }
+
     public enum AprilTagID {
         BLUE_BACKDROP_LEFT_TAG(1),
         BLUE_BACKDROP_CENTER_TAG(2),
@@ -284,6 +307,10 @@ public class VisionSubsystem extends FalconSubsystemBase {
 
         telemetry.addData("Team prop position :", position);
         return position;
+    }
+
+    public AprilTagDetection findAprilTag() {
+        return findAprilTag(GetAprilTagID());
     }
 
     public AprilTagDetection findAprilTag(int tagID) {

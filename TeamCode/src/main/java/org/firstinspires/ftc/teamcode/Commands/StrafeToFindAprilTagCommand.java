@@ -1,0 +1,87 @@
+package org.firstinspires.ftc.teamcode.Commands;
+
+import com.acmerobotics.roadrunner.trajectory.Trajectory;
+import com.acmerobotics.roadrunner.trajectory.constraints.MecanumVelocityConstraint;
+import com.arcrobotics.ftclib.command.CommandBase;
+
+import org.firstinspires.ftc.teamcode.Commands.Autonomous.Alliance;
+import org.firstinspires.ftc.teamcode.Commands.Autonomous.FindAprilTagCommand;
+import org.firstinspires.ftc.teamcode.Subsystems.MecanumDriveSubsystem;
+import org.firstinspires.ftc.teamcode.Subsystems.VisionSubsystem;
+import org.firstinspires.ftc.teamcode.Subsystems.drive.TrajectorySequence.TrajectorySequence;
+import org.firstinspires.ftc.teamcode.Utilities.Configuration;
+import org.firstinspires.ftc.teamcode.Utilities.MatchConfig;
+import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
+
+public class StrafeToFindAprilTagCommand extends CommandBase {
+
+    private final MecanumDriveSubsystem mecanumDriveSubsystem;
+    private final VisionSubsystem visionSubsystem;
+    private TrajectorySequence sequence;
+    private boolean isFinished;
+    private boolean hasExecuted;
+
+    public StrafeToFindAprilTagCommand(MecanumDriveSubsystem mDrive, VisionSubsystem vSystem) {
+        mecanumDriveSubsystem = mDrive;
+        visionSubsystem = vSystem;
+        isFinished = false;
+        hasExecuted = false;
+        addRequirements(mecanumDriveSubsystem, visionSubsystem);
+    }
+
+    @Override
+    public void initialize() {
+
+        visionSubsystem.resumeAprilStreaming();
+
+        if(MatchConfig.Alliance == Alliance.Blue) {
+            sequence = mecanumDriveSubsystem.getDrive().trajectorySequenceBuilder(mecanumDriveSubsystem.getPoseEstimate())
+                    .setVelConstraint(new MecanumVelocityConstraint(Configuration.AUTO_VEL, Configuration.TRACKWIDTH))
+                    .strafeRight(Configuration.VISION_STRAFE_DIS)
+                    .build();
+        }
+        else {
+            sequence = mecanumDriveSubsystem.getDrive().trajectorySequenceBuilder(mecanumDriveSubsystem.getPoseEstimate())
+                    .setVelConstraint(new MecanumVelocityConstraint(Configuration.AUTO_VEL, Configuration.TRACKWIDTH))
+                    .strafeLeft(Configuration.VISION_STRAFE_DIS)
+                    .build();
+        }
+    }
+
+    @Override
+    public void execute() {
+        MatchConfig.telemetry.addLine("Executing StrafeToFindAprilTagCommand");
+        MatchConfig.telemetry.addLine("FOUND Tag " + visionSubsystem.GetAprilTagID());
+
+        if(hasExecuted) {
+            // Look for AprilTag
+            AprilTagDetection detection = this.visionSubsystem.findAprilTag();
+            if(detection != null) {
+                MatchConfig.telemetry.addLine("FOUND Tag " + visionSubsystem.GetAprilTagID());
+                mecanumDriveSubsystem.stop();
+                mecanumDriveSubsystem.update();
+                sequence = mecanumDriveSubsystem.getDrive().trajectorySequenceBuilder(mecanumDriveSubsystem.getPoseEstimate())
+                        .setVelConstraint(new MecanumVelocityConstraint(Configuration.AUTO_VEL, Configuration.TRACKWIDTH))
+                        .strafeLeft(2)
+                        .build();
+                mecanumDriveSubsystem.getDrive().followTrajectorySequence(sequence);
+                isFinished = true;
+            }
+        }
+        else {
+            // Tell System to strafe
+            mecanumDriveSubsystem.getDrive().followTrajectorySequence(sequence);
+            hasExecuted = true;
+        }
+    }
+
+    @Override
+    public boolean isFinished() {
+        return isFinished;
+    }
+    @Override
+    public void end(boolean interrupted) {
+        //mecanumDriveSubsystem.stop();
+        visionSubsystem.stopAprilStreaming();
+    }
+}

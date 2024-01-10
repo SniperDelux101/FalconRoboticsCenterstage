@@ -192,8 +192,9 @@ public class Configuration {
     public static int VISION_VEL = 10;
 
     //*****************************************************************
-    public static double DISTANCE_ERROR_DISTANCE = 0.1; //inches
+    public static double DISTANCE_ERROR_DISTANCE = 0.75; //inches
     public static double BACKDROP_DISTANCE = 3.0;
 
     public static double SHAKE_DEGREES = 5;
+    public static double VISION_STRAFE_DIS = 20;
 }

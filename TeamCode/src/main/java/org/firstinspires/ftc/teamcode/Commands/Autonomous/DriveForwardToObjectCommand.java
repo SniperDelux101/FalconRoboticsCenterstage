@@ -42,18 +42,17 @@ public class DriveForwardToObjectCommand extends CommandBase {
 
     @Override
     public void execute(){
+        MatchConfig.telemetry.addLine("Executing " + this.getClass().getName());
         MatchConfig.telemetry.addData("Average Distance to Object: ", distanceSensorSubsystem.getBackAverageDistance());
         MatchConfig.telemetry.update();
-        if(!hasExecuted && distanceSensorSubsystem.getBackAverageDistance() < 36 && !mecanumDriveSubsystem.isBusy()) {
+        if(!hasExecuted && distanceSensorSubsystem.getBackAverageDistance() < 36) {
             TrajectorySequence t;
             if (distanceSensorSubsystem.getBackAverageDistance() < this.stopDistance) {
-                //this.mecanumDriveSubsystem.drive(X, 0, 0, POWER);
                 t = mecanumDriveSubsystem.getDrive().trajectorySequenceBuilder(mecanumDriveSubsystem.getPoseEstimate())
                         .setVelConstraint(new MecanumVelocityConstraint(Configuration.VISION_VEL, Configuration.TRACKWIDTH))
                         .forward(stopDistance - distanceSensorSubsystem.getBackAverageDistance())
                         .build();
             } else {
-                //this.mecanumDriveSubsystem.drive(-X, 0, 0, POWER);
                 t = mecanumDriveSubsystem.getDrive().trajectorySequenceBuilder(mecanumDriveSubsystem.getPoseEstimate())
                         .setVelConstraint(new MecanumVelocityConstraint(Configuration.VISION_VEL, Configuration.TRACKWIDTH))
                         .back(distanceSensorSubsystem.getBackAverageDistance() - stopDistance)
@@ -63,6 +62,7 @@ public class DriveForwardToObjectCommand extends CommandBase {
             mecanumDriveSubsystem.getDrive().followTrajectorySequence(t);
         }
         else{
+            MatchConfig.telemetry.addLine("No Tag Found");
             if(!shakeRobot && !hasExecuted)
             {
                 double turnRadians = Math.toRadians(Configuration.SHAKE_DEGREES);
@@ -75,6 +75,7 @@ public class DriveForwardToObjectCommand extends CommandBase {
                 shakeRobot = true;
             }
         }
+        MatchConfig.telemetry.update();
     }
 
     @Override
@@ -117,19 +118,6 @@ public class DriveForwardToObjectCommand extends CommandBase {
             diff = Math.abs(a - b);
         }
         mecanumDriveSubsystem.stop();
-    }
-
-    private void SquareToGyro(){
-        double currentHeading = this.gyroSubsystem.getHeading(AngleUnit.DEGREES);
-        double error;
-        if( MatchConfig.Alliance == Alliance.Red){
-            error = 90 - currentHeading;
-
-        } else {
-            error = currentHeading - 270;
-        }
-
-        mecanumDriveSubsystem.turn(Math.toRadians(error));
     }
 
 }

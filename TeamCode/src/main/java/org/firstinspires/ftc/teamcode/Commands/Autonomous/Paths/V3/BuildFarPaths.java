@@ -45,7 +45,7 @@ public class BuildFarPaths {
     private static class Blue {
         public static void CenterPhases() {
             Phase1 = drive.trajectorySequenceBuilder(Blue_Far_Start_Pose)
-                    .lineTo(new Vector2d(BF_Center_Spike_C1, BF_Center_Spike_C2))
+                    .lineTo(new Vector2d(-36, 13))
                     .turn(BF_Center_Spike_H1)
                     .build();
             Center_Phase2();
@@ -53,36 +53,43 @@ public class BuildFarPaths {
         public static void Center_Phase2() {
             Phase2 = drive.trajectorySequenceBuilder(Phase1.end())
                     .setVelConstraint(new MecanumVelocityConstraint(Configuration.AUTO_VEL, Configuration.TRACKWIDTH))
-                    .lineToConstantHeading(new Vector2d(BF_Center_Ph2_C1, BF_Center_Ph2_C2))
-                    .splineTo(new Vector2d(BF_Center_Ph2_C3, BF_Center_Ph2_C4), BF_Center_Ph2_H1)
-                    .lineToConstantHeading(new Vector2d(BF_Center_Ph2_C5, BF_Center_Ph2_C6))
-                    .splineToConstantHeading(new Vector2d(BF_Center_Ph2_C7,BF_Center_Ph2_C8), BF_Center_Ph2_H2)
+                    .lineToConstantHeading(new Vector2d(-36, 8))
+                    .splineTo(new Vector2d(-20, 8), BF_Center_Ph2_H1)
+                    .lineToConstantHeading(new Vector2d(30, 8))
+                    .splineToConstantHeading(new Vector2d(40,Y_Mod), BF_Center_Ph2_H2)
                     .build();
             Center_Phase3();
         }
+//        public static void Center_Strafe() {
+//            Phase_Strafe = drive.trajectorySequenceBuilder(Phase2.end())
+//                    .setVelConstraint(new MecanumVelocityConstraint(Configuration.AUTO_VEL, Configuration.TRACKWIDTH))
+//                    .strafeLeft(Strafe_Distance)
+//                    .build();
+//            Center_Phase3();
+//        }
         public static void Center_Phase3() {
             Phase3 = drive.trajectorySequenceBuilder(Phase2.end())
                     .setVelConstraint(new MecanumVelocityConstraint(Configuration.AUTO_VEL, Configuration.TRACKWIDTH))
-                    .lineToConstantHeading(new Vector2d(BF_Center_Ph3_C1, BF_Center_Ph3_C2))
+                    .lineToConstantHeading(new Vector2d(40, 31))
                     .build();
             Center_Park();
         }
         public static void Center_Park() {
             Park = drive.trajectorySequenceBuilder(Phase2.end())
                     .setVelConstraint(new MecanumVelocityConstraint(Configuration.AUTO_VEL, Configuration.TRACKWIDTH))
-                    .lineToConstantHeading(new Vector2d(BF_Center_Park_C1, BF_Center_Park_C2))
-                    .splineToConstantHeading(new Vector2d(BF_Center_Park_C3, BF_Center_Park_C4), BF_Center_Park_H1)
+                    .lineToConstantHeading(new Vector2d(40, 14))
+                    .splineToConstantHeading(new Vector2d(60, 3), BF_Center_Park_H1)
                     .build();
         }
         public static void Left_Right_Phases(TeamPropPosition position) {
             if (position == TeamPropPosition.Left) {
                 Phase1 = drive.trajectorySequenceBuilder(Blue_Far_Start_Pose)
-                        .splineTo(new Vector2d(BF_Left_Spike_C1, BF_Left_Spike_C2), BF_Left_Spike_Turn1)
+                        .splineTo(new Vector2d(-33, 28), Math.toRadians(0))
                         .build();
             } else {
                 Phase1 = drive.trajectorySequenceBuilder(Blue_Far_Start_Pose)
-                        .lineTo(new Vector2d(BF_Right_Spike_C1, BF_Right_Spike_C2))
-                        .turn(BF_Right_Spike_H1)
+                        .lineTo(new Vector2d(-42, 16))
+                        .turn(Math.toRadians(180))
                         .build();
             }
             Left_Right_Phase2(position);
@@ -91,32 +98,40 @@ public class BuildFarPaths {
             if(position == TeamPropPosition.Left){
                 Phase2 = drive.trajectorySequenceBuilder(Phase1.end())
                         .setVelConstraint(new MecanumVelocityConstraint(Configuration.AUTO_VEL, Configuration.TRACKWIDTH))
-                        .lineTo(new Vector2d(BF_Left_Ph2_C1, BF_Left_Ph2_C2))
-                        .splineTo(new Vector2d(BF_Left_Ph2_C3, BF_Left_Ph2_C4), BF_Left_Ph2_H1)
-                        .lineToConstantHeading(new Vector2d(BF_Left_Ph2_C5, BF_Left_Ph2_C6))
-                        .splineToConstantHeading(new Vector2d(BF_Left_Ph2_C7, BF_Left_Ph2_C8), BF_Left_Ph2_H2)
+                        .lineTo(new Vector2d(-40, 28))
+                        .splineTo(new Vector2d(-40, 2), Math.toRadians(0))
+                        .lineToConstantHeading(new Vector2d(30, 2))
+                        .splineToConstantHeading(new Vector2d(40, Y_Mod), Math.toRadians(0))
                         .build();
             } else {
                 Phase2 = drive.trajectorySequenceBuilder(Phase1.end())
                         .setVelConstraint(new MecanumVelocityConstraint(Configuration.AUTO_VEL, Configuration.TRACKWIDTH))
-                        .lineToConstantHeading(new Vector2d(BF_Right_Ph2_C1, BF_Right_Ph2_C2))
-                        .turn(BF_Right_Ph2_H1)
-                        .lineToConstantHeading(new Vector2d(BF_Right_Ph2_C3, BF_Right_Ph2_C4))
-                        .splineToConstantHeading(new Vector2d(BF_Right_Ph2_C5,BF_Right_Ph2_C6), BF_Right_Ph2_H2)
+                        .lineToConstantHeading(new Vector2d(-46, 6))
+                        .turn(Math.toRadians(90))
+                        .lineToConstantHeading(new Vector2d(30, 6))
+                        .splineToConstantHeading(new Vector2d(40,Y_Mod), Math.toRadians(0))
                         .build();
             }
             Left_Right_Phase3(position);
         }
+
+//        public static void Left_Right_Strafe(TeamPropPosition position) {
+//            Phase_Strafe = drive.trajectorySequenceBuilder(Phase2.end())
+//                    .setVelConstraint(new MecanumVelocityConstraint(Configuration.AUTO_VEL, Configuration.TRACKWIDTH))
+//                    .strafeLeft(Strafe_Distance)
+//                    .build();
+//            Left_Right_Phase3(position);
+//        }
         private static void Left_Right_Phase3(TeamPropPosition position){
             if(position == TeamPropPosition.Left){
                 Phase3 = drive.trajectorySequenceBuilder(Phase2.end())
                         .setVelConstraint(new MecanumVelocityConstraint(Configuration.AUTO_VEL, Configuration.TRACKWIDTH))
-                        .lineToConstantHeading(new Vector2d(BF_Left_Ph3_C1, BF_Left_Ph3_C2))
+                        .lineToConstantHeading(new Vector2d(40, 42))
                         .build();
             } else {
                 Phase3 = drive.trajectorySequenceBuilder(Phase2.end())
                         .setVelConstraint(new MecanumVelocityConstraint(Configuration.AUTO_VEL, Configuration.TRACKWIDTH))
-                        .lineToConstantHeading(new Vector2d(BF_Right_Ph3_C1, BF_Right_Ph3_C2))
+                        .lineToConstantHeading(new Vector2d(40, 28))
                         .build();
             }
             Left_Right_Park(position);
@@ -125,14 +140,14 @@ public class BuildFarPaths {
             if(position == TeamPropPosition.Left){
                 Park = drive.trajectorySequenceBuilder(Phase2.end())
                         .setVelConstraint(new MecanumVelocityConstraint(Configuration.AUTO_VEL, Configuration.TRACKWIDTH))
-                        .lineToConstantHeading(new Vector2d(BF_Left_Park_C1, BF_Left_Park_C2))
-                        .splineToConstantHeading(new Vector2d(BF_Left_Park_C3, BF_Left_Park_C4), BF_Left_Park_H1)
+                        .lineToConstantHeading(new Vector2d(40, 14))
+                        .splineToConstantHeading(new Vector2d(60, 7), Math.toRadians(0))
                         .build();
             } else {
                 Park = drive.trajectorySequenceBuilder(Phase2.end())
                         .setVelConstraint(new MecanumVelocityConstraint(Configuration.AUTO_VEL, Configuration.TRACKWIDTH))
-                        .lineToConstantHeading(new Vector2d(BF_Right_Park_C1, BF_Right_Park_C2))
-                        .splineToConstantHeading(new Vector2d(BF_Right_Park_C3, BF_Right_Park_C4), BF_Right_Park_H1)
+                        .lineToConstantHeading(new Vector2d(40, 14))
+                        .splineToConstantHeading(new Vector2d(60, 7), Math.toRadians(0))
                         .build();
             }
         }
@@ -141,7 +156,7 @@ public class BuildFarPaths {
     private static class Red {
         public static void CenterPhases() {
             Phase1 = drive.trajectorySequenceBuilder(Red_Far_Start_Pose)
-                    .lineTo(new Vector2d(RF_Center_Spike_C1, RF_Center_Spike_C2))
+                    .lineTo(new Vector2d(-36, -17))
                     .turn(RF_Center_Spike_H1)
                     .build();
             Center_Phase2();
@@ -149,37 +164,44 @@ public class BuildFarPaths {
         public static void Center_Phase2() {
             Phase2 = drive.trajectorySequenceBuilder(Phase1.end())
                     .setVelConstraint(new MecanumVelocityConstraint(Configuration.AUTO_VEL, Configuration.TRACKWIDTH))
-                    .lineToConstantHeading(new Vector2d(RF_Center_Ph2_C1, RF_Center_Ph2_C2))
-                    .splineTo(new Vector2d(RF_Center_Ph2_C3, RF_Center_Ph2_C4), RF_Center_Ph2_H1)
-                    .lineToConstantHeading(new Vector2d(RF_Center_Ph2_C5, RF_Center_Ph2_C6))
-                    .splineToConstantHeading(new Vector2d(RF_Center_Ph2_C7,RF_Center_Ph2_C8), RF_Center_Ph2_H2)
+                    .lineToConstantHeading(new Vector2d(-36, -8))
+                    .splineTo(new Vector2d(-20, -8), RF_Center_Ph2_H1)
+                    .lineToConstantHeading(new Vector2d(30, -8))
+                    .splineToConstantHeading(new Vector2d(40,-Y_Mod), RF_Center_Ph2_H2)
                     .build();
             Center_Phase3();
         }
+//        public static void Center_Strafe() {
+//            Phase_Strafe = drive.trajectorySequenceBuilder(Phase2.end())
+//                    .setVelConstraint(new MecanumVelocityConstraint(Configuration.AUTO_VEL, Configuration.TRACKWIDTH))
+//                    .strafeLeft(Strafe_Distance)
+//                    .build();
+//            Center_Phase3();
+//        }
         public static void Center_Phase3() {
             Phase3 = drive.trajectorySequenceBuilder(Phase2.end())
                     .setVelConstraint(new MecanumVelocityConstraint(Configuration.AUTO_VEL, Configuration.TRACKWIDTH))
-                    .lineToConstantHeading(new Vector2d(RF_Center_Ph3_C1, RF_Center_Ph3_C2))
+                    .lineToConstantHeading(new Vector2d(40, -35))
                     .build();
             Center_Park();
         }
         public static void Center_Park() {
             Park = drive.trajectorySequenceBuilder(Phase2.end())
                     .setVelConstraint(new MecanumVelocityConstraint(Configuration.AUTO_VEL, Configuration.TRACKWIDTH))
-                    .lineToConstantHeading(new Vector2d(RF_Center_Park_C1, RF_Center_Park_C2))
-                    .splineToConstantHeading(new Vector2d(RF_Center_Park_C3, RF_Center_Park_C4), RF_Center_Park_H1)
+                    .lineToConstantHeading(new Vector2d(40, -14))
+                    .splineToConstantHeading(new Vector2d(50, -12), RF_Center_Park_H1)
                     .build();
         }
         public static void Left_Right_Phases(TeamPropPosition position) {
             if (position == TeamPropPosition.Left) {
                 Phase1 = drive.trajectorySequenceBuilder(Red_Far_Start_Pose)
-                        .lineTo(new Vector2d(RF_Left_Spike_C1, RF_Left_Spike_C2))
-                        .turn(RF_Left_Spike_Turn1)
+                        .lineTo(new Vector2d(-47, -18))
+                        .turn(Math.toRadians(180))
                         .build();
             } else {
                 //RIGHT
                 Phase1 = drive.trajectorySequenceBuilder(Red_Far_Start_Pose)
-                        .splineTo(new Vector2d(RF_Right_Spike_C1, RF_Right_Spike_C2), RF_Right_Spike_H1)
+                        .splineTo(new Vector2d(-32, -30), Math.toRadians(0))
                         .build();
             }
             Left_Right_Phase2(position);
@@ -188,35 +210,42 @@ public class BuildFarPaths {
             if(position == TeamPropPosition.Left){
                 Phase2 = drive.trajectorySequenceBuilder(Phase1.end())
                         .setVelConstraint(new MecanumVelocityConstraint(Configuration.AUTO_VEL, Configuration.TRACKWIDTH))
-                        .lineTo(new Vector2d(RF_Left_Ph2_C1, RF_Left_Ph2_C2))
-                        .turn(RF_Left_Ph2_H1)
-                        .lineToConstantHeading(new Vector2d(RF_Left_Ph2_C3, RF_Left_Ph2_C4))
-                        .splineToConstantHeading(new Vector2d(RF_Left_Ph2_C5, RF_Left_Ph2_C6), RF_Left_Ph2_H2)
-                        .lineToConstantHeading(new Vector2d(RF_Left_Ph2_C7, RF_Left_Ph2_C8))
-                        .splineToConstantHeading(new Vector2d(RF_Left_Ph2_C9,RF_Left_Ph2_C10), RF_Left_Ph2_H3)
+                        .lineTo(new Vector2d(-47, -10))
+                        .turn(Math.toRadians(-90))
+                        .lineToConstantHeading(new Vector2d(-34, -10))
+                        .splineToConstantHeading(new Vector2d(-20, -10), Math.toRadians(0))
+                        .lineToConstantHeading(new Vector2d(30, -10))
+                        .splineToConstantHeading(new Vector2d(40,-Y_Mod), Math.toRadians(0))
                         .build();
             } else {
                 //Right
                 Phase2 = drive.trajectorySequenceBuilder(Phase1.end())
                         .setVelConstraint(new MecanumVelocityConstraint(Configuration.AUTO_VEL, Configuration.TRACKWIDTH))
-                        .lineTo(new Vector2d(RF_Right_Ph2_C1, RF_Right_Ph2_C2))
-                        .splineTo(new Vector2d(RF_Right_Ph2_C3, RF_Right_Ph2_C4), RF_Right_Ph2_H1)
-                        .lineToConstantHeading(new Vector2d(RF_Right_Ph2_C5, RF_Right_Ph2_C6))
-                        .splineToConstantHeading(new Vector2d(RF_Right_Ph2_C7, RF_Right_Ph2_C8), RF_Right_Ph2_H2)
+                        .lineTo(new Vector2d(-40, -30))
+                        .splineTo(new Vector2d(-40, -12), RF_Right_Ph2_H1)
+                        .lineToConstantHeading(new Vector2d(30, -12))
+                        .splineToConstantHeading(new Vector2d(40,-Y_Mod), RF_Right_Ph2_H2)
                         .build();
                 Left_Right_Phase3(position);
             }
         }
+//        public static void Left_Right_Strafe(TeamPropPosition position) {
+//            Phase_Strafe = drive.trajectorySequenceBuilder(Phase2.end())
+//                    .setVelConstraint(new MecanumVelocityConstraint(Configuration.AUTO_VEL, Configuration.TRACKWIDTH))
+//                    .strafeRight(Strafe_Distance)
+//                    .build();
+//            Left_Right_Phase3(position);
+//        }
         private static void Left_Right_Phase3(TeamPropPosition position){
             if(position == TeamPropPosition.Left){
                 Phase3 = drive.trajectorySequenceBuilder(Phase2.end())
                         .setVelConstraint(new MecanumVelocityConstraint(Configuration.AUTO_VEL, Configuration.TRACKWIDTH))
-                        .lineToConstantHeading(new Vector2d(RF_Left_Ph3_C1, RF_Left_Ph3_C2))
+                        .lineToConstantHeading(new Vector2d(40, -30))
                         .build();
             } else {
                 Phase3 = drive.trajectorySequenceBuilder(Phase2.end())
                         .setVelConstraint(new MecanumVelocityConstraint(Configuration.AUTO_VEL, Configuration.TRACKWIDTH))
-                        .lineToConstantHeading(new Vector2d(RF_Right_Ph3_C1, RF_Right_Ph3_C2))
+                        .lineToConstantHeading(new Vector2d(40, -40))
                         .build();
             }
             Left_Right_Park(position);
@@ -225,15 +254,15 @@ public class BuildFarPaths {
             if(position == TeamPropPosition.Left){
                 Phase2 = drive.trajectorySequenceBuilder(Phase3.end())
                         .setVelConstraint(new MecanumVelocityConstraint(Configuration.AUTO_VEL, Configuration.TRACKWIDTH))
-                        .lineToConstantHeading(new Vector2d(RF_Left_Park_C1, RF_Left_Park_C2))
-                        .splineToConstantHeading(new Vector2d(RF_Left_Park_C3, -RF_Left_Park_C4), RF_Left_Park_H1)
+                        .lineToConstantHeading(new Vector2d(40, -14))
+                        .splineToConstantHeading(new Vector2d(50, -12), Math.toRadians(0))
                         .build();
             } else {
                 //Right
                 Phase2 = drive.trajectorySequenceBuilder(Phase3.end())
                         .setVelConstraint(new MecanumVelocityConstraint(Configuration.AUTO_VEL, Configuration.TRACKWIDTH))
-                        .lineToConstantHeading(new Vector2d(RF_Right_Park_C1, RF_Right_Park_C2))
-                        .splineToConstantHeading(new Vector2d(RF_Right_Park_C3, RF_Right_Park_C4), RF_Right_Park_H1)
+                        .lineToConstantHeading(new Vector2d(40, -14))
+                        .splineToConstantHeading(new Vector2d(50, -12), RF_Right_Park_H1)
                         .build();
             }
         }
