@@ -16,18 +16,23 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.Commands.Autonomous.Alliance;
 import org.firstinspires.ftc.teamcode.Commands.Autonomous.AutonomousStartLocation;
+import org.firstinspires.ftc.teamcode.Commands.Autonomous.DriveForwardToObjectCommand;
+import org.firstinspires.ftc.teamcode.Commands.Autonomous.FindAprilTagCommand;
 import org.firstinspires.ftc.teamcode.Commands.Autonomous.Paths.V3.BuildFarPaths;
 import org.firstinspires.ftc.teamcode.Commands.Autonomous.Paths.V3.BuildNearPaths;
 import org.firstinspires.ftc.teamcode.Commands.Autonomous.TeamPropPosition;
+import org.firstinspires.ftc.teamcode.Commands.GyroSquareCommand;
 import org.firstinspires.ftc.teamcode.Commands.MovePixelBoxArmToPositionCommand;
 import org.firstinspires.ftc.teamcode.Commands.PixelBoxArmPosition;
 import org.firstinspires.ftc.teamcode.Commands.PlacePixelOnSpikeCommand;
 import org.firstinspires.ftc.teamcode.Commands.RunLinearSlideAndCenterPixelBoxCommand;
 import org.firstinspires.ftc.teamcode.Commands.StopPixelBoxReset;
+import org.firstinspires.ftc.teamcode.Commands.StrafeToFindAprilTagCommand;
 import org.firstinspires.ftc.teamcode.Commands.TrajectoryFollowerCommand;
 import org.firstinspires.ftc.teamcode.Commands.TrajectorySequenceFollowerCommand;
 import org.firstinspires.ftc.teamcode.Subsystems.AirplaneLauncherSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.ClimbSubsystem;
+import org.firstinspires.ftc.teamcode.Subsystems.DistanceSensorSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.ExtakeSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.GyroSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.IntakeMotorSubsystem;
@@ -55,15 +60,12 @@ public class Autonomous_V3 extends CommandOpMode {
     private IntakeMotorSubsystem intakeMotorSubsystem;
     private VisionSubsystem visionSubsystem;
     private GyroSubsystem gyroSubsystem;
+    private DistanceSensorSubsystem distanceSensorSubsystem;
     ///endregion
 
     public static Alliance alliance = Alliance.Blue;
     public static AutonomousStartLocation startLocation = AutonomousStartLocation.Near;
     public static TeamPropPosition teamPropPosition = TeamPropPosition.Center;
-
-    public static boolean runAutonomous = true;
-    public static boolean useVision = true;
-
 
     @Override
     public void initialize() {
@@ -78,16 +80,15 @@ public class Autonomous_V3 extends CommandOpMode {
         linearSlideSubsystem = new LinearSlideSubsystem(hardwareMap, telemetry);
         intakeMotorSubsystem = new IntakeMotorSubsystem(hardwareMap, telemetry);
         visionSubsystem = new VisionSubsystem(hardwareMap, telemetry, true);
+        distanceSensorSubsystem = new DistanceSensorSubsystem(hardwareMap, telemetry);
 
-        register(driveBaseSubsystem, airplaneLauncherSubsystem, climbSubsystem, extakeSubsystem, linearSlideSubsystem, odometryControlSubsystem, intakeMotorSubsystem, visionSubsystem);
+        register(driveBaseSubsystem, airplaneLauncherSubsystem, climbSubsystem, extakeSubsystem, linearSlideSubsystem, odometryControlSubsystem,
+                intakeMotorSubsystem, visionSubsystem, distanceSensorSubsystem);
     }
 
     @Override
     public void runOpMode() throws InterruptedException {
         initialize();
-
-
-        boolean readVision = true;
 
         while(this.opModeInInit()) {
             telemetry.addLine("GamePad1 D-PadUp = Start Location Far");
@@ -103,14 +104,13 @@ public class Autonomous_V3 extends CommandOpMode {
                 startLocation = AutonomousStartLocation.Far;
             else if (gamepad1.dpad_down)
                 startLocation = AutonomousStartLocation.Near;
-            if(useVision)
-                teamPropPosition = visionSubsystem.getTeamPropPosition();
+
+            teamPropPosition = visionSubsystem.getTeamPropPosition();
 
             MatchConfig.Alliance = alliance;
             MatchConfig.AutonomousStartLocation = startLocation;
             MatchConfig.TeamPropPosition = teamPropPosition;
 
-            telemetry.addData("Run atonomous ; " , runAutonomous);
             telemetry.addData("Team Prop Position: ", teamPropPosition);
             telemetry.addData("Alliance: ", alliance);
             telemetry.addData("Auto Start Location: ", startLocation);
@@ -119,8 +119,7 @@ public class Autonomous_V3 extends CommandOpMode {
 
         waitForStart();
 
-        if(useVision)
-            visionSubsystem.stopTensorStreaming();
+        visionSubsystem.stopTensorStreaming();
         TrajectorySequence phase1, phase2, phase3, park;
 
         if(startLocation == AutonomousStartLocation.Near) {
@@ -140,11 +139,14 @@ public class Autonomous_V3 extends CommandOpMode {
         schedule(
                 new SequentialCommandGroup(
                         new TrajectorySequenceFollowerCommand(driveBaseSubsystem, phase1),
-                        // This places a pixel on the spike
                         new ParallelCommandGroup(
                                 new PlacePixelOnSpikeCommand(intakeMotorSubsystem).withTimeout(2000),
                                 new TrajectorySequenceFollowerCommand(driveBaseSubsystem, phase2)
                         ),
+                        new GyroSquareCommand(gyroSubsystem, driveBaseSubsystem, getSquareDegree()).withTimeout(1000),
+                        new StrafeToFindAprilTagCommand(driveBaseSubsystem, visionSubsystem),
+                        new FindAprilTagCommand(driveBaseSubsystem, visionSubsystem),
+                        new DriveForwardToObjectCommand(driveBaseSubsystem, distanceSensorSubsystem, GyroSubsystem.getInstance(hardwareMap, telemetry), Configuration.BACKDROP_DISTANCE),
                         new SequentialCommandGroup(
                                 new RunLinearSlideAndCenterPixelBoxCommand(extakeSubsystem,linearSlideSubsystem, Configuration.LINEAR_SLIDE_POS_AUTO),
                                 new MovePixelBoxArmToPositionCommand(extakeSubsystem, PixelBoxArmPosition.Extake)
@@ -159,13 +161,12 @@ public class Autonomous_V3 extends CommandOpMode {
                                 this::getTeamPropPosition
                         ),
                         new InstantCommand(extakeSubsystem::pixelEject, extakeSubsystem),
-                        new WaitCommand(2000),
+                        new WaitCommand(1000),
                         new TrajectorySequenceFollowerCommand(driveBaseSubsystem, phase3),
                         new StopPixelBoxReset(extakeSubsystem, linearSlideSubsystem),
                         new TrajectorySequenceFollowerCommand(driveBaseSubsystem, park),
                         new InstantCommand(extakeSubsystem::pixelStop, extakeSubsystem)
-                )
-        );
+                ));
 
         // run the scheduler
         while (!isStopRequested() && opModeIsActive()) {
@@ -176,7 +177,14 @@ public class Autonomous_V3 extends CommandOpMode {
         visionSubsystem.stopAllVisionPortalStreaming();
         reset();
     }
-
+    private double getSquareDegree() {
+        if(MatchConfig.Alliance == Alliance.Blue) {
+            return 270;
+        }
+        else {
+            return 90;
+        }
+    }
     private TeamPropPosition getTeamPropPosition(){
         return teamPropPosition;
     }
