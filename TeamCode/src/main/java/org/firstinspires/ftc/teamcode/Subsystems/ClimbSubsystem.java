@@ -1,11 +1,14 @@
 package org.firstinspires.ftc.teamcode.Subsystems;
 
 import com.arcrobotics.ftclib.command.SubsystemBase;
+import com.qualcomm.ftccommon.SoundPlayer;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Utilities.Configuration;
+
+import java.io.File;
 
 public class ClimbSubsystem extends FalconSubsystemBase {
     /**
@@ -14,9 +17,12 @@ public class ClimbSubsystem extends FalconSubsystemBase {
 
     public final DcMotor climbMotorLeft;
     public final DcMotor climbMotorRight;
+    private HardwareMap hardwareMap;
+    private File soundEffect = new File("/sdcard/FIRST/blocks/sound/the-eagle-has-landed-101681.mp3");
 
     public ClimbSubsystem(HardwareMap hMap, Telemetry tel) {
         super(tel);
+        hardwareMap = hMap;
         climbMotorLeft = hMap.dcMotor.get("Climb_Motor_Left");
         climbMotorRight = hMap.dcMotor.get("Climb_Motor_Right");
 
@@ -28,6 +34,9 @@ public class ClimbSubsystem extends FalconSubsystemBase {
      *
      */
     public void ClimbOut() {
+        if(soundEffect.exists()){
+            SoundPlayer.getInstance().startPlaying(hardwareMap.appContext, soundEffect);
+        }
         runMotorsToPosition(Configuration.CLIMB_OUT);
     }
 
