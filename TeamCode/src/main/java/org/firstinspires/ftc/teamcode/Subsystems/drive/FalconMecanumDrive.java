@@ -62,7 +62,7 @@ public class FalconMecanumDrive extends MecanumDrive {
 //    public static double VY_WEIGHT = 1;
 //    public static double OMEGA_WEIGHT = 1;
 
-    private TrajectorySequenceRunner trajectorySequenceRunner;
+    private TrajectorySequenceRunnerCancelable trajectorySequenceRunner;
 
     private static final TrajectoryVelocityConstraint VEL_CONSTRAINT = getVelocityConstraint(MAX_VEL, MAX_ANG_VEL, TRACKWIDTH);
     private static final TrajectoryAccelerationConstraint ACCEL_CONSTRAINT = getAccelerationConstraint(MAX_ACCEL);
@@ -133,10 +133,16 @@ public class FalconMecanumDrive extends MecanumDrive {
         // TODO: if desired, use setLocalizer() to change the localization method
          setLocalizer(new StandardTrackingWheelLocalizer(hardwareMap, lastTrackingEncPositions, lastTrackingEncVels));
 
-        trajectorySequenceRunner = new TrajectorySequenceRunner(
-                follower, HEADING_PID, batteryVoltageSensor,
-                lastEncPositions, lastEncVels, lastTrackingEncPositions, lastTrackingEncVels
-        );
+//        trajectorySequenceRunner = new TrajectorySequenceRunner(
+//                follower, HEADING_PID, batteryVoltageSensor,
+//                lastEncPositions, lastEncVels, lastTrackingEncPositions, lastTrackingEncVels
+//        );
+        trajectorySequenceRunner = new TrajectorySequenceRunnerCancelable(
+                follower, HEADING_PID );
+    }
+
+    public void breakFollowing(){
+        trajectorySequenceRunner.breakFollowing();
     }
 
     public TrajectoryBuilder trajectoryBuilder(Pose2d startPose) {
@@ -211,6 +217,14 @@ public class FalconMecanumDrive extends MecanumDrive {
 
     public boolean isBusy() {
         return trajectorySequenceRunner.isBusy();
+    }
+
+    public boolean isMotorsBusy(){
+        for (DcMotorEx motor : motors) {
+            if(motor.isBusy())
+                return true;
+        }
+        return false;
     }
 
     public void setMode(DcMotor.RunMode runMode) {

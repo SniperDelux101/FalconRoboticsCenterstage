@@ -120,7 +120,7 @@ public class AutonomousCommandTest extends CommandOpMode {
             MatchConfig.TeamPropPosition = teamPropPosition;
             MatchConfig.telemetry = telemetry;
 
-            telemetry.addData("Run atonomous ; " , runAutonomous);
+            telemetry.addData("Run autonomous ; " , runAutonomous);
             telemetry.addData("Team Prop Position: ", teamPropPosition);
             telemetry.addData("Alliance: ", alliance);
             telemetry.addData("Auto Start Location: ", startLocation);

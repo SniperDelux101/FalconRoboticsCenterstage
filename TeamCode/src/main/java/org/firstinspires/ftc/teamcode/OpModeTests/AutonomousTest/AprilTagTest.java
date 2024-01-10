@@ -5,6 +5,7 @@ import android.service.autofill.FieldClassification;
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.CommandScheduler;
+import com.arcrobotics.ftclib.command.ScheduleCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -13,6 +14,7 @@ import org.firstinspires.ftc.teamcode.Commands.Autonomous.Alliance;
 import org.firstinspires.ftc.teamcode.Commands.Autonomous.DriveForwardToObjectCommand;
 import org.firstinspires.ftc.teamcode.Commands.Autonomous.FindAprilTagCommand;
 import org.firstinspires.ftc.teamcode.Commands.Autonomous.TeamPropPosition;
+import org.firstinspires.ftc.teamcode.Commands.StrafeToFindAprilTagCommand;
 import org.firstinspires.ftc.teamcode.Subsystems.DistanceSensorSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.GyroSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.MecanumDriveSubsystem;
@@ -41,18 +43,17 @@ public class AprilTagTest extends CommandOpMode {
         VisionSubsystem visionSubsystem = new VisionSubsystem(hardwareMap, telemetry, true);
         DistanceSensorSubsystem distanceSensorSubsystem = new DistanceSensorSubsystem(hardwareMap, telemetry);
 
-
         schedule(new SequentialCommandGroup(
-                new FindAprilTagCommand(mecanumDriveSubsystem, visionSubsystem)
-//                new DriveForwardToObjectCommand(mecanumDriveSubsystem, distanceSensorSubsystem, GyroSubsystem.getInstance(hardwareMap, telemetry), Configuration.BACKDROP_DISTANCE)
+                new StrafeToFindAprilTagCommand(mecanumDriveSubsystem, visionSubsystem),
+                new FindAprilTagCommand(mecanumDriveSubsystem, visionSubsystem),
+                new DriveForwardToObjectCommand(mecanumDriveSubsystem, distanceSensorSubsystem, GyroSubsystem.getInstance(hardwareMap, telemetry), Configuration.BACKDROP_DISTANCE)
                 ));
 
-        register(mecanumDriveSubsystem, visionSubsystem, distanceSensorSubsystem);
+        register(mecanumDriveSubsystem, visionSubsystem, distanceSensorSubsystem, GyroSubsystem.getInstance(hardwareMap, telemetry));
     }
 
     @Override
     public void runOpMode() throws InterruptedException{
         super.runOpMode();
-        MatchConfig.telemetry.update();
     }
 }

@@ -190,6 +190,7 @@ public class Configuration {
     //*****************************************************************
     public static int AUTO_VEL = 30;
     public static int VISION_VEL = 10;
+    public static int STRAFE_TO_APRIL_TAG_VEL = 10;
 
     //*****************************************************************
     public static double DISTANCE_ERROR_DISTANCE = 0.75; //inches

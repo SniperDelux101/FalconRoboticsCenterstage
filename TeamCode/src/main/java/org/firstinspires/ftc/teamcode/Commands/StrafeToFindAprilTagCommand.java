@@ -26,6 +26,7 @@ public class StrafeToFindAprilTagCommand extends CommandBase {
         visionSubsystem = vSystem;
         isFinished = false;
         hasExecuted = false;
+
         addRequirements(mecanumDriveSubsystem, visionSubsystem);
     }
 
@@ -36,13 +37,13 @@ public class StrafeToFindAprilTagCommand extends CommandBase {
 
         if(MatchConfig.Alliance == Alliance.Blue) {
             sequence = mecanumDriveSubsystem.getDrive().trajectorySequenceBuilder(mecanumDriveSubsystem.getPoseEstimate())
-                    .setVelConstraint(new MecanumVelocityConstraint(Configuration.AUTO_VEL, Configuration.TRACKWIDTH))
+                    .setVelConstraint(new MecanumVelocityConstraint(Configuration.STRAFE_TO_APRIL_TAG_VEL, Configuration.TRACKWIDTH))
                     .strafeRight(Configuration.VISION_STRAFE_DIS)
                     .build();
         }
         else {
             sequence = mecanumDriveSubsystem.getDrive().trajectorySequenceBuilder(mecanumDriveSubsystem.getPoseEstimate())
-                    .setVelConstraint(new MecanumVelocityConstraint(Configuration.AUTO_VEL, Configuration.TRACKWIDTH))
+                    .setVelConstraint(new MecanumVelocityConstraint(Configuration.STRAFE_TO_APRIL_TAG_VEL, Configuration.TRACKWIDTH))
                     .strafeLeft(Configuration.VISION_STRAFE_DIS)
                     .build();
         }
@@ -51,26 +52,34 @@ public class StrafeToFindAprilTagCommand extends CommandBase {
     @Override
     public void execute() {
         MatchConfig.telemetry.addLine("Executing StrafeToFindAprilTagCommand");
-        MatchConfig.telemetry.addLine("FOUND Tag " + visionSubsystem.GetAprilTagID());
+        MatchConfig.telemetry.addLine("Looking for Tag: " + visionSubsystem.GetAprilTagID());
 
         if(hasExecuted) {
             // Look for AprilTag
             AprilTagDetection detection = this.visionSubsystem.findAprilTag();
             if(detection != null) {
-                MatchConfig.telemetry.addLine("FOUND Tag " + visionSubsystem.GetAprilTagID());
                 mecanumDriveSubsystem.stop();
-                mecanumDriveSubsystem.update();
-                sequence = mecanumDriveSubsystem.getDrive().trajectorySequenceBuilder(mecanumDriveSubsystem.getPoseEstimate())
-                        .setVelConstraint(new MecanumVelocityConstraint(Configuration.AUTO_VEL, Configuration.TRACKWIDTH))
-                        .strafeLeft(2)
-                        .build();
+                mecanumDriveSubsystem.getDrive().breakFollowing();
+                MatchConfig.telemetry.addLine("FOUND Tag " + visionSubsystem.GetAprilTagID());
+//                if(MatchConfig.Alliance == Alliance.Blue) {
+//                    sequence = mecanumDriveSubsystem.getDrive().trajectorySequenceBuilder(mecanumDriveSubsystem.getPoseEstimate())
+//                            .setVelConstraint(new MecanumVelocityConstraint(Configuration.AUTO_VEL, Configuration.TRACKWIDTH))
+//                            .strafeLeft(2)
+//                            .build();
+//                }
+//                else{
+//                    sequence = mecanumDriveSubsystem.getDrive().trajectorySequenceBuilder(mecanumDriveSubsystem.getPoseEstimate())
+//                            .setVelConstraint(new MecanumVelocityConstraint(Configuration.AUTO_VEL, Configuration.TRACKWIDTH))
+//                            .strafeRight(2)
+//                            .build();
+//                }
                 mecanumDriveSubsystem.getDrive().followTrajectorySequence(sequence);
                 isFinished = true;
             }
         }
         else {
             // Tell System to strafe
-            mecanumDriveSubsystem.getDrive().followTrajectorySequence(sequence);
+            mecanumDriveSubsystem.followTrajectorySequenceAsync(sequence);
             hasExecuted = true;
         }
     }
