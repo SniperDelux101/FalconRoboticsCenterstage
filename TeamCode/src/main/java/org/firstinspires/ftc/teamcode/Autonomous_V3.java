@@ -44,6 +44,7 @@ import org.firstinspires.ftc.teamcode.Subsystems.drive.FalconMecanumDrive;
 import org.firstinspires.ftc.teamcode.Subsystems.drive.TrajectorySequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.Utilities.Configuration;
 import org.firstinspires.ftc.teamcode.Utilities.MatchConfig;
+import org.opencv.core.Mat;
 
 import java.util.HashMap;
 
@@ -110,6 +111,7 @@ public class Autonomous_V3 extends CommandOpMode {
             MatchConfig.Alliance = alliance;
             MatchConfig.AutonomousStartLocation = startLocation;
             MatchConfig.TeamPropPosition = teamPropPosition;
+            MatchConfig.telemetry = telemetry;
 
             telemetry.addData("Team Prop Position: ", teamPropPosition);
             telemetry.addData("Alliance: ", alliance);
@@ -120,6 +122,7 @@ public class Autonomous_V3 extends CommandOpMode {
         waitForStart();
 
         visionSubsystem.stopTensorStreaming();
+        visionSubsystem.resumeAprilStreaming();
         TrajectorySequence phase1, phase2, phase3, park;
 
         if(startLocation == AutonomousStartLocation.Near) {
@@ -143,7 +146,7 @@ public class Autonomous_V3 extends CommandOpMode {
                                 new PlacePixelOnSpikeCommand(intakeMotorSubsystem).withTimeout(2000),
                                 new TrajectorySequenceFollowerCommand(driveBaseSubsystem, phase2)
                         ),
-                        new GyroSquareCommand(gyroSubsystem, driveBaseSubsystem, getSquareDegree()).withTimeout(1000),
+                        //new GyroSquareCommand(gyroSubsystem, driveBaseSubsystem, getSquareDegree()).withTimeout(1000),
                         new StrafeToFindAprilTagCommand(driveBaseSubsystem, visionSubsystem),
                         new FindAprilTagCommand(driveBaseSubsystem, visionSubsystem),
                         new DriveForwardToObjectCommand(driveBaseSubsystem, distanceSensorSubsystem, GyroSubsystem.getInstance(hardwareMap, telemetry), Configuration.BACKDROP_DISTANCE),
