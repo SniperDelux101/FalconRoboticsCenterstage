@@ -1,11 +1,9 @@
 package org.firstinspires.ftc.teamcode.Commands;
 
-import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.acmerobotics.roadrunner.trajectory.constraints.MecanumVelocityConstraint;
 import com.arcrobotics.ftclib.command.CommandBase;
 
 import org.firstinspires.ftc.teamcode.Commands.Autonomous.Alliance;
-import org.firstinspires.ftc.teamcode.Commands.Autonomous.FindAprilTagCommand;
 import org.firstinspires.ftc.teamcode.Subsystems.MecanumDriveSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.VisionSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.drive.TrajectorySequence.TrajectorySequence;
@@ -61,27 +59,18 @@ public class StrafeToFindAprilTagCommand extends CommandBase {
                 mecanumDriveSubsystem.stop();
                 mecanumDriveSubsystem.breakFollowing();
                 MatchConfig.telemetry.addLine("FOUND Tag " + visionSubsystem.GetAprilTagID());
-//                if(MatchConfig.Alliance == Alliance.Blue) {
-//                    sequence = mecanumDriveSubsystem.getDrive().trajectorySequenceBuilder(mecanumDriveSubsystem.getPoseEstimate())
-//                            .setVelConstraint(new MecanumVelocityConstraint(Configuration.AUTO_VEL, Configuration.TRACKWIDTH))
-//                            .strafeLeft(2)
-//                            .build();
-//                }
-//                else{
-//                    sequence = mecanumDriveSubsystem.getDrive().trajectorySequenceBuilder(mecanumDriveSubsystem.getPoseEstimate())
-//                            .setVelConstraint(new MecanumVelocityConstraint(Configuration.AUTO_VEL, Configuration.TRACKWIDTH))
-//                            .strafeRight(2)
-//                            .build();
-//                }
-//                mecanumDriveSubsystem.getDrive().followTrajectorySequence(sequence);
                 isFinished = true;
             }
+            else
+                MatchConfig.telemetry.addLine("Didn't Find ID: " + visionSubsystem.GetAprilTagID());
         }
         else {
             // Tell System to strafe
             mecanumDriveSubsystem.followTrajectorySequenceAsync(sequence);
+            MatchConfig.telemetry.addLine("Executing Trajectory in Strafe to April Tag");
             hasExecuted = true;
         }
+        MatchConfig.telemetry.update();
     }
 
     @Override
