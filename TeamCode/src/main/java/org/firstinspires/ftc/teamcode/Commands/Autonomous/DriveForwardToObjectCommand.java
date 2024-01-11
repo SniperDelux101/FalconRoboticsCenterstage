@@ -1,21 +1,13 @@
 package org.firstinspires.ftc.teamcode.Commands.Autonomous;
 
 import com.acmerobotics.dashboard.config.Config;
-import com.acmerobotics.roadrunner.trajectory.Trajectory;
-import com.acmerobotics.roadrunner.trajectory.constraints.MecanumVelocityConstraint;
 import com.arcrobotics.ftclib.command.CommandBase;
-import com.arcrobotics.ftclib.command.CommandScheduler;
-import com.arcrobotics.ftclib.command.InstantCommand;
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.Subsystems.DistanceSensorSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.GyroSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.MecanumDriveSubsystem;
-import org.firstinspires.ftc.teamcode.Subsystems.drive.TrajectorySequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.Utilities.Configuration;
 import org.firstinspires.ftc.teamcode.Utilities.MatchConfig;
-import org.opencv.core.Mat;
 
 @Config
 public class DriveForwardToObjectCommand extends CommandBase {
@@ -23,8 +15,6 @@ public class DriveForwardToObjectCommand extends CommandBase {
     private final DistanceSensorSubsystem distanceSensorSubsystem;
     private final GyroSubsystem gyroSubsystem;
     private final double stopDistance;
-    private boolean hasExecuted = false;
-    private boolean shakeRobot = false;
 
     public DriveForwardToObjectCommand(MecanumDriveSubsystem drive, DistanceSensorSubsystem dist, GyroSubsystem gSubsystem, double stopDistance){
         mecanumDriveSubsystem = drive;
@@ -36,52 +26,15 @@ public class DriveForwardToObjectCommand extends CommandBase {
     }
 
     @Override
-    public void initialize(){
-        //this.squareUpRobot();
-    }
-
-    @Override
     public void execute(){
         MatchConfig.telemetry.addLine("Executing " + this.getClass().getName());
-        MatchConfig.telemetry.addData("Average Distance to Object: ", distanceSensorSubsystem.getBackAverageDistance());
-
-        if(!hasExecuted && distanceSensorSubsystem.getBackAverageDistance() < 36) {
-            TrajectorySequence t;
-            if (distanceSensorSubsystem.getBackAverageDistance() < this.stopDistance) {
-                t = mecanumDriveSubsystem.trajectorySequenceBuilder(mecanumDriveSubsystem.getPoseEstimate())
-                        .setVelConstraint(new MecanumVelocityConstraint(Configuration.VISION_VEL, Configuration.TRACKWIDTH))
-                        .forward(stopDistance - distanceSensorSubsystem.getBackAverageDistance())
-                        .build();
-            } else {
-                t = mecanumDriveSubsystem.trajectorySequenceBuilder(mecanumDriveSubsystem.getPoseEstimate())
-                        .setVelConstraint(new MecanumVelocityConstraint(Configuration.VISION_VEL, Configuration.TRACKWIDTH))
-                        .back(distanceSensorSubsystem.getBackAverageDistance() - stopDistance)
-                        .build();
-            }
-            hasExecuted = true;
-            //mecanumDriveSubsystem.getDrive().followTrajectorySequence(t);
-            mecanumDriveSubsystem.followTrajectorySequenceAsync(t);
-        }
-        else{
-            MatchConfig.telemetry.addLine("Bad distance sensor read shake? " + shakeRobot);
-            if(!shakeRobot && !hasExecuted)
-            {
-                double turnRadians = Math.toRadians(Configuration.SHAKE_DEGREES);
-                TrajectorySequence ts = mecanumDriveSubsystem.trajectorySequenceBuilder(mecanumDriveSubsystem.getPoseEstimate())
-                        .turn(turnRadians)
-                        .turn(-turnRadians*2)
-                        .turn(turnRadians)
-                        .build();
-                mecanumDriveSubsystem.followTrajectorySequence(ts);
-                shakeRobot = true;
-            }
-        }
-        MatchConfig.telemetry.update();
+        MatchConfig.telemetry.addData("Average Distance to Object: ", distanceSensorSubsystem.getBackAverageDistance(Configuration.MAX_DISTANCE));
+        mecanumDriveSubsystem.drive(Configuration.DRIVE_FORWARD_SPEED,0,0,Configuration.DRIVE_FORWARD_POWER);
     }
 
     @Override
     public boolean isFinished(){
-        double distance = distanceSensorSubsystem.getBackAverageDistance();
+        double distance = distanceSensorSubsystem.getBackAverageDistance(Configuration.MAX_DISTANCE);
         double delta = Math.abs( distance - stopDistance);
         MatchConfig.telemetry.addData("Average Distance to Object: ", distance);
         MatchConfig.telemetry.addData("Delta: ", delta);
@@ -92,8 +45,6 @@ public class DriveForwardToObjectCommand extends CommandBase {
     @Override
     public void end(boolean interrupted){
         this.mecanumDriveSubsystem.stop();
-        if(this.mecanumDriveSubsystem.isBusy())
-            this.mecanumDriveSubsystem.breakFollowing();
     }
 
     private void squareUpRobot(){

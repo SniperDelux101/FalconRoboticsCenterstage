@@ -103,7 +103,7 @@ public class Configuration {
     //****************************************************************************************************************//
     //Linear Slide Motor Values / Percentages
 
-    public static double LINEAR_SLIDE_POWER = 0.75;
+    //public static double LINEAR_SLIDE_POWER = 0.75;
 
 
     public static int LINEAR_SLIDE_POS_HOME = 70;
@@ -185,7 +185,7 @@ public class Configuration {
 
     public static int CAMERA_WIDTH = 1600;
     public static int CAMERA_HEIGHT = 896;
-    public static int CAMERA_ZOOM = 1;
+    //public static int CAMERA_ZOOM = 1;
 
     //*****************************************************************
     public static int AUTO_VEL = 30;
@@ -194,8 +194,14 @@ public class Configuration {
 
     //*****************************************************************
     public static double DISTANCE_ERROR_DISTANCE = 0.75; //inches
-    public static double BACKDROP_DISTANCE = 3.0;
+    public static double BACKDROP_DISTANCE = 5.0;
 
     public static double SHAKE_DEGREES = 5;
     public static double VISION_STRAFE_DIS = 20;
+
+    public static double APRIL_TAG_BEARING = 10;
+
+    public static double MAX_DISTANCE = 36;
+    public static double DRIVE_FORWARD_SPEED = .05;
+    public static double DRIVE_FORWARD_POWER = 5;
 }
