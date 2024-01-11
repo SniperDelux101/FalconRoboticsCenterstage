@@ -24,8 +24,15 @@ public class DistanceSensorSubsystem extends FalconSubsystemBase {
         right = map.get(Rev2mDistanceSensor.class, "Right_Front_DSensor");
     }
 
-    public double getBackAverageDistance(){
-       return (getBackLeft() + getBackRight())/2.0;
+    public double getBackAverageDistance(double maxValue){
+        if(getBackLeft() <= maxValue && getBackRight() <= maxValue)
+            return (getBackLeft() + getBackRight())/2.0;
+       else if(getBackRight() > maxValue && getBackLeft() <= maxValue)
+           return getBackLeft();
+       else if(getBackRight() <= maxValue && getBackLeft() > maxValue)
+           return getBackRight();
+        else
+            return 0;
     }
 
     public double getBackLeft(){
