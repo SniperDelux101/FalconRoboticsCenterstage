@@ -52,7 +52,7 @@ public class FindAprilTagCommand extends CommandBase {
                         .build();
             }
             hasExecuted = true;
-            this.mecanumDriveSubsystem.followTrajectory(trajectory);
+            this.mecanumDriveSubsystem.followTrajectoryAsync(trajectory);
         }
         else {
             ///TODO: We should try to find the tag if we can.  Based on the current Pose and Alliance we should be able to find a starting point to start over
