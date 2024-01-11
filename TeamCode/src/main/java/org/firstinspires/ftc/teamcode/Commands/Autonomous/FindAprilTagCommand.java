@@ -11,7 +11,6 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 public class FindAprilTagCommand extends CommandBase {
     private final MecanumDriveSubsystem mecanumDriveSubsystem;
     private final VisionSubsystem visionSubsystem;
-    private Trajectory trajectory;
     private boolean hasExecuted = false;
 
     public FindAprilTagCommand(MecanumDriveSubsystem mecanumDriveSubsystem, VisionSubsystem visionSubsystem) {
@@ -41,6 +40,7 @@ public class FindAprilTagCommand extends CommandBase {
             double strafeDistance = Math.abs(detection.ftcPose.range * (strafeSin));
 //            double backCos = Math.cos(detection.ftcPose.bearing);
 //            double backDistance = ((Math.abs(detection.ftcPose.range * (backCos))) - Configuration.BACKDROP_DISTANCE);
+            Trajectory trajectory;
 
             if (detection.ftcPose.bearing > 0) {
                 trajectory = this.mecanumDriveSubsystem.trajectoryBuilder(this.mecanumDriveSubsystem.getPoseEstimate())
@@ -57,6 +57,7 @@ public class FindAprilTagCommand extends CommandBase {
         else {
             ///TODO: We should try to find the tag if we can.  Based on the current Pose and Alliance we should be able to find a starting point to start over
             MatchConfig.telemetry.addLine("NO April tag found, WHAT SHOULD WE DO?????");
+
         }
 
         MatchConfig.telemetry.update();
@@ -72,12 +73,10 @@ public class FindAprilTagCommand extends CommandBase {
             MatchConfig.telemetry.addData("Yaw: ", detection.ftcPose.yaw);
             MatchConfig.telemetry.update();
 
-            return Math.abs(detection.ftcPose.bearing) < 1;
+            return Math.abs(detection.ftcPose.bearing) < Configuration.APRIL_TAG_BEARING;
         }
         else
             return false;
-
-//        return !this.mecanumDriveSubsystem.getDrive().isBusy();
     }
 
     @Override
