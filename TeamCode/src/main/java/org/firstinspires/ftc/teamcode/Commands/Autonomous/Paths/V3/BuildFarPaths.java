@@ -101,7 +101,7 @@ public class BuildFarPaths {
                         .lineTo(new Vector2d(-40, 28))
                         .splineTo(new Vector2d(-40, 2), Math.toRadians(0))
                         .lineToConstantHeading(new Vector2d(30, 2))
-                        .splineToConstantHeading(new Vector2d(40, Y_Mod), Math.toRadians(0))
+                        .splineToConstantHeading(new Vector2d(45, Y_Mod), Math.toRadians(0))
                         .build();
             } else {
                 Phase2 = drive.trajectorySequenceBuilder(Phase1.end())
@@ -109,7 +109,7 @@ public class BuildFarPaths {
                         .lineToConstantHeading(new Vector2d(-46, 6))
                         .turn(Math.toRadians(90))
                         .lineToConstantHeading(new Vector2d(30, 6))
-                        .splineToConstantHeading(new Vector2d(40,Y_Mod), Math.toRadians(0))
+                        .splineToConstantHeading(new Vector2d(45,Y_Mod), Math.toRadians(0))
                         .build();
             }
             Left_Right_Phase3(position);

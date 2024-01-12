@@ -149,7 +149,7 @@ public class Autonomous_V3 extends CommandOpMode {
                         ),
                         //new GyroSquareCommand(gyroSubsystem, driveBaseSubsystem, getSquareDegree()).withTimeout(1000),
                         new StrafeToFindAprilTagCommand(driveBaseSubsystem, visionSubsystem),
-                        new FindAprilTagCommand(driveBaseSubsystem, visionSubsystem),
+//                        new FindAprilTagCommand(driveBaseSubsystem, visionSubsystem),
                         new SelectCommand(
                                 new HashMap<Object, Command>(){{
                                     put(TeamPropPosition.Left, new AprilTagStrafeCommand(driveBaseSubsystem));
