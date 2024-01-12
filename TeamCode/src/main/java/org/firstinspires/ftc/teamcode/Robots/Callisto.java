@@ -14,8 +14,8 @@ import org.firstinspires.ftc.teamcode.Commands.Autonomous.Alliance;
 import org.firstinspires.ftc.teamcode.Commands.Autonomous.AutonomousDriveCommand;
 import org.firstinspires.ftc.teamcode.Commands.Autonomous.AutonomousStartLocation;
 import org.firstinspires.ftc.teamcode.Commands.FireDroneAndClimbCommand;
+import org.firstinspires.ftc.teamcode.Commands.MovePixelBoxAndEjectSequentialCommand;
 import org.firstinspires.ftc.teamcode.Commands.MovePixelBoxArmToPositionCommand;
-import org.firstinspires.ftc.teamcode.Commands.MoveToPixelBoxPosition;
 import org.firstinspires.ftc.teamcode.Commands.PixelBoxArmPosition;
 import org.firstinspires.ftc.teamcode.Commands.PixelBoxPosition;
 import org.firstinspires.ftc.teamcode.Commands.ResetAndPrepForExchangeCommand;
@@ -140,15 +140,15 @@ public class Callisto extends Robot {
         // Drop the box
         utilityGamepad.getGamepadButton(GamepadKeys.Button.DPAD_UP)
                         .whenPressed(
-                                new MoveToPixelBoxPosition( extakeSubsystem, PixelBoxPosition.Center)
+                                new MovePixelBoxAndEjectSequentialCommand(linearSlideSubsystem, extakeSubsystem, PixelBoxPosition.Center)
                         );
         utilityGamepad.getGamepadButton(GamepadKeys.Button.DPAD_LEFT)
                 .whenPressed(
-                        new MoveToPixelBoxPosition( extakeSubsystem, PixelBoxPosition.Left)
+                        new MovePixelBoxAndEjectSequentialCommand(linearSlideSubsystem, extakeSubsystem, PixelBoxPosition.Left)
                 );
         utilityGamepad.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT)
                 .whenPressed(
-                        new MoveToPixelBoxPosition( extakeSubsystem, PixelBoxPosition.Right)
+                        new MovePixelBoxAndEjectSequentialCommand(linearSlideSubsystem, extakeSubsystem, PixelBoxPosition.Right)
                 );
         // Dropping the pixel
         utilityGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER)

@@ -1,11 +1,9 @@
 package org.firstinspires.ftc.teamcode.Subsystems;
 
-import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.hardware.SimpleServo;
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.hardware.rev.RevColorSensorV3;
 import com.qualcomm.robotcore.hardware.CRServo;
-import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
@@ -26,6 +24,8 @@ public class ExtakeSubsystem extends FalconSubsystemBase {
 
     RevBlinkinLedDriver blinkinLedDriver;
 
+    private int pixelCount;
+
 
     public ExtakeSubsystem(HardwareMap hMap, Telemetry tel) {
         super(tel);
@@ -39,22 +39,46 @@ public class ExtakeSubsystem extends FalconSubsystemBase {
         blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
     }
 
+    @Override
+    public void periodic() {
+        pixelCount = detectPixelCount();
+        detectPixel();
+    }
+
+    public int getPixelCount(){
+        return pixelCount;
+    }
+
     public void detectPixel () {
-        //if distance is greater than 20 MM no pixel, on average pixel was about 6-7 MM away
-        //telemetry.addLine();
+        pixelCount = detectPixelCount();
+
+        switch (pixelCount){
+            case 1:
+                blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
+                break;
+            case 2:
+                blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
+                break;
+            default:
+                blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.WHITE);
+        }
+    }
+
+    private int detectPixelCount(){
         telemetry.addData("Distance sensor1 ", "%.3f", colorSensor1.getDistance(DistanceUnit.MM));
         telemetry.addData("Sensor 2", "%.3f", colorSensor2.getDistance(DistanceUnit.MM));
+
         double sensor1Distance = colorSensor1.getDistance(DistanceUnit.MM);
         double sensor2Distance = colorSensor2.getDistance(DistanceUnit.MM);
         double distanceMax = 20.0;
         if (sensor1Distance > distanceMax && sensor2Distance > distanceMax) {
-            blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.WHITE);
+            return 0;
         } else if (sensor1Distance < 30.0 && sensor2Distance > 30.0) {
-            blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
+            return 1;
         } else if (sensor1Distance < distanceMax && sensor2Distance < distanceMax)
-            blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
+            return 2;
         else {
-            blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.WHITE);
+            return 0;
         }
     }
 
@@ -102,12 +126,12 @@ public class ExtakeSubsystem extends FalconSubsystemBase {
      */
     public void pixelIntake(){
        pixelWheelDirection(DcMotorSimple.Direction.FORWARD);
-       detectPixel();
+       //detectPixel();
        telemetry.addData("Pixel Intake: ", pixelWheel.getPower());
        telemetry.addData("Pixel Intake: ", pixelWheel.getDirection());
     }
     public void pixelEject (){
-        detectPixel();
+        //detectPixel();
         pixelWheelDirection(DcMotorSimple.Direction.REVERSE);
         telemetry.addData("Pixel Eject: ", pixelWheel.getPower());
         telemetry.addData("Pixel Eject: ", pixelWheel.getDirection());
@@ -118,7 +142,20 @@ public class ExtakeSubsystem extends FalconSubsystemBase {
     private void pixelWheelDirection (DcMotorSimple.Direction direction){
         pixelWheel.setDirection(direction);
         pixelWheel.setPower(1.0);
+    }
 
+    public void ejectSinglePixel(){
+        pixelCount = getPixelCount();
+        if(pixelCount == 0)
+            pixelStop();
+        else{
+            int newPixelCount = pixelCount--;
+            while(newPixelCount != pixelCount){
+                pixelEject();
+                pixelCount = getPixelCount();
+            }
+            pixelStop();
+        }
     }
 
     /**
