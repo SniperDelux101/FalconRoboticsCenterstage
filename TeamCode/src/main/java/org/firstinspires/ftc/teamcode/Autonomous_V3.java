@@ -14,6 +14,7 @@ import com.arcrobotics.ftclib.command.WaitCommand;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.teamcode.Commands.AprilTagStrafeCommand;
 import org.firstinspires.ftc.teamcode.Commands.Autonomous.Alliance;
 import org.firstinspires.ftc.teamcode.Commands.Autonomous.AutonomousStartLocation;
 import org.firstinspires.ftc.teamcode.Commands.Autonomous.DriveForwardToObjectCommand;
@@ -149,6 +150,14 @@ public class Autonomous_V3 extends CommandOpMode {
                         //new GyroSquareCommand(gyroSubsystem, driveBaseSubsystem, getSquareDegree()).withTimeout(1000),
                         new StrafeToFindAprilTagCommand(driveBaseSubsystem, visionSubsystem),
                         new FindAprilTagCommand(driveBaseSubsystem, visionSubsystem),
+                        new SelectCommand(
+                                new HashMap<Object, Command>(){{
+                                    put(TeamPropPosition.Left, new AprilTagStrafeCommand(driveBaseSubsystem));
+                                    put(TeamPropPosition.Right, new AprilTagStrafeCommand(driveBaseSubsystem));
+                                }},
+                                this::getTeamPropPosition
+                        ),
+
                         new DriveForwardToObjectCommand(driveBaseSubsystem, distanceSensorSubsystem, GyroSubsystem.getInstance(hardwareMap, telemetry), Configuration.BACKDROP_DISTANCE),
                         new SequentialCommandGroup(
                                 new RunLinearSlideAndCenterPixelBoxCommand(extakeSubsystem,linearSlideSubsystem, Configuration.LINEAR_SLIDE_POS_AUTO),

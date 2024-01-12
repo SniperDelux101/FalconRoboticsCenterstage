@@ -21,7 +21,7 @@ public class MeepMeepTesting {
         RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
                 .setConstraints(30, 40, Math.toRadians(180), Math.toRadians(180), 15)
                 .followTrajectorySequence(drive ->
-                        drive.trajectorySequenceBuilder(Blue_Far_Start_Pos)
+                        drive.trajectorySequenceBuilder(Red_Far_Start_Pos)
 
                                 // Blue Near Left
                                 /*
@@ -39,11 +39,11 @@ public class MeepMeepTesting {
 
                                 //Blue Near Center
                                 /*
-                                .lineTo(new Vector2d(12, 28))
+                                .lineTo(new Vector2d(12, 30))
 
-                                .lineTo(new Vector2d(12, 36))
-                                .splineTo(new Vector2d(30, 32), Math.toRadians(0))
-                                .lineTo(new Vector2d(54, 32))
+                                .lineTo(new Vector2d(12, 32))
+                                .splineTo((new Vector2d(30, 32)), Math.toRadians(270))
+                                .splineTo(new Vector2d(40, 16), Math.toRadians(0))
 
                                 .lineToConstantHeading(new Vector2d(45, 32))
 
@@ -70,7 +70,7 @@ public class MeepMeepTesting {
                                 /*
                                 .splineTo(new Vector2d(9, -30), Math.toRadians(180))
 
-                                .lineToConstantHeading(new Vector2d(51.5, -30))
+                                .lineToConstantHeading(new Vector2d(40, -16))
 
                                 .lineToConstantHeading(new Vector2d(40, -30))
 
@@ -190,7 +190,7 @@ public class MeepMeepTesting {
                                  */
 
                                 //  Blue Far Right 2
-//                                /*
+                                /*
                                 .lineTo(new Vector2d(-42, 16))
                                 .turn(Math.toRadians(180))
 
@@ -205,7 +205,7 @@ public class MeepMeepTesting {
 
                                 .lineToConstantHeading(new Vector2d(40, 14))
                                 .splineToConstantHeading(new Vector2d(60, 7), Math.toRadians(0))
-//                                */
+                                */
 
 //              -------------------------------------------------------------------
 
@@ -253,7 +253,7 @@ public class MeepMeepTesting {
 //              -------------------------------------------------------------------
 
                                 // Red Far Left 2
-                                /*
+//                                /*
                                 .lineTo(new Vector2d(-47, -18))
                                 .turn(Math.toRadians(180))
 
@@ -262,13 +262,13 @@ public class MeepMeepTesting {
                                 .lineToConstantHeading(new Vector2d(-34, -10))
                                 .splineToConstantHeading(new Vector2d(-20, -10), Math.toRadians(0))
                                 .lineToConstantHeading(new Vector2d(30, -10))
-                                .splineToConstantHeading(new Vector2d(40,-35), Math.toRadians(0))
-
-                                .lineToConstantHeading(new Vector2d(40, -30))
+                                .splineToConstantHeading(new Vector2d(40,-16), Math.toRadians(0))
 
                                 .lineToConstantHeading(new Vector2d(40, -14))
-                                .splineToConstantHeading(new Vector2d(50, -12), Math.toRadians(0))
-                                 */
+                                .splineToConstantHeading(new Vector2d(60, -7), Math.toRadians(0))
+
+//                                .lineToConstantHeading(new Vector2d(40, -30))
+//                                 */
 
                                 // Red Far Center 2
                                 /*

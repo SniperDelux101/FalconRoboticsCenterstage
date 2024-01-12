@@ -156,7 +156,7 @@ public class AutonomousCommandTest extends CommandOpMode {
                                 new PlacePixelOnSpikeCommand(intakeMotorSubsystem).withTimeout(2000),
                                 new TrajectorySequenceFollowerCommand(driveBaseSubsystem, phase2)
                         ),
-                        new GyroSquareCommand(gyroSubsystem, driveBaseSubsystem, getSquareDegree()).withTimeout(1000),
+//                        new GyroSquareCommand(gyroSubsystem, driveBaseSubsystem, getSquareDegree()).withTimeout(1000),
                         new StrafeToFindAprilTagCommand(driveBaseSubsystem, visionSubsystem),
                         new FindAprilTagCommand(driveBaseSubsystem, visionSubsystem),
                         new DriveForwardToObjectCommand(driveBaseSubsystem, distanceSensorSubsystem, GyroSubsystem.getInstance(hardwareMap, telemetry), Configuration.BACKDROP_DISTANCE),

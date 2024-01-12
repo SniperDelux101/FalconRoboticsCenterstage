@@ -56,6 +56,8 @@ public class StrafeToFindAprilTagCommand extends CommandBase {
             // Look for AprilTag
             AprilTagDetection detection = this.visionSubsystem.findAprilTag();
             if(detection != null) {
+
+
                 mecanumDriveSubsystem.stop();
                 mecanumDriveSubsystem.breakFollowing();
                 MatchConfig.telemetry.addLine("FOUND Tag " + visionSubsystem.GetAprilTagID());

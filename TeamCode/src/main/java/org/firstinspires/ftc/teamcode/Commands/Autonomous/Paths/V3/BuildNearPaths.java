@@ -49,8 +49,8 @@ public class BuildNearPaths {
             Phase2 = drive.trajectorySequenceBuilder(Phase1.end())
                     .setVelConstraint(new MecanumVelocityConstraint(Configuration.AUTO_VEL, Configuration.TRACKWIDTH))
                     .lineTo(new Vector2d(12, 32))
-                    .splineTo((new Vector2d(30, 32)), BN_Center_Ph2_H1)
-                    .lineTo(new Vector2d(40, 32))
+                    .splineTo((new Vector2d(30, 32)), Math.toRadians(270))
+                    .splineTo(new Vector2d(40, Y_Mod), Math.toRadians(0))
                     .build();
             Center_Phase3();
         }
@@ -73,7 +73,7 @@ public class BuildNearPaths {
             Park = drive.trajectorySequenceBuilder(Phase3.end())
                     .setVelConstraint(new MecanumVelocityConstraint(Configuration.AUTO_VEL, Configuration.TRACKWIDTH))
                     .lineToConstantHeading(new Vector2d(45, 50))
-                    .splineToConstantHeading(new Vector2d(60, 60), BN_Center_Park_H1)
+                    .splineToConstantHeading(new Vector2d(60, 60), Math.toRadians(0))
                     .build();
         }
         public static void Left_Right_Phases(TeamPropPosition position) {
@@ -152,7 +152,7 @@ public class BuildNearPaths {
                     .setVelConstraint(new MecanumVelocityConstraint(Configuration.AUTO_VEL, Configuration.TRACKWIDTH))
                     .lineTo(new Vector2d(12, -36))
                     .splineTo(new Vector2d(30, -36), Math.toRadians(0))
-                    .lineTo(new Vector2d(54, -Y_Mod))
+                    .lineTo(new Vector2d(40, -Y_Mod))
                     .build();
             Center_Phase3();
         }
@@ -181,7 +181,7 @@ public class BuildNearPaths {
         public static void Left_Right_Phases(TeamPropPosition position) {
             if (position == TeamPropPosition.Left) {
                 Phase1 = drive.trajectorySequenceBuilder(Red_Near_Start_Pose)
-                        .splineTo(new Vector2d(9, -30), RN_Left_Spike_Turn1)
+                        .splineTo(new Vector2d(9, -30), Math.toRadians(180))
                         .build();
             } else {
                 //RIGHT
@@ -196,14 +196,14 @@ public class BuildNearPaths {
             if(position == TeamPropPosition.Left){
                 Phase2 = drive.trajectorySequenceBuilder(Phase1.end())
                         .setVelConstraint(new MecanumVelocityConstraint(Configuration.AUTO_VEL, Configuration.TRACKWIDTH))
-                        .lineToConstantHeading(new Vector2d(55, -Y_Mod))
+                        .lineToConstantHeading(new Vector2d(40, -Y_Mod))
                         .build();
             } else {
                 //Right
                 Phase2 = drive.trajectorySequenceBuilder(Phase1.end())
                         .setVelConstraint(new MecanumVelocityConstraint(Configuration.AUTO_VEL, Configuration.TRACKWIDTH))
                         .lineToConstantHeading(new Vector2d(40, -26))
-                        .splineToConstantHeading(new Vector2d(55, -Y_Mod), Math.toRadians(0))
+                        .splineToConstantHeading(new Vector2d(40, -Y_Mod), Math.toRadians(0))
                         .build();
             }
             Left_Right_Phase3(position);
@@ -236,7 +236,7 @@ public class BuildNearPaths {
                 Park = drive.trajectorySequenceBuilder(Phase2.end())
                         .setVelConstraint(new MecanumVelocityConstraint(Configuration.AUTO_VEL, Configuration.TRACKWIDTH))
                         .lineToConstantHeading(new Vector2d(40, -50))
-                        .splineToConstantHeading(new Vector2d(60, -60), RN_Left_Park_H1)
+                        .splineToConstantHeading(new Vector2d(60, -60), Math.toRadians(0))
                         .build();
             } else {
                 //Right

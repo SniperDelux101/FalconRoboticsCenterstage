@@ -111,7 +111,7 @@ public class Configuration {
     public static int LINEAR_SLIDE_POS_MED = -3700;
     public static int LINEAR_SLIDE_POS_HI = -4200;
     public static int LINEAR_SLIDE_POS_TRANSFER = -150;
-    public static int LINEAR_SLIDE_POS_AUTO = -2100;
+    public static int LINEAR_SLIDE_POS_AUTO = -2700;
     public static int LINEAR_SLIDE_MULTIPLIER = 10;
     public static int TICK_RANGE = 50;
 
@@ -193,7 +193,7 @@ public class Configuration {
     public static int STRAFE_TO_APRIL_TAG_VEL = 10;
 
     //*****************************************************************
-    public static double DISTANCE_ERROR_DISTANCE = 0.75; //inches
+    public static double BACKDROP_ERROR_DISTANCE = 1.5; //inches
     public static double BACKDROP_DISTANCE = 5.0;
 
     public static double SHAKE_DEGREES = 5;
@@ -204,4 +204,5 @@ public class Configuration {
     public static double MAX_DISTANCE = 36;
     public static double DRIVE_FORWARD_SPEED = .05;
     public static double DRIVE_FORWARD_POWER = 5;
+    public static double AUTO_STRAFE_DISTANCE = 3.0;
 }

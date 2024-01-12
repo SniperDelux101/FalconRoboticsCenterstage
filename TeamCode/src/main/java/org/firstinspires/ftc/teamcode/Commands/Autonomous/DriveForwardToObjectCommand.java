@@ -39,7 +39,7 @@ public class DriveForwardToObjectCommand extends CommandBase {
         MatchConfig.telemetry.addData("Average Distance to Object: ", distance);
         MatchConfig.telemetry.addData("Delta: ", delta);
         MatchConfig.telemetry.update();
-        return delta < Configuration.DISTANCE_ERROR_DISTANCE;
+        return delta < Configuration.BACKDROP_ERROR_DISTANCE;
     }
 
     @Override

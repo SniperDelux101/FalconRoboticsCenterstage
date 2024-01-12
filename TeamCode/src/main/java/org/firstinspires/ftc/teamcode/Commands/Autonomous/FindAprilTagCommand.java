@@ -1,9 +1,12 @@
 package org.firstinspires.ftc.teamcode.Commands.Autonomous;
 
+import android.service.autofill.FieldClassification;
+
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.arcrobotics.ftclib.command.CommandBase;
 import org.firstinspires.ftc.teamcode.Subsystems.MecanumDriveSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.VisionSubsystem;
+import org.firstinspires.ftc.teamcode.Subsystems.drive.TrajectorySequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.Utilities.Configuration;
 import org.firstinspires.ftc.teamcode.Utilities.MatchConfig;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
@@ -38,21 +41,24 @@ public class FindAprilTagCommand extends CommandBase {
 
             double strafeSin = Math.sin(Math.toRadians(detection.ftcPose.bearing));
             double strafeDistance = Math.abs(detection.ftcPose.range * (strafeSin));
+            double yawValue = detection.ftcPose.yaw;
 //            double backCos = Math.cos(detection.ftcPose.bearing);
 //            double backDistance = ((Math.abs(detection.ftcPose.range * (backCos))) - Configuration.BACKDROP_DISTANCE);
-            Trajectory trajectory;
+            TrajectorySequence trajectory;
 
             if (detection.ftcPose.bearing > 0) {
-                trajectory = this.mecanumDriveSubsystem.trajectoryBuilder(this.mecanumDriveSubsystem.getPoseEstimate())
-                     .strafeRight(strafeDistance)
+                trajectory = this.mecanumDriveSubsystem.trajectorySequenceBuilder(this.mecanumDriveSubsystem.getPoseEstimate())
+                        .strafeRight(strafeDistance)
                         .build();
+
             } else {
-                trajectory = this.mecanumDriveSubsystem.trajectoryBuilder(this.mecanumDriveSubsystem.getPoseEstimate())
+                trajectory = this.mecanumDriveSubsystem.trajectorySequenceBuilder(this.mecanumDriveSubsystem.getPoseEstimate())
                         .strafeLeft(strafeDistance)
                         .build();
+
             }
             hasExecuted = true;
-            this.mecanumDriveSubsystem.followTrajectoryAsync(trajectory);
+            this.mecanumDriveSubsystem.followTrajectorySequenceAsync(trajectory);
         }
         else {
             ///TODO: We should try to find the tag if we can.  Based on the current Pose and Alliance we should be able to find a starting point to start over
