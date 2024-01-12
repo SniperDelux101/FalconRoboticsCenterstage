@@ -1,8 +1,8 @@
 package org.firstinspires.ftc.teamcode.Subsystems;
 
-import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.ftccommon.SoundPlayer;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -15,19 +15,22 @@ public class ClimbSubsystem extends FalconSubsystemBase {
      * This controls the left and right motors to climb in and climb out
      */
 
-    public final DcMotor climbMotorLeft;
-    public final DcMotor climbMotorRight;
-    private HardwareMap hardwareMap;
-    private File soundEffect = new File("/sdcard/FIRST/blocks/sound/the-eagle-has-landed-101681.mp3");
+    public final DcMotorEx climbMotorLeft;
+    public final DcMotorEx climbMotorRight;
+    private final HardwareMap hardwareMap;
+    private final File soundEffect = new File("/sdcard/FIRST/blocks/sound/the-eagle-has-landed-101681.mp3");
 
     public ClimbSubsystem(HardwareMap hMap, Telemetry tel) {
         super(tel);
         hardwareMap = hMap;
-        climbMotorLeft = hMap.dcMotor.get("Climb_Motor_Left");
-        climbMotorRight = hMap.dcMotor.get("Climb_Motor_Right");
+        climbMotorLeft = hMap.get(DcMotorEx.class,"Climb_Motor_Left");
+        climbMotorRight = hMap.get(DcMotorEx.class, "Climb_Motor_Right");
 
         climbMotorLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         climbMotorRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        climbMotorLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        climbMotorRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
 
     /** tells the Climb motors to extend out
@@ -66,8 +69,11 @@ public class ClimbSubsystem extends FalconSubsystemBase {
         climbMotorLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         climbMotorRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        climbMotorRight.setPower(1.0);
-        climbMotorLeft.setPower(1.0);
+        climbMotorRight.setVelocity(1000);
+        climbMotorLeft.setVelocity(1000);
+
+//        climbMotorRight.setPower(1.0);
+//        climbMotorLeft.setPower(1.0);
     }
 
 }
