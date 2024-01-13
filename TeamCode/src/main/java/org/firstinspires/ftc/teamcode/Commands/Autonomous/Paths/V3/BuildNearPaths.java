@@ -54,14 +54,6 @@ public class BuildNearPaths {
                     .build();
             Center_Phase3();
         }
-
-//        public static void Center_Phase_Strafe() {
-//            Phase_Strafe = drive.trajectorySequenceBuilder(Phase2.end())
-//                .setVelConstraint(new MecanumVelocityConstraint(Configuration.AUTO_VEL, Configuration.TRACKWIDTH))
-//                    .strafeRight(Strafe_Distance)
-//                    .build();
-//            Center_Phase3();
-//        }
         public static void Center_Phase3(){
             Phase3 = drive.trajectorySequenceBuilder(Phase2.end())
                     .setVelConstraint(new MecanumVelocityConstraint(Configuration.AUTO_VEL, Configuration.TRACKWIDTH))
@@ -103,14 +95,6 @@ public class BuildNearPaths {
             }
             Left_Right_Phase3(position);
         }
-
-//        public static void Left_Right_Strafe(TeamPropPosition position) {
-//            Phase_Strafe = drive.trajectorySequenceBuilder(Phase2.end())
-//                    .setVelConstraint(new MecanumVelocityConstraint(Configuration.AUTO_VEL, Configuration.TRACKWIDTH))
-//                    .strafeRight(5)
-//                    .build();
-//            Left_Right_Phase3(position);
-//        }
         private static void Left_Right_Phase3(TeamPropPosition position) {
             if(position == TeamPropPosition.Left){
                 Phase3 = drive.trajectorySequenceBuilder(Phase2.end())
@@ -156,14 +140,6 @@ public class BuildNearPaths {
                     .build();
             Center_Phase3();
         }
-
-//        public static void Center_Strafe() {
-//            Phase_Strafe = drive.trajectorySequenceBuilder(Phase2.end())
-//                    .setVelConstraint(new MecanumVelocityConstraint(Configuration.AUTO_VEL, Configuration.TRACKWIDTH))
-//                    .strafeLeft(Strafe_Distance)
-//                    .build();
-//            Center_Phase3();
-//        }
         public static void Center_Phase3() {
             Phase3 = drive.trajectorySequenceBuilder(Phase2.end())
                     .setVelConstraint(new MecanumVelocityConstraint(Configuration.AUTO_VEL, Configuration.TRACKWIDTH))
@@ -208,14 +184,6 @@ public class BuildNearPaths {
             }
             Left_Right_Phase3(position);
         }
-
-//        public static void Left_Right_Strafe(TeamPropPosition position) {
-//            Phase_Strafe = drive.trajectorySequenceBuilder(Phase2.end())
-//                    .setVelConstraint(new MecanumVelocityConstraint(Configuration.AUTO_VEL, Configuration.TRACKWIDTH))
-//                    .strafeRight(5)
-//                    .build();
-//            Left_Right_Phase3(position);
-//        }
         private static void Left_Right_Phase3(TeamPropPosition position){
             if(position == TeamPropPosition.Left){
                 Phase3 = drive.trajectorySequenceBuilder(Phase2.end())

@@ -123,6 +123,8 @@ public class Autonomous_V3 extends CommandOpMode {
         waitForStart();
 
         visionSubsystem.stopTensorStreaming();
+        //visionSubsystem.closeTensorFlow();
+
         visionSubsystem.resumeAprilStreaming();
         TrajectorySequence phase1, phase2, phase3, park;
 

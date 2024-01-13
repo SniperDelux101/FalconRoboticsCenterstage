@@ -152,7 +152,7 @@ public class VisionSubsystem extends FalconSubsystemBase {
         visionPortalBuilder = new VisionPortal.Builder();
         visionPortalBuilder.setCamera(hardwareMap.get(WebcamName.class, "Webcam 1"));
         visionPortalBuilder.setCameraResolution(new Size(Configuration.CAMERA_WIDTH, Configuration.CAMERA_HEIGHT));
-        visionPortalBuilder.enableLiveView(allowStreaming);
+        //visionPortalBuilder.enableLiveView(allowStreaming);
         visionPortalBuilder.setStreamFormat(VisionPortal.StreamFormat.YUY2);
 
         visionPortalBuilder.addProcessor(tfod);
@@ -168,11 +168,10 @@ public class VisionSubsystem extends FalconSubsystemBase {
                 // The following default settings are available to un-comment and edit as needed.
                 .setDrawAxes(false)
                 .setDrawCubeProjection(false)
-                .setDrawTagOutline(true)
+                .setDrawTagOutline(false)
                 .setTagFamily(AprilTagProcessor.TagFamily.TAG_36h11)
                 .setTagLibrary(AprilTagGameDatabase.getCenterStageTagLibrary())
                 .setOutputUnits(DistanceUnit.INCH, AngleUnit.DEGREES)
-
                 // == CAMERA CALIBRATION ==
                 // If you do not manually specify calibration parameters, the SDK will attempt
                 // to load a predefined calibration for your camera.
@@ -187,7 +186,7 @@ public class VisionSubsystem extends FalconSubsystemBase {
         // Decimation = 3 ..  Detect 2" Tag from 4  feet away at 30 Frames Per Second (default)
         // Decimation = 3 ..  Detect 5" Tag from 10 feet away at 30 Frames Per Second (default)
         // Note: Decimation can be changed on-the-fly to adapt during a match.
-        aprilTag.setDecimation(3);
+        //aprilTag.setDecimation(5);
 
         // Create the vision portal by using a builder.
        // VisionPortal.Builder builder = new VisionPortal.Builder();
@@ -196,10 +195,10 @@ public class VisionSubsystem extends FalconSubsystemBase {
         visionPortalBuilder.setCamera(hardwareMap.get(WebcamName.class, "Webcam 2"));
 
         // Choose a camera resolution. Not all cameras support all resolutions.
-        visionPortalBuilder.setCameraResolution(new Size(320, 240));
+        visionPortalBuilder.setCameraResolution(new Size(640, 480));
 
         // Enable the RC preview (LiveView).  Set "false" to omit camera monitoring.
-        visionPortalBuilder.enableLiveView(true);
+        visionPortalBuilder.enableLiveView(false);
 
         // Set the stream format; MJPEG uses less bandwidth than default YUY2.
         visionPortalBuilder.setStreamFormat(VisionPortal.StreamFormat.YUY2);
@@ -250,6 +249,10 @@ public class VisionSubsystem extends FalconSubsystemBase {
     public void resumeAllVisionPortalStreaming(){
         resumeTensorStreaming();
         resumeAprilStreaming();
+    }
+
+    public void closeTensorFlow(){
+        tensorVisionPortal.close();
     }
 
     public void closeVisionPortal() {
@@ -313,25 +316,35 @@ public class VisionSubsystem extends FalconSubsystemBase {
         return findAprilTag(GetAprilTagID());
     }
 
+    public VisionPortal.CameraState getAprilTagCameraState(){
+        return aprilTagVisionPortal.getCameraState();
+    }
+
+    public List<AprilTagDetection> getAprilTags(){
+
+        return aprilTag.getDetections();
+    }
+
     public AprilTagDetection findAprilTag(int tagID) {
         AprilTagDetection currentDetection = null;
-        List<AprilTagDetection> currentDetections = aprilTag.getDetections();
-        telemetry.addData("# AprilTags Detected", currentDetections.size());
-        telemetry.addData("Looking for Tag ID: ", tagID);
+        List<AprilTagDetection> currentDetections = getAprilTags();
+//        telemetry.addData("# AprilTags Detected", currentDetections.size());
+//        telemetry.addData("Looking for Tag ID: ", tagID);
 
         // Step through the list of detections and display info for each one.
         for (AprilTagDetection detection : currentDetections) {
-            if (detection.metadata != null && detection.id == tagID) {
-                telemetry.addLine(String.format("\n==== (ID %d) %s", detection.id, detection.metadata.name));
-                telemetry.addLine(String.format("XYZ %6.1f %6.1f %6.1f  (inch)", detection.ftcPose.x, detection.ftcPose.y, detection.ftcPose.z));
-                telemetry.addLine(String.format("PRY %6.1f %6.1f %6.1f  (deg)", detection.ftcPose.pitch, detection.ftcPose.roll, detection.ftcPose.yaw));
-                telemetry.addLine(String.format("RBE %6.1f %6.1f %6.1f  (inch, deg, deg)", detection.ftcPose.range, detection.ftcPose.bearing, detection.ftcPose.elevation));
+            //if (detection.metadata != null && detection.id == tagID) {
+            if(detection.id == tagID){
+//                telemetry.addLine(String.format("\n==== (ID %d) %s", detection.id, detection.metadata.name));
+//                telemetry.addLine(String.format("XYZ %6.1f %6.1f %6.1f  (inch)", detection.ftcPose.x, detection.ftcPose.y, detection.ftcPose.z));
+//                telemetry.addLine(String.format("PRY %6.1f %6.1f %6.1f  (deg)", detection.ftcPose.pitch, detection.ftcPose.roll, detection.ftcPose.yaw));
+//                telemetry.addLine(String.format("RBE %6.1f %6.1f %6.1f  (inch, deg, deg)", detection.ftcPose.range, detection.ftcPose.bearing, detection.ftcPose.elevation));
 
                currentDetection = detection;
                break;
             } else {
-                telemetry.addLine(String.format("\n==== (ID %d) Unknown", detection.id));
-                telemetry.addLine(String.format("Center %6.0f %6.0f   (pixels)", detection.center.x, detection.center.y));
+//                telemetry.addLine(String.format("\n==== (ID %d) Unknown", detection.id));
+//                telemetry.addLine(String.format("Center %6.0f %6.0f   (pixels)", detection.center.x, detection.center.y));
             }
         }
         // end for() loop
@@ -396,5 +409,9 @@ public class VisionSubsystem extends FalconSubsystemBase {
         }
 
         return yawDegrees;
+    }
+
+    public float getAprilFPS(){
+        return aprilTagVisionPortal.getFps();
     }
 }

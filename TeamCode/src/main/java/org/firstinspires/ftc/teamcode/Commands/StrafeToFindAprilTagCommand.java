@@ -10,6 +10,9 @@ import org.firstinspires.ftc.teamcode.Subsystems.drive.TrajectorySequence.Trajec
 import org.firstinspires.ftc.teamcode.Utilities.Configuration;
 import org.firstinspires.ftc.teamcode.Utilities.MatchConfig;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
+import org.opencv.core.Mat;
+
+import java.util.List;
 
 public class StrafeToFindAprilTagCommand extends CommandBase {
 
@@ -31,7 +34,7 @@ public class StrafeToFindAprilTagCommand extends CommandBase {
     @Override
     public void initialize() {
         executeCounter = 0;
-        visionSubsystem.resumeAprilStreaming();
+        //visionSubsystem.resumeAprilStreaming();
 
         buildAndExecuteStrafeSequence();
     }
@@ -55,88 +58,192 @@ public class StrafeToFindAprilTagCommand extends CommandBase {
 
     @Override
     public void execute() {
-        MatchConfig.telemetry.addLine("Executing StrafeToFindAprilTagCommand");
-        MatchConfig.telemetry.addLine("Looking for Tag: " + visionSubsystem.GetAprilTagID());
-
         AprilTagDetection detection = this.visionSubsystem.findAprilTag();
-        if(detection != null) {
+        if (detection != null) {
             MatchConfig.telemetry.addData("Bearing: ", detection.ftcPose.bearing);
             MatchConfig.telemetry.addData("Yaw: ", detection.ftcPose.yaw);
 
-            if( Math.abs(detection.ftcPose.bearing) <= Configuration.APRIL_TAG_BEARING && Math.abs(detection.ftcPose.yaw) <= Configuration.APRIL_TAG_YAW) {
-                mecanumDriveSubsystem.stop();
-                mecanumDriveSubsystem.breakFollowing();
-                MatchConfig.telemetry.addLine("FOUND Tag " + visionSubsystem.GetAprilTagID());
-                isFinished = true;
-            }
-            else if( Math.abs(detection.ftcPose.bearing) > Configuration.APRIL_TAG_BEARING || Math.abs(detection.ftcPose.yaw) > Configuration.APRIL_TAG_YAW
-                && !mecanumDriveSubsystem.isBusy()) {
-                if(executeCounter >= 2)
-                {
-                    isFinished = true;
-                    return;
-                }
-
-                mecanumDriveSubsystem.stop();
-                mecanumDriveSubsystem.breakFollowing();
-
-//                double  strafeDistance = calculatedDistanceToTravel(detection.ftcPose.bearing, detection.ftcPose.range, detection.ftcPose.yaw);
-                double strafeDistance = betterCalculatedDistanceToTravel(detection.ftcPose.bearing, detection.ftcPose.range, detection.ftcPose.yaw);
-
+            if (Math.abs(detection.ftcPose.yaw) > Configuration.APRIL_TAG_YAW) {
+                MatchConfig.telemetry.addData("Turning to Yaw : ", detection.ftcPose.yaw);
                 mecanumDriveSubsystem.turn(Math.toRadians(detection.ftcPose.yaw));
+            }
+
+            if (Math.abs(detection.ftcPose.bearing) > Configuration.APRIL_TAG_BEARING) {
+                double strafeFinal = betterCalculatedDistanceToTravel(detection.ftcPose.bearing, detection.ftcPose.range, detection.ftcPose.yaw);
 
                 TrajectorySequence t = mecanumDriveSubsystem.trajectorySequenceBuilder(mecanumDriveSubsystem.getPoseEstimate())
                         .setVelConstraint(new MecanumVelocityConstraint(Configuration.STRAFE_TO_APRIL_TAG_VEL, Configuration.TRACKWIDTH))
-                        .strafeRight(strafeDistance)
+                        .strafeRight(strafeFinal)
                         .build();
+
                 mecanumDriveSubsystem.followTrajectorySequenceAsync(t);
-                executeCounter++;
+                MatchConfig.telemetry.addData("Strafing to : ", strafeFinal);
+                MatchConfig.telemetry.update();
+                hasExecuted = true;
+            }
+
+        } else if(hasExecuted && !mecanumDriveSubsystem.isBusy()){
+            //we did find any tags look for others
+            List<AprilTagDetection> currentDetections = visionSubsystem.getAprilTags();
+            for (AprilTagDetection newDetection : currentDetections) {
+                if(newDetection.id == 1 || newDetection.id == 4){
+                    //strafe right
+                    TrajectorySequence t = mecanumDriveSubsystem.trajectorySequenceBuilder(mecanumDriveSubsystem.getPoseEstimate())
+                            .setVelConstraint(new MecanumVelocityConstraint(Configuration.STRAFE_TO_APRIL_TAG_VEL, Configuration.TRACKWIDTH))
+                            .strafeLeft(8)
+                            .build();
+
+                    mecanumDriveSubsystem.followTrajectorySequenceAsync(t);
+                }
+                else if(newDetection.id == 3 || newDetection.id == 6){
+                    //strafe left
+                    TrajectorySequence t = mecanumDriveSubsystem.trajectorySequenceBuilder(mecanumDriveSubsystem.getPoseEstimate())
+                            .setVelConstraint(new MecanumVelocityConstraint(Configuration.STRAFE_TO_APRIL_TAG_VEL, Configuration.TRACKWIDTH))
+                            .strafeRight(8)
+                            .build();
+
+                    mecanumDriveSubsystem.followTrajectorySequenceAsync(t);
+                }
             }
         }
-        else
-            MatchConfig.telemetry.addLine("Didn't Find ID: " + visionSubsystem.GetAprilTagID());
-
-
-        MatchConfig.telemetry.addData("Counter: ", executeCounter);
-        MatchConfig.telemetry.update();
     }
 
-    public double betterCalculatedDistanceToTravel(double bearing, double range, double yaw) {
+//    @Override
+//    public void execute() {
+//        MatchConfig.telemetry.addLine("Executing StrafeToFindAprilTagCommand");
+//        MatchConfig.telemetry.addLine("Looking for Tag: " + visionSubsystem.GetAprilTagID());
+//        MatchConfig.telemetry.addData("April Tag Camera FPS: ", visionSubsystem.getAprilFPS());
+//        MatchConfig.telemetry.addData("April Tag Camera State: ", visionSubsystem.getAprilTagCameraState().toString());
+//
+//        AprilTagDetection detection = this.visionSubsystem.findAprilTag();
+//        if(detection != null) {
+//
+//            MatchConfig.telemetry.addData("Bearing: ", detection.ftcPose.bearing);
+//            MatchConfig.telemetry.addData("Yaw: ", detection.ftcPose.yaw);
+//
+//            if(Math.abs(detection.ftcPose.yaw) > Configuration.APRIL_TAG_YAW && !mecanumDriveSubsystem.isBusy()) {
+//                MatchConfig.telemetry.addData("Turning to Yaw : ", detection.ftcPose.yaw);
+//                mecanumDriveSubsystem.turn(Math.toRadians(detection.ftcPose.yaw));
+//            }
+//
+//            if(Math.abs(detection.ftcPose.bearing) > Configuration.APRIL_TAG_BEARING && !mecanumDriveSubsystem.isBusy()) {
+//
+//                double strafeFinal = betterCalculatedDistanceToTravel(detection.ftcPose.bearing, detection.ftcPose.range, detection.ftcPose.yaw);
+//
+//                TrajectorySequence t = mecanumDriveSubsystem.trajectorySequenceBuilder(mecanumDriveSubsystem.getPoseEstimate())
+//                        .setVelConstraint(new MecanumVelocityConstraint(Configuration.STRAFE_TO_APRIL_TAG_VEL, Configuration.TRACKWIDTH))
+//                        .strafeRight(strafeFinal)
+//                        .build();
+//
+//                mecanumDriveSubsystem.followTrajectorySequenceAsync(t);
+//                MatchConfig.telemetry.addData("Strafing to : ", strafeFinal);
+//                MatchConfig.telemetry.update();
+//                detection = this.visionSubsystem.findAprilTag();
+//                int counter = 0;
+//                while(counter < 10){
+//                    detection = this.visionSubsystem.findAprilTag();
+//                    MatchConfig.telemetry.addData("April Tag Camera FPS: ", visionSubsystem.getAprilFPS());
+//                    MatchConfig.telemetry.addData("April Tage Camera State: ", visionSubsystem.getAprilTagCameraState().toString());
+//                    MatchConfig.telemetry.addData("Counter: ", counter);
+//                    if(detection != null){
+//                        MatchConfig.telemetry.addData("Bearing: ", detection.ftcPose.bearing);
+//                        MatchConfig.telemetry.addData("Yaw: ", detection.ftcPose.yaw);
+//                        MatchConfig.telemetry.update();
+//                    }
+//                    if(detection != null && Math.abs(detection.ftcPose.bearing) <= Configuration.APRIL_TAG_BEARING && Math.abs(detection.ftcPose.yaw) <= Configuration.APRIL_TAG_YAW) {
+//                        mecanumDriveSubsystem.stop();
+//                        mecanumDriveSubsystem.breakFollowing();
+//                        MatchConfig.telemetry.addLine("FOUND Tag " + visionSubsystem.GetAprilTagID());
+//                        isFinished = true;
+//                        counter = Integer.MAX_VALUE;
+//                    }
+//                    else if(detection!= null && Math.abs(detection.ftcPose.bearing) > Configuration.APRIL_TAG_BEARING && !mecanumDriveSubsystem.isBusy()){
+//                        t = mecanumDriveSubsystem.trajectorySequenceBuilder(mecanumDriveSubsystem.getPoseEstimate())
+//                                .setVelConstraint(new MecanumVelocityConstraint(Configuration.STRAFE_TO_APRIL_TAG_VEL, Configuration.TRACKWIDTH))
+//                                .strafeRight(strafeFinal)
+//                                .build();
+//
+//                        mecanumDriveSubsystem.followTrajectorySequenceAsync(t);
+//                    }
+//                    MatchConfig.telemetry.update();
+//                    counter++;
+//                    try {
+//                        Thread.sleep(250);
+//                    }catch(Exception ex){
+//
+//                    }
+//                }
+//            }
+//
+//            if(detection != null && (detection.ftcPose.bearing) <= Configuration.APRIL_TAG_BEARING && (detection.ftcPose.bearing) >= -Configuration.APRIL_TAG_BEARING && Math.abs(detection.ftcPose.yaw) <= Configuration.APRIL_TAG_YAW) {
+//                mecanumDriveSubsystem.stop();
+//                mecanumDriveSubsystem.breakFollowing();
+//                MatchConfig.telemetry.addLine("FOUND Tag " + visionSubsystem.GetAprilTagID());
+//                isFinished = true;
+//            }
+//        }
+//        else {
+//            MatchConfig.telemetry.addLine("Didn't Find ID: " + visionSubsystem.GetAprilTagID());
+//            try {
+//                Thread.sleep(250);
+//            }catch(Exception ex){}
+//        }
+//
+//
+//        MatchConfig.telemetry.addData("Counter: ", executeCounter);
+//        MatchConfig.telemetry.update();
+//    }
 
-        double length = range * Math.cos(bearing);
+    private double betterCalculatedDistanceToTravel(double bearing, double range, double yaw) {
 
-        double sqrdRange = range * range;
-        double sqrdLength = length * length;
+        double deltaCOMX = range * Math.sin(Math.toRadians(bearing));
+        double absDeltaCOMX = Math.abs(deltaCOMX);
 
-        double ve = sqrdRange - sqrdLength;
+        double yawD = 11.5 * (Math.sin(Math.toRadians(yaw)));
+        double absYawD = Math.abs(yawD);
 
-        double sqrtVE = Math.sqrt(ve);
+        //  The 2 represents an offest to center the bot more
+        double finalStrafe = absDeltaCOMX + absYawD + Configuration.AUTO_APRILTAG_STRAFE_OFFSET;
 
-        return sqrtVE;
-
+        return finalStrafe;
     }
 
-    public double calculatedDistanceToTravel(double bearing, double range, double yaw) {
-        double bearingRadians = Math.toRadians(bearing);
-        double yawRadians = Math.toRadians(yaw);
-
-        double xComponent = range * Math.cos(bearingRadians);
-        double yComponent = range * Math.sin(bearingRadians);
-
-        double rotatedX = xComponent * Math.cos(yawRadians) - yComponent * Math.sin(yawRadians);
-        double rotatedy = xComponent * Math.sin(yawRadians) + yComponent * Math.cos(yawRadians);
-
-        return Math.abs(rotatedX);
-    }
+//    private double returnBearingStrafe(double bearing, double range, double yaw) {
+//
+//        double returnStrafe = 0.0;
+//        if(bearing <= Configuration.APRIL_TAG_BEARING) {
+//             returnStrafe = betterCalculatedDistanceToTravel(bearing, range, yaw);
+//        }
+//        else if(bearing >= -Configuration.APRIL_TAG_BEARING) {
+//             returnStrafe = -betterCalculatedDistanceToTravel(bearing, range, yaw);
+//        }
+//
+//        return returnStrafe;
+//    }
 
     @Override
     public boolean isFinished() {
-        return isFinished;
+        AprilTagDetection detection = visionSubsystem.findAprilTag();
+        if (detection != null && Math.abs(detection.ftcPose.bearing) <= Configuration.APRIL_TAG_BEARING && Math.abs(detection.ftcPose.yaw) <= Configuration.APRIL_TAG_YAW) {
+            mecanumDriveSubsystem.stop();
+            mecanumDriveSubsystem.breakFollowing();
+            MatchConfig.telemetry.addLine("FOUND Tag " + visionSubsystem.GetAprilTagID());
+            return true;
+        }
+        else
+            return false;
     }
     @Override
     public void end(boolean interrupted) {
+
         mecanumDriveSubsystem.stop();
         mecanumDriveSubsystem.breakFollowing();
-        visionSubsystem.stopAprilStreaming();
+
+        AprilTagDetection detection = this.visionSubsystem.findAprilTag();
+        if(detection != null) {
+            mecanumDriveSubsystem.turn(Math.toRadians(detection.ftcPose.yaw));
+        }
+
+        //visionSubsystem.stopAprilStreaming();
     }
 }
