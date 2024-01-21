@@ -34,8 +34,6 @@ public class StrafeToFindAprilTagCommand extends CommandBase {
     @Override
     public void initialize() {
         executeCounter = 0;
-        //visionSubsystem.resumeAprilStreaming();
-
         buildAndExecuteStrafeSequence();
     }
 
