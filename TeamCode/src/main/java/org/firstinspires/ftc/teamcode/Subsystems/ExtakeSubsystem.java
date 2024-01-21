@@ -65,11 +65,21 @@ public class ExtakeSubsystem extends FalconSubsystemBase {
     }
 
     private int detectPixelCount(){
-        telemetry.addData("Distance sensor1 ", "%.3f", colorSensor1.getDistance(DistanceUnit.MM));
-        telemetry.addData("Sensor 2", "%.3f", colorSensor2.getDistance(DistanceUnit.MM));
+        double sensor1Distance = 0.0;
+        double sensor2Distance = 0.0;
 
-        double sensor1Distance = colorSensor1.getDistance(DistanceUnit.MM);
-        double sensor2Distance = colorSensor2.getDistance(DistanceUnit.MM);
+        try{
+            sensor1Distance = colorSensor1.getDistance(DistanceUnit.MM);
+            sensor2Distance = colorSensor2.getDistance(DistanceUnit.MM);
+
+            telemetry.addData("Distance sensor1 ", "%.3f", sensor1Distance);
+            telemetry.addData("Sensor 2", "%.3f", sensor2Distance);
+        }
+        catch(Exception ex){
+            telemetry.addLine("EXCEPTION: Extake Distance Sensor Reading: " + ex.getMessage());
+            return 0;
+        }
+
         double distanceMax = 20.0;
         if (sensor1Distance > distanceMax && sensor2Distance > distanceMax) {
             return 0;
