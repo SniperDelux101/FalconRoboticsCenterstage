@@ -65,15 +65,16 @@ public class AutonomousCoordinateCommandTest extends CommandOpMode {
         extakeSubsystem = new ExtakeSubsystem(hardwareMap, telemetry);
         linearSlideSubsystem = new LinearSlideSubsystem(hardwareMap, telemetry);
         intakeMotorSubsystem = new IntakeMotorSubsystem(hardwareMap, telemetry);
-        visionSubsystem = new VisionSubsystem(hardwareMap, telemetry);
+        visionSubsystem = new VisionSubsystem(hardwareMap, telemetry, true, true);
 
         register(driveBaseSubsystem, airplaneLauncherSubsystem, climbSubsystem, extakeSubsystem, linearSlideSubsystem, odometryControlSubsystem, intakeMotorSubsystem, visionSubsystem);
-        visionSubsystem.initTfod(true);
     }
 
     @Override
     public void runOpMode() throws InterruptedException {
         initialize();
+        if(useVision)
+            visionSubsystem.startTensorFlowProcessing();
 
 
         boolean readVision = true;
@@ -109,7 +110,7 @@ public class AutonomousCoordinateCommandTest extends CommandOpMode {
         waitForStart();
 
         if(useVision)
-            visionSubsystem.stopTensorStreaming();
+            visionSubsystem.stopTensorFlowProcessing();
         TrajectorySequence phase1, phase2, park;
 
         if(startLocation == AutonomousStartLocation.Near) {
