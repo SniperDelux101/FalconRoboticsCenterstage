@@ -25,7 +25,7 @@ public class FindAprilTagCommand extends CommandBase {
 
     @Override
     public void initialize() {
-        this.visionSubsystem.resumeAprilStreaming();
+        this.visionSubsystem.startAprilTagProcessing();
     }
 
     @Override
@@ -88,7 +88,7 @@ public class FindAprilTagCommand extends CommandBase {
     @Override
     public void end(boolean interrupted) {
         this.mecanumDriveSubsystem.stop();
-        visionSubsystem.stopAprilStreaming();
+        visionSubsystem.stopAprilTagProcessing();
     }
 
 
