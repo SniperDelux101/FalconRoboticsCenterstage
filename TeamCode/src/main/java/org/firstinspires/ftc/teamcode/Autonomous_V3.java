@@ -14,6 +14,7 @@ import com.arcrobotics.ftclib.command.WaitCommand;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.teamcode.Commands.AprilTagStartStopCommand;
 import org.firstinspires.ftc.teamcode.Commands.AprilTagStrafeCommand;
 import org.firstinspires.ftc.teamcode.Commands.Autonomous.Alliance;
 import org.firstinspires.ftc.teamcode.Commands.Autonomous.AutonomousStartLocation;
@@ -22,6 +23,7 @@ import org.firstinspires.ftc.teamcode.Commands.Autonomous.FindAprilTagCommand;
 import org.firstinspires.ftc.teamcode.Commands.Autonomous.Paths.V3.BuildFarPaths;
 import org.firstinspires.ftc.teamcode.Commands.Autonomous.Paths.V3.BuildNearPaths;
 import org.firstinspires.ftc.teamcode.Commands.Autonomous.TeamPropPosition;
+import org.firstinspires.ftc.teamcode.Commands.DriveToAprilTagCommand;
 import org.firstinspires.ftc.teamcode.Commands.GyroSquareCommand;
 import org.firstinspires.ftc.teamcode.Commands.MovePixelBoxArmToPositionCommand;
 import org.firstinspires.ftc.teamcode.Commands.PixelBoxArmPosition;
@@ -81,15 +83,20 @@ public class Autonomous_V3 extends CommandOpMode {
         extakeSubsystem = new ExtakeSubsystem(hardwareMap, telemetry);
         linearSlideSubsystem = new LinearSlideSubsystem(hardwareMap, telemetry);
         intakeMotorSubsystem = new IntakeMotorSubsystem(hardwareMap, telemetry);
-        visionSubsystem = new VisionSubsystem(hardwareMap, telemetry, true);
+        visionSubsystem = new VisionSubsystem(hardwareMap, telemetry, true, true);
         distanceSensorSubsystem = new DistanceSensorSubsystem(hardwareMap, telemetry);
 
         register(driveBaseSubsystem, airplaneLauncherSubsystem, climbSubsystem, extakeSubsystem, linearSlideSubsystem, odometryControlSubsystem,
                 intakeMotorSubsystem, visionSubsystem, distanceSensorSubsystem);
+        this.visionSubsystem.startTensorFlowProcessing();
     }
 
     @Override
     public void runOpMode() throws InterruptedException {
+        MatchConfig.Alliance = Alliance.Blue;
+        MatchConfig.AutonomousStartLocation = AutonomousStartLocation.Far;
+        MatchConfig.TeamPropPosition = TeamPropPosition.NoDetection;
+        MatchConfig.telemetry = telemetry;
         initialize();
 
         while(this.opModeInInit()) {
@@ -122,10 +129,9 @@ public class Autonomous_V3 extends CommandOpMode {
 
         waitForStart();
 
-        visionSubsystem.stopTensorStreaming();
-        //visionSubsystem.closeTensorFlow();
+        visionSubsystem.stopTensorFlowProcessing();
+        visionSubsystem.shutDownTensorFlowProcessor();
 
-        visionSubsystem.resumeAprilStreaming();
         TrajectorySequence phase1, phase2, phase3, park;
 
         if(startLocation == AutonomousStartLocation.Near) {
@@ -144,23 +150,23 @@ public class Autonomous_V3 extends CommandOpMode {
 
         schedule(
                 new SequentialCommandGroup(
+                        new AprilTagStartStopCommand(visionSubsystem, AprilTagStartStopCommand.State.Start),
                         new TrajectorySequenceFollowerCommand(driveBaseSubsystem, phase1),
                         new ParallelCommandGroup(
                                 new PlacePixelOnSpikeCommand(intakeMotorSubsystem).withTimeout(2000),
                                 new TrajectorySequenceFollowerCommand(driveBaseSubsystem, phase2)
                         ),
-                        //new GyroSquareCommand(gyroSubsystem, driveBaseSubsystem, getSquareDegree()).withTimeout(1000),
-                        new StrafeToFindAprilTagCommand(driveBaseSubsystem, visionSubsystem),
-//                        new FindAprilTagCommand(driveBaseSubsystem, visionSubsystem),
-                        new SelectCommand(
-                                new HashMap<Object, Command>(){{
-                                    put(TeamPropPosition.Left, new AprilTagStrafeCommand(driveBaseSubsystem));
-                                    put(TeamPropPosition.Right, new AprilTagStrafeCommand(driveBaseSubsystem));
-                                }},
-                                this::getTeamPropPosition
-                        ),
-
+                        //new StrafeToFindAprilTagCommand(driveBaseSubsystem, visionSubsystem),
+                        new DriveToAprilTagCommand(visionSubsystem, driveBaseSubsystem),
                         new DriveForwardToObjectCommand(driveBaseSubsystem, distanceSensorSubsystem, GyroSubsystem.getInstance(hardwareMap, telemetry), Configuration.BACKDROP_DISTANCE),
+                        //offset if we are dropping left or right
+//                        new SelectCommand(
+//                                new HashMap<Object, Command>(){{
+//                                    put(TeamPropPosition.Left, new AprilTagStrafeCommand(driveBaseSubsystem));
+//                                    put(TeamPropPosition.Right, new AprilTagStrafeCommand(driveBaseSubsystem));
+//                                }},
+//                                this::getTeamPropPosition
+//                        ),
                         new SequentialCommandGroup(
                                 new RunLinearSlideAndCenterPixelBoxCommand(extakeSubsystem,linearSlideSubsystem, Configuration.LINEAR_SLIDE_POS_AUTO),
                                 new MovePixelBoxArmToPositionCommand(extakeSubsystem, PixelBoxArmPosition.Extake)
@@ -179,18 +185,27 @@ public class Autonomous_V3 extends CommandOpMode {
                         new TrajectorySequenceFollowerCommand(driveBaseSubsystem, phase3),
                         new StopPixelBoxReset(extakeSubsystem, linearSlideSubsystem),
                         new TrajectorySequenceFollowerCommand(driveBaseSubsystem, park),
-                        new InstantCommand(extakeSubsystem::pixelStop, extakeSubsystem)
+                        new InstantCommand(extakeSubsystem::pixelStop, extakeSubsystem),
+                        new AprilTagStartStopCommand(visionSubsystem, AprilTagStartStopCommand.State.Stop)
                 ));
 
         // run the scheduler
         while (!isStopRequested() && opModeIsActive()) {
-            run();
-            telemetry.addData("Gyro Reading(Degrees): ", gyroSubsystem.getHeading(AngleUnit.DEGREES));
+            try {
+                run();
+            }
+            catch(Exception ex){
+                telemetry.addData("Error in run method ", ex.getMessage());
+            }
+            //telemetry.addData("Gyro Reading(Degrees): ", gyroSubsystem.getHeading(AngleUnit.DEGREES));
             telemetry.update();
         }
-        visionSubsystem.stopAllVisionPortalStreaming();
+
         reset();
     }
+
+
+
     private double getSquareDegree() {
         if(MatchConfig.Alliance == Alliance.Blue) {
             return 270;
