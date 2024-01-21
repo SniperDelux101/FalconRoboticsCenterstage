@@ -8,6 +8,9 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.JavaUtil;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.ExposureControl;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.GainControl;
+import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Quaternion;
@@ -15,6 +18,7 @@ import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.teamcode.Commands.Autonomous.Alliance;
 import org.firstinspires.ftc.teamcode.Commands.Autonomous.AutonomousStartLocation;
 import org.firstinspires.ftc.teamcode.Commands.Autonomous.TeamPropPosition;
+import org.firstinspires.ftc.teamcode.Subsystems.vision.TeamPropProcessor;
 import org.firstinspires.ftc.teamcode.Utilities.Configuration;
 import org.firstinspires.ftc.teamcode.Utilities.MatchConfig;
 import org.firstinspires.ftc.vision.VisionPortal;
@@ -22,10 +26,10 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagGameDatabase;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 import org.firstinspires.ftc.vision.tfod.TfodProcessor;
-import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
 
 import java.io.File;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class VisionSubsystem extends FalconSubsystemBase {
     /**
@@ -43,12 +47,13 @@ public class VisionSubsystem extends FalconSubsystemBase {
 
     private AprilTagProcessor aprilTag;
 
-    ///the variable to store our
+    private TeamPropProcessor teamPropProcessor;
+
+    ///the variable to store our vision portals
     private VisionPortal tensorVisionPortal;
     private VisionPortal aprilTagVisionPortal;
-    private int tensorflowVisionPortal_ID, apriltagVisionPortal_ID;
-
-    VisionPortal.Builder visionPortalBuilder;
+    private int tensorflowVisionPortal_ID;
+    private int apriltagVisionPortal_ID;
 
     public int GetAprilTagID()
     {
@@ -111,29 +116,29 @@ public class VisionSubsystem extends FalconSubsystemBase {
     }
 
     public VisionSubsystem(HardwareMap hm, Telemetry tel) {
-        this(hm, tel, false);
+        this(hm, tel, false, false);
     }
 
-    public VisionSubsystem(HardwareMap hm, Telemetry tel, boolean initVisionPortals) {
+    public VisionSubsystem(HardwareMap hm, Telemetry tel, boolean initVisionPortals, boolean allowStreaming) {
         super(tel);
         hardwareMap = hm;
         if (initVisionPortals) {
             initMultiPortals();
-            initTfod(true);
-            initAprilTagProcessor();
+            initAprilTagProcessor(allowStreaming);
+            initTfod(allowStreaming);
         }
     }
 
     private void initMultiPortals(){
         List portalList;
 
-        portalList = JavaUtil.makeIntegerList(VisionPortal.makeMultiPortalView(2, VisionPortal.MultiPortalLayout.HORIZONTAL));
+        portalList = JavaUtil.makeIntegerList(VisionPortal.makeMultiPortalView(2, VisionPortal.MultiPortalLayout.VERTICAL));
         tensorflowVisionPortal_ID = ((Integer) JavaUtil.inListGet(portalList, JavaUtil.AtMode.FROM_START, 0, false)).intValue();
         apriltagVisionPortal_ID = ((Integer) JavaUtil.inListGet(portalList, JavaUtil.AtMode.FROM_START, 1, false)).intValue();
     }
 
-    public void initTfod(boolean allowStreaming) {
-
+    private void initTfod(boolean allowStreaming) {
+        //teamPropProcessor = new TeamPropProcessor(MatchConfig.Alliance);
         File f = new File(TFOD_MODEL_FILE);
         if(!f.exists())
             telemetry.addLine("Tensor file " + TFOD_MODEL_FILE + " does not exist");
@@ -146,29 +151,29 @@ public class VisionSubsystem extends FalconSubsystemBase {
                 .setModelInputSize(300)
                 .setModelAspectRatio(16.0 / 9.0)
                 .build();
+
+        VisionPortal.Builder builder = new VisionPortal.Builder();
+        builder.setCamera(hardwareMap.get(WebcamName.class, "Webcam 1"));
+        builder.setCameraResolution(new Size(Configuration.CAMERA_WIDTH, Configuration.CAMERA_HEIGHT));
+        builder.enableLiveView(allowStreaming);
+        builder.setStreamFormat(VisionPortal.StreamFormat.YUY2);
+        builder.addProcessor(tfod);
+        builder.setLiveViewContainerId(tensorflowVisionPortal_ID);
+
+        tensorVisionPortal = builder.build();
         tfod.setMinResultConfidence((float) Configuration.CONFIDENCE_SCORE);
 
-
-        visionPortalBuilder = new VisionPortal.Builder();
-        visionPortalBuilder.setCamera(hardwareMap.get(WebcamName.class, "Webcam 1"));
-        visionPortalBuilder.setCameraResolution(new Size(Configuration.CAMERA_WIDTH, Configuration.CAMERA_HEIGHT));
-        //visionPortalBuilder.enableLiveView(allowStreaming);
-        visionPortalBuilder.setStreamFormat(VisionPortal.StreamFormat.YUY2);
-
-        visionPortalBuilder.addProcessor(tfod);
-        visionPortalBuilder.setLiveViewContainerId(tensorflowVisionPortal_ID);
-
-        tensorVisionPortal = visionPortalBuilder.build();
-        tensorVisionPortal.setProcessorEnabled(tfod,true);
+        this.enableTensorFlowProcessing();
     }
 
-    private void initAprilTagProcessor() {
+    private void initAprilTagProcessor(boolean allowStreaming) {
         // Create the AprilTag processor.
         aprilTag = new AprilTagProcessor.Builder()
                 // The following default settings are available to un-comment and edit as needed.
-                .setDrawAxes(false)
-                .setDrawCubeProjection(false)
-                .setDrawTagOutline(false)
+                .setDrawAxes(allowStreaming)
+                .setDrawCubeProjection(allowStreaming)
+                .setDrawTagID(allowStreaming)
+                .setDrawTagOutline(allowStreaming)
                 .setTagFamily(AprilTagProcessor.TagFamily.TAG_36h11)
                 .setTagLibrary(AprilTagGameDatabase.getCenterStageTagLibrary())
                 .setOutputUnits(DistanceUnit.INCH, AngleUnit.DEGREES)
@@ -188,85 +193,135 @@ public class VisionSubsystem extends FalconSubsystemBase {
         // Note: Decimation can be changed on-the-fly to adapt during a match.
         //aprilTag.setDecimation(5);
 
+        if(aprilTagVisionPortal != null)
+            aprilTagVisionPortal = null;
+
         // Create the vision portal by using a builder.
-       // VisionPortal.Builder builder = new VisionPortal.Builder();
+//        aprilTagVisionPortal = new VisionPortal.Builder()
+//                .addProcessor(aprilTag)
+//                .setCamera(hardwareMap.get(WebcamName.class, "Webcam 2"))
+//                .setCameraResolution(new Size(640, 480))
+//                .enableLiveView(allowStreaming)
+//                .setStreamFormat(VisionPortal.StreamFormat.YUY2)
+//                .setAutoStopLiveView(allowStreaming)
+//                .setLiveViewContainerId(apriltagVisionPortal_ID)
+//                .build();
 
-        // Set the camera (webcam vs. built-in RC phone camera).
-        visionPortalBuilder.setCamera(hardwareMap.get(WebcamName.class, "Webcam 2"));
-
-        // Choose a camera resolution. Not all cameras support all resolutions.
-        visionPortalBuilder.setCameraResolution(new Size(640, 480));
-
-        // Enable the RC preview (LiveView).  Set "false" to omit camera monitoring.
-        visionPortalBuilder.enableLiveView(false);
-
-        // Set the stream format; MJPEG uses less bandwidth than default YUY2.
-        visionPortalBuilder.setStreamFormat(VisionPortal.StreamFormat.YUY2);
-
+        VisionPortal.Builder builder = new VisionPortal.Builder();
+        builder.setCamera(hardwareMap.get(WebcamName.class, "Webcam 2"));
+        builder.setCameraResolution(new Size(640, 480));
+        builder.enableLiveView(allowStreaming);
+        // Set the stream format; MJPEG uses less bandwidth than default YUY2./builder.setStreamFormat(VisionPortal.StreamFormat.YUY2);
+        builder.setStreamFormat(VisionPortal.StreamFormat.YUY2);
         // Choose whether or not LiveView stops if no processors are enabled.
         // If set "true", monitor shows solid orange screen if no processors enabled.
         // If set "false", monitor shows camera view without annotations.
-        visionPortalBuilder.setAutoStopLiveView(false);
+        builder.setAutoStopLiveView(allowStreaming);
 
         // Set and enable the processor.
-        visionPortalBuilder.addProcessor(aprilTag);
+        builder.addProcessor(aprilTag);
 
-        visionPortalBuilder.setLiveViewContainerId(apriltagVisionPortal_ID);
+        builder.setLiveViewContainerId(apriltagVisionPortal_ID);
 
         // Build the Vision Portal, using the above settings.
-        aprilTagVisionPortal = visionPortalBuilder.build();
+        aprilTagVisionPortal = builder.build();
+        enableAprilTagProcessing();
 
-        // Disable or re-enable the aprilTag processor at any time.
+        this.setAprilTagExposure();
+    }
+
+    public boolean setAprilTagExposure() {
+        if(aprilTagVisionPortal == null)
+            return false;
+
+        // Make sure camera is streaming before we try to set the exposure controls
+        if (aprilTagVisionPortal.getCameraState() != VisionPortal.CameraState.STREAMING) {
+            telemetry.addData("Camera", "Waiting");
+            telemetry.update();
+            waitForCameraToInit(aprilTagVisionPortal);
+            telemetry.addData("Camera", "Ready");
+            telemetry.update();
+        }
+
+        if(aprilTagVisionPortal.getCameraState() == VisionPortal.CameraState.STREAMING) {
+            ExposureControl exposureControl = aprilTagVisionPortal.getCameraControl(ExposureControl.class);
+            if (exposureControl.isExposureSupported()) {
+                exposureControl.setMode(ExposureControl.Mode.Manual);
+                exposureControl.setExposure(Configuration.APRIL_TAG_CAMERA_EXPOSURE, TimeUnit.MILLISECONDS);
+
+                GainControl gainControl = aprilTagVisionPortal.getCameraControl(GainControl.class);
+                gainControl.setGain(Configuration.APRIL_TAG_CAMERA_GAIN);
+            }
+        }
+        return true;
+    }
+
+    public void startAprilTagProcessing(){
+        if(aprilTagVisionPortal != null && aprilTagVisionPortal.getCameraState() != VisionPortal.CameraState.STREAMING)
+        {
+            this.enableAprilTagProcessing();
+            aprilTagVisionPortal.resumeStreaming();
+            waitForCameraToInit(aprilTagVisionPortal);
+        }
+    }
+
+    public void stopAprilTagProcessing(){
+        aprilTagVisionPortal.stopStreaming();
+        this.disableAprilTagProcessing();
+    }
+
+    private void enableAprilTagProcessing(){
         aprilTagVisionPortal.setProcessorEnabled(aprilTag, true);
     }
-
-    public void setEnableDisableForAprilTagPortal(boolean enable) {
-        aprilTagVisionPortal.setProcessorEnabled(aprilTag, enable);
+    private void disableAprilTagProcessing(){
+        aprilTagVisionPortal.setProcessorEnabled(aprilTag, false);
     }
 
-    public void enableTfod(boolean ennabled) {
-        ///TODO: Come back and do type checking for null values
-        tensorVisionPortal.setProcessorEnabled(tfod, ennabled);
+    public void startTensorFlowProcessing(){
+        if(tensorVisionPortal != null && tensorVisionPortal.getCameraState() != VisionPortal.CameraState.STREAMING)
+        {
+            this.enableTensorFlowProcessing();
+            tensorVisionPortal.resumeStreaming();
+            waitForCameraToInit(tensorVisionPortal);
+        }
     }
 
-    public void stopTensorStreaming() {
-        tensorVisionPortal.stopStreaming();
-    }
-    public void stopAprilStreaming(){
-        aprilTagVisionPortal.stopStreaming();
-    }
-    public void stopAllVisionPortalStreaming(){
-        stopTensorStreaming();
-        stopAprilStreaming();
+    public void stopTensorFlowProcessing(){
+        if(tensorVisionPortal.getCameraState() == VisionPortal.CameraState.STREAMING || tensorVisionPortal.getCameraState() == VisionPortal.CameraState.CAMERA_DEVICE_READY
+            || tensorVisionPortal.getCameraState() == VisionPortal.CameraState.STARTING_STREAM) {
+            tensorVisionPortal.stopStreaming();
+            this.disableTensorFlowProcessing();
+        }
     }
 
-    public void resumeTensorStreaming() {
-        tensorVisionPortal.resumeStreaming();
+    private void enableTensorFlowProcessing(){
+        tensorVisionPortal.setProcessorEnabled(tfod, true);
     }
-    public void resumeAprilStreaming(){
-        aprilTagVisionPortal.resumeStreaming();
-    }
-    public void resumeAllVisionPortalStreaming(){
-        resumeTensorStreaming();
-        resumeAprilStreaming();
+    private void disableTensorFlowProcessing(){
+        tensorVisionPortal.setProcessorEnabled(tfod, false);
     }
 
-    public void closeTensorFlow(){
-        tensorVisionPortal.close();
+    public void shutDownTensorFlowProcessor(){
+        if(tfod != null)
+            tfod.shutdown();
     }
 
-    public void closeVisionPortal() {
-        tensorVisionPortal.close();
-        aprilTagVisionPortal.close();
+
+    private void waitForCameraToInit(VisionPortal visionPortal){
+        int counter = 0;
+        while(visionPortal.getCameraState() != VisionPortal.CameraState.STREAMING & counter < 10){
+            try{Thread.sleep(500);}
+            catch(Exception ex) {}
+            counter++;
+        }
     }
 
-    public List<Recognition> getRecognitions() {
-        List<Recognition> recognitionList = tfod.getRecognitions();
-        return recognitionList;
+    public List<Recognition> getTeamPropRecognitions() {
+        return tfod.getRecognitions();
     }
 
     public TeamPropPosition getTeamPropPosition() {
-        List<Recognition> currentRecognitions = getRecognitions();
+        List<Recognition> currentRecognitions = getTeamPropRecognitions();
         TeamPropPosition position = TeamPropPosition.Left;
         Recognition teamProp = null;
         if (currentRecognitions != null && currentRecognitions.size() > 0) {
@@ -298,7 +353,11 @@ public class VisionSubsystem extends FalconSubsystemBase {
                     position = TeamPropPosition.NoDetection;
 
             }
-        } else if (MatchConfig.Alliance == Alliance.Red && MatchConfig.AutonomousStartLocation == AutonomousStartLocation.Near)
+        }
+        else if(teamPropProcessor != null && teamPropProcessor.objectDetected && teamPropProcessor.detectedPosition != TeamPropPosition.NoDetection){
+            position = teamPropProcessor.detectedPosition;
+        }
+        else if (MatchConfig.Alliance == Alliance.Red && MatchConfig.AutonomousStartLocation == AutonomousStartLocation.Near)
             position = TeamPropPosition.Left;
         else if (MatchConfig.Alliance == Alliance.Red && MatchConfig.AutonomousStartLocation == AutonomousStartLocation.Far)
             position = TeamPropPosition.Right;
@@ -321,35 +380,33 @@ public class VisionSubsystem extends FalconSubsystemBase {
     }
 
     public List<AprilTagDetection> getAprilTags(){
-
         return aprilTag.getDetections();
     }
 
     public AprilTagDetection findAprilTag(int tagID) {
         AprilTagDetection currentDetection = null;
         List<AprilTagDetection> currentDetections = getAprilTags();
-//        telemetry.addData("# AprilTags Detected", currentDetections.size());
-//        telemetry.addData("Looking for Tag ID: ", tagID);
 
         // Step through the list of detections and display info for each one.
         for (AprilTagDetection detection : currentDetections) {
-            //if (detection.metadata != null && detection.id == tagID) {
             if(detection.id == tagID){
-//                telemetry.addLine(String.format("\n==== (ID %d) %s", detection.id, detection.metadata.name));
-//                telemetry.addLine(String.format("XYZ %6.1f %6.1f %6.1f  (inch)", detection.ftcPose.x, detection.ftcPose.y, detection.ftcPose.z));
-//                telemetry.addLine(String.format("PRY %6.1f %6.1f %6.1f  (deg)", detection.ftcPose.pitch, detection.ftcPose.roll, detection.ftcPose.yaw));
-//                telemetry.addLine(String.format("RBE %6.1f %6.1f %6.1f  (inch, deg, deg)", detection.ftcPose.range, detection.ftcPose.bearing, detection.ftcPose.elevation));
-
-               currentDetection = detection;
+                outputDetectionToTelemetry(detection);
+                currentDetection = detection;
                break;
-            } else {
-//                telemetry.addLine(String.format("\n==== (ID %d) Unknown", detection.id));
-//                telemetry.addLine(String.format("Center %6.0f %6.0f   (pixels)", detection.center.x, detection.center.y));
             }
         }
         // end for() loop
 
         return currentDetection;
+    }
+
+    private void outputDetectionToTelemetry(AprilTagDetection detection) {
+        try {
+            telemetry.addLine(String.format("\n==== (ID %d)", detection.id));
+            telemetry.addLine(String.format("XYZ %6.1f %6.1f %6.1f  (inch)", detection.ftcPose.x, detection.ftcPose.y, detection.ftcPose.z));
+            telemetry.addLine(String.format("PRY %6.1f %6.1f %6.1f  (deg)", detection.ftcPose.pitch, detection.ftcPose.roll, detection.ftcPose.yaw));
+            telemetry.addLine(String.format("RBE %6.1f %6.1f %6.1f  (inch, deg, deg)", detection.ftcPose.range, detection.ftcPose.bearing, detection.ftcPose.elevation));
+        } catch (Exception ex) {}
     }
 
     private Pose2d DeterminePoseFromAprilTag(AprilTagID tag) {
@@ -391,7 +448,7 @@ public class VisionSubsystem extends FalconSubsystemBase {
         return newPose;
     }
 
-    public double QuaternionToHeading(Quaternion quaternion) {
+    private double QuaternionToHeading(Quaternion quaternion) {
 
         // Calculate yaw (heading) from quaternion
         double t0 = 2.0 * (quaternion.w * quaternion.z + quaternion.x * quaternion.y);
