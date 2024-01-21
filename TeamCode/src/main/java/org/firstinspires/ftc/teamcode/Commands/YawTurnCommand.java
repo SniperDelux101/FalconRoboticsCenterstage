@@ -27,7 +27,7 @@ public class YawTurnCommand extends CommandBase {
 
     @Override
     public void initialize() {
-        visionSubsystem.resumeAprilStreaming();
+        visionSubsystem.startAprilTagProcessing();
 
         AprilTagDetection detection = this.visionSubsystem.findAprilTag();
         if(detection != null){
@@ -45,7 +45,7 @@ public class YawTurnCommand extends CommandBase {
 
     @Override
     public void end(boolean interrupted) {
-        visionSubsystem.stopAprilStreaming();
+        visionSubsystem.stopAprilTagProcessing();
     }
 
     @Override
