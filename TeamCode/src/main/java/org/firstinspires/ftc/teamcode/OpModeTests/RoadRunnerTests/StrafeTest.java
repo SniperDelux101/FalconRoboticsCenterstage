@@ -2,9 +2,12 @@ package org.firstinspires.ftc.teamcode.OpModeTests.RoadRunnerTests;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.trajectory.Trajectory;
+import com.acmerobotics.roadrunner.trajectory.TrajectoryBuilder;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.WaitUntilCommand;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.Commands.TrajectoryFollowerCommand;
 import org.firstinspires.ftc.teamcode.Subsystems.drive.FalconMecanumDrive;
@@ -17,7 +20,7 @@ import org.firstinspires.ftc.teamcode.Subsystems.MecanumDriveSubsystem;
  */
 @Config
 @Autonomous(group = "drive")
-public class StrafeTest extends CommandOpMode {
+public class StrafeTest extends LinearOpMode {
 
     public static double DISTANCE = 35; // in
 
@@ -25,20 +28,38 @@ public class StrafeTest extends CommandOpMode {
     private TrajectoryFollowerCommand strafeFollower;
 
     @Override
-    public void initialize() {
+    public void runOpMode() throws InterruptedException {
         drive = new MecanumDriveSubsystem(new FalconMecanumDrive(hardwareMap), false);
-        strafeFollower = new TrajectoryFollowerCommand(drive,
-                drive.trajectoryBuilder(new Pose2d())
-                        .strafeRight(DISTANCE)
-                        .build()
-        );
-        schedule(new WaitUntilCommand(this::isStarted).andThen(strafeFollower.whenFinished(() -> {
-            Pose2d poseEstimate = drive.getPoseEstimate();
-            telemetry.addData("finalX", poseEstimate.getX());
-            telemetry.addData("finalY", poseEstimate.getY());
-            telemetry.addData("finalHeading", poseEstimate.getHeading());
-            telemetry.update();
-        })));
+//        strafeFollower = new TrajectoryFollowerCommand(drive,
+//                drive.trajectoryBuilder(new Pose2d())
+//                        .strafeRight(DISTANCE)
+//                        .build()
+//        );
+//        schedule(new WaitUntilCommand(this::isStarted).andThen(strafeFollower.whenFinished(() -> {
+//            Pose2d poseEstimate = drive.getPoseEstimate();
+//            telemetry.addData("finalX", poseEstimate.getX());
+//            telemetry.addData("finalY", poseEstimate.getY());
+//            telemetry.addData("finalHeading", poseEstimate.getHeading());
+//            telemetry.update();
+//        })));
+
+        Trajectory trajectory = drive.trajectoryBuilder(new Pose2d())
+                .strafeRight(DISTANCE)
+                .build();
+
+        waitForStart();
+
+        if(isStopRequested())return;
+
+        drive.followTrajectory(trajectory);
+
+        Pose2d poseEstimate = drive.getPoseEstimate();
+        telemetry.addData("finalX: ", poseEstimate.getX());
+        telemetry.addData("finalY: ", poseEstimate.getY());
+        telemetry.addData("final Heading: ", poseEstimate.getHeading());
+        telemetry.update();
+
+        while(!isStopRequested() && opModeIsActive()) ;
     }
 
 }

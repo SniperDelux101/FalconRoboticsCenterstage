@@ -42,7 +42,7 @@ public class LinearSlideTest extends OpMode {
     @Override
     public void init() {
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
-        linearSlideSubsystem = new LinearSlideSubsystem(hardwareMap);
+        linearSlideSubsystem = new LinearSlideSubsystem(hardwareMap, telemetry);
     }
     @Override
     public void loop() {

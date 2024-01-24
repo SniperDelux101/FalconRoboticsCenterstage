@@ -5,12 +5,18 @@ import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Utilities.Configuration;
 
-public class LinearSlideSubsystem extends SubsystemBase {
+public class LinearSlideSubsystem extends FalconSubsystemBase {
+    /**
+     * sets the linear slide to fo to its diffirent positions
+     *
+     */
 
     private final MotorEx linearSlideMotor;
-    public LinearSlideSubsystem(HardwareMap hMap) {
+    public LinearSlideSubsystem(HardwareMap hMap, Telemetry tel) {
+        super(tel);
         linearSlideMotor = new MotorEx(hMap,"Linear_Slide_Motor");
         linearSlideMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
         linearSlideMotor.setRunMode(Motor.RunMode.PositionControl);
@@ -47,6 +53,7 @@ public class LinearSlideSubsystem extends SubsystemBase {
         linearSlideMotor.setRunMode(Motor.RunMode.PositionControl);
         linearSlideMotor.setTargetPosition(linearSlidePos);
         linearSlideMotor.set(1.0);
+        telemetry.addData("Linear Slide Position ; ", linearSlidePos);
         if(runSynchronous){
             while(LinearCurPos() < linearSlidePos){}
             stop();
@@ -54,8 +61,19 @@ public class LinearSlideSubsystem extends SubsystemBase {
     }
 
     public boolean isSlideAtTargetPosition(){
+        boolean flag = false;
+        try{
+            flag = linearSlideMotor.atTargetPosition();
+        }
+        catch (Exception ex){
+            telemetry.addData("Exception: ", ex.getMessage());
+        }
 
-        return linearSlideMotor.atTargetPosition();
+        return flag;
+    }
+
+    public int getCurrentPosition(){
+        return linearSlideMotor.getCurrentPosition();
     }
 
     public void stop() {

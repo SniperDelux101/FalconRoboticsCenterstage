@@ -17,7 +17,7 @@ public class AirplaneLaunchTest extends OpMode {
     @Override
     public void init() {
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
-        airplaneLauncherSubsystem = new AirplaneLauncherSubsystem(hardwareMap);
+        airplaneLauncherSubsystem = new AirplaneLauncherSubsystem(hardwareMap , telemetry);
     }
 
     @Override

@@ -29,7 +29,7 @@ public class SimpleRobot extends Robot {
         driverGamePad_FTC = gamepad1;
         utilityGamePad_FTC = gamepad2;
 
-        linearSlideSubsystem = new LinearSlideSubsystem(hMap);
+        linearSlideSubsystem = new LinearSlideSubsystem(hMap , telemetry);
 
         driverGamepad = new GamepadEx(driverGamePad_FTC);
         utilityGamepad = new GamepadEx(utilityGamePad_FTC);

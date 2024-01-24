@@ -17,7 +17,7 @@ public class TurnCommand extends CommandBase {
 
     @Override
     public void initialize() {
-        drive.turn(angle);
+        drive.turnAsync(angle);
     }
 
     @Override

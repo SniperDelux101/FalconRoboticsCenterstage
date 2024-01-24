@@ -45,7 +45,7 @@ import java.util.Objects;
 @Config
 @Autonomous(group = "drive")
 public class ManualFeedforwardTuner extends LinearOpMode {
-    public static double DISTANCE = 72; // in
+    public static double DISTANCE = 90; // in
 
     private FtcDashboard dashboard = FtcDashboard.getInstance();
 
@@ -116,9 +116,11 @@ public class ManualFeedforwardTuner extends LinearOpMode {
                     MotionState motionState = activeProfile.get(profileTime);
                     double targetPower = Kinematics.calculateMotorFeedforward(motionState.getV(), motionState.getA(), kV, kA, kStatic);
 
+                    telemetry.addData("Target Power : ", targetPower);
+
                     final double NOMINAL_VOLTAGE = 12.0;
                     final double voltage = voltageSensor.getVoltage();
-                    drive.setDrivePower(new Pose2d(NOMINAL_VOLTAGE / voltage * targetPower, 0, 0));
+                    drive.setDrivePower(new Pose2d(NOMINAL_VOLTAGE / voltage * targetPower , 0, 0));
                     drive.updatePoseEstimate();
 
                     Pose2d poseVelo = Objects.requireNonNull(drive.getPoseVelocity(), "poseVelocity() must not be null. Ensure that the getWheelVelocities() method has been overridden in your localizer.");

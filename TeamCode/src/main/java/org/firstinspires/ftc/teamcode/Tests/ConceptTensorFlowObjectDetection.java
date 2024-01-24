@@ -72,14 +72,14 @@ import java.util.concurrent.atomic.AtomicReference;
 @TeleOp(name = "Concept: TensorFlow Object Detection", group = "Concept")
 public class ConceptTensorFlowObjectDetection extends LinearOpMode {
 
-    private static final boolean USE_WEBCAM = true;  // true for webcam, false for phone camera
+    private static final boolean USE_WEBCAM = false;  // true for webcam, false for phone camera
 
     // TFOD_MODEL_ASSET points to a model file stored in the project Asset location,
     // this is only used for Android Studio when using models in Assets.
     //private static final String TFOD_MODEL_ASSET = "model_20231015_183624.tflite";
     //TFOD_MODEL_FILE points to a model file stored onboard the Robot Controller's storage,
     // this is used when uploading models directly to the RC using the model upload interface.
-    private static final String TFOD_MODEL_FILE = "/sdcard/FIRST/tflitemodels/model_20231031_151740.tflite";
+    private static final String TFOD_MODEL_FILE = "/sdcard/FIRST/tflitemodels/" + Configuration.TENSOR_FILE;
     // Define the labels recognized in the model for TFOD (must be in training order!)
     private static final String[] LABELS = {
             "TeamProp",

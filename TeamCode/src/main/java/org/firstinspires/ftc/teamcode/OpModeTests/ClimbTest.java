@@ -30,7 +30,7 @@ public class ClimbTest extends OpMode {
     @Override
     public void init() {
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
-        climbSubsystem = new ClimbSubsystem(hardwareMap);
+        climbSubsystem = new ClimbSubsystem(hardwareMap , telemetry);
     }
 
     @Override

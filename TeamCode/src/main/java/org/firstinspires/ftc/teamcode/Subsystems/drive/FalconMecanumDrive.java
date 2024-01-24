@@ -9,6 +9,7 @@ import com.acmerobotics.roadrunner.drive.MecanumDrive;
 import com.acmerobotics.roadrunner.followers.HolonomicPIDVAFollower;
 import com.acmerobotics.roadrunner.followers.TrajectoryFollower;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.localization.ThreeTrackingWheelLocalizer;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.acmerobotics.roadrunner.trajectory.TrajectoryBuilder;
 import com.acmerobotics.roadrunner.trajectory.constraints.AngularVelocityConstraint;
@@ -22,7 +23,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-//import com.qualcomm.robotcore.hardware.IMU;
+import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
@@ -43,6 +44,7 @@ import static org.firstinspires.ftc.teamcode.Utilities.Configuration.MAX_VEL;
 import static org.firstinspires.ftc.teamcode.Utilities.Configuration.MOTOR_VELO_PID;
 import static org.firstinspires.ftc.teamcode.Utilities.Configuration.RUN_USING_ENCODER;
 import static org.firstinspires.ftc.teamcode.Utilities.Configuration.TRACKWIDTH;
+import static org.firstinspires.ftc.teamcode.Utilities.Configuration.WHEELBASE;
 import static org.firstinspires.ftc.teamcode.Utilities.Configuration.encoderTicksToInches;
 import static org.firstinspires.ftc.teamcode.Utilities.Configuration.kA;
 import static org.firstinspires.ftc.teamcode.Utilities.Configuration.kStatic;
@@ -53,16 +55,14 @@ import static org.firstinspires.ftc.teamcode.Utilities.Configuration.kV;
  */
 @Config
 public class FalconMecanumDrive extends MecanumDrive {
-    public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(18, 0, 4);
-    public static PIDCoefficients HEADING_PID = new PIDCoefficients(70, 0, 0);
-
-    public static double LATERAL_MULTIPLIER = 1;
+    public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(12, 1, 1);
+    public static PIDCoefficients HEADING_PID = new PIDCoefficients(16, 10, 2);
 
 //    public static double VX_WEIGHT = 1;
 //    public static double VY_WEIGHT = 1;
 //    public static double OMEGA_WEIGHT = 1;
 
-    private TrajectorySequenceRunner trajectorySequenceRunner;
+    private TrajectorySequenceRunnerCancelable trajectorySequenceRunner;
 
     private static final TrajectoryVelocityConstraint VEL_CONSTRAINT = getVelocityConstraint(MAX_VEL, MAX_ANG_VEL, TRACKWIDTH);
     private static final TrajectoryAccelerationConstraint ACCEL_CONSTRAINT = getAccelerationConstraint(MAX_ACCEL);
@@ -72,14 +72,15 @@ public class FalconMecanumDrive extends MecanumDrive {
     private DcMotorEx leftFront, leftRear, rightRear, rightFront;
     private List<DcMotorEx> motors;
 
-//    private IMU imu;
+    private IMU imu;
     private VoltageSensor batteryVoltageSensor;
 
     private List<Integer> lastEncPositions = new ArrayList<>();
     private List<Integer> lastEncVels = new ArrayList<>();
 
     public FalconMecanumDrive(HardwareMap hardwareMap) {
-        super(kV, kA, kStatic, TRACKWIDTH, TRACKWIDTH, LATERAL_MULTIPLIER);
+        //Changed the 5th parameter to an independent constant since our robot is not square
+        super(kV, kA, kStatic, TRACKWIDTH, WHEELBASE, Configuration.LATERAL_MULTIPLIER);
 
         follower = new HolonomicPIDVAFollower(TRANSLATIONAL_PID, TRANSLATIONAL_PID, HEADING_PID,
                 new Pose2d(0.5, 0.5, Math.toRadians(5.0)), 0.5);
@@ -132,10 +133,16 @@ public class FalconMecanumDrive extends MecanumDrive {
         // TODO: if desired, use setLocalizer() to change the localization method
          setLocalizer(new StandardTrackingWheelLocalizer(hardwareMap, lastTrackingEncPositions, lastTrackingEncVels));
 
-        trajectorySequenceRunner = new TrajectorySequenceRunner(
-                follower, HEADING_PID, batteryVoltageSensor,
-                lastEncPositions, lastEncVels, lastTrackingEncPositions, lastTrackingEncVels
-        );
+//        trajectorySequenceRunner = new TrajectorySequenceRunner(
+//                follower, HEADING_PID, batteryVoltageSensor,
+//                lastEncPositions, lastEncVels, lastTrackingEncPositions, lastTrackingEncVels
+//        );
+        trajectorySequenceRunner = new TrajectorySequenceRunnerCancelable(
+                follower, HEADING_PID );
+    }
+
+    public void breakFollowing(){
+        trajectorySequenceRunner.breakFollowing();
     }
 
     public TrajectoryBuilder trajectoryBuilder(Pose2d startPose) {
@@ -210,6 +217,14 @@ public class FalconMecanumDrive extends MecanumDrive {
 
     public boolean isBusy() {
         return trajectorySequenceRunner.isBusy();
+    }
+
+    public boolean isMotorsBusy(){
+        for (DcMotorEx motor : motors) {
+            if(motor.isBusy())
+                return true;
+        }
+        return false;
     }
 
     public void setMode(DcMotor.RunMode runMode) {

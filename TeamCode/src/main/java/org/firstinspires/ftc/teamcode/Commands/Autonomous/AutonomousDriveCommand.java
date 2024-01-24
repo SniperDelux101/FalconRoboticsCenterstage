@@ -1,44 +1,106 @@
 package org.firstinspires.ftc.teamcode.Commands.Autonomous;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.acmerobotics.roadrunner.geometry.Vector2d;
-import com.arcrobotics.ftclib.command.CommandBase;
+import com.arcrobotics.ftclib.command.InstantCommand;
+import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 
+import org.firstinspires.ftc.teamcode.Commands.MovePixelBoxArmToPositionCommand;
+import org.firstinspires.ftc.teamcode.Commands.MoveToPixelBoxPosition;
+import org.firstinspires.ftc.teamcode.Commands.PixelBoxArmPosition;
+import org.firstinspires.ftc.teamcode.Commands.PixelBoxPosition;
+import org.firstinspires.ftc.teamcode.Commands.PlacePixelOnSpikeCommand;
+import org.firstinspires.ftc.teamcode.Commands.RunLinearSlideAndCenterPixelBoxCommand;
+import org.firstinspires.ftc.teamcode.Commands.StopPixelBoxReset;
+import org.firstinspires.ftc.teamcode.Commands.TrajectoryFollowerCommand;
+import org.firstinspires.ftc.teamcode.Commands.TrajectorySequenceFollowerCommand;
+import org.firstinspires.ftc.teamcode.Subsystems.ExtakeSubsystem;
+import org.firstinspires.ftc.teamcode.Subsystems.IntakeMotorSubsystem;
+import org.firstinspires.ftc.teamcode.Subsystems.LinearSlideSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.MecanumDriveSubsystem;
+import org.firstinspires.ftc.teamcode.Subsystems.VisionSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.drive.TrajectorySequence.TrajectorySequence;
+import org.firstinspires.ftc.teamcode.Utilities.Configuration;
 
-public class AutonomousDriveCommand extends CommandBase {
+public class AutonomousDriveCommand extends SequentialCommandGroup {
 
+    private final LinearSlideSubsystem linearSlideSubsystem;
+    private final IntakeMotorSubsystem intakeMotorSubsystem;
+    private final ExtakeSubsystem extakeSubsystem;
+    private final VisionSubsystem visionSubsystem;
     final MecanumDriveSubsystem mecanumDriveSubsystem;
     final Alliance alliance;
-    final AutonomousPath autonomousPath;
+    final AutonomousStartLocation autonomousStartLocation;
     private TrajectorySequence trajectorySequence;
+    private IdentifyTeamPropPositionCommand identifyTeamPropPositionCommand;
 
-    public AutonomousDriveCommand(MecanumDriveSubsystem dr, Alliance p_alliance , AutonomousPath path ){
+
+    public AutonomousDriveCommand(MecanumDriveSubsystem dr, LinearSlideSubsystem ls, IntakeMotorSubsystem is, ExtakeSubsystem es, VisionSubsystem vs,
+                                  Alliance p_alliance , AutonomousStartLocation path ) {
         mecanumDriveSubsystem = dr;
-        alliance = p_alliance ;
-        autonomousPath = path;
+        alliance = p_alliance;
+        autonomousStartLocation = path;
+        linearSlideSubsystem = ls;
+        intakeMotorSubsystem = is;
+        extakeSubsystem = es;
+        visionSubsystem = vs;
+        identifyTeamPropPositionCommand = new IdentifyTeamPropPositionCommand(visionSubsystem);
 
-        addRequirements(mecanumDriveSubsystem);
+        TeamPropPosition teamPropPosition = identifyTeamPropPositionCommand.getTeamPropPosition();
 
+        //TODO:
+        addCommands(
+                // This moves the robot to its center position
+                new TrajectorySequenceFollowerCommand(mecanumDriveSubsystem, AutonomousPaths.PhaseOne(alliance, mecanumDriveSubsystem.getDrive(),
+                        teamPropPosition, path)),
+                // This places a pixel on the spike
+                new PlacePixelOnSpikeCommand(intakeMotorSubsystem).withTimeout(2000),
+                // This moves the robot to a scoring position near the backdrop
+                new TrajectorySequenceFollowerCommand(mecanumDriveSubsystem, AutonomousPaths.PhaseTwo(alliance, mecanumDriveSubsystem.getDrive(), teamPropPosition, path)),
+                // This will score a pixel on the backdrop
+//                new RunLinearSlideAndCenterPixelBoxCommand(extakeSubsystem,linearSlideSubsystem, Configuration.LINEAR_SLIDE_POS_LO),
+//                // This moves the arm into a scoring position
+//                new MovePixelBoxArmToPositionCommand(extakeSubsystem, PixelBoxArmPosition.Extake),
+//                // This moves the pixel box to the correct location based off of which spike location the team prop is on
+//                new MoveToPixelBoxPosition(extakeSubsystem, getPixelBoxPositionFromPropPosition(teamPropPosition)),
+//                // This drops the pixel to the correct position
+//                new InstantCommand( extakeSubsystem::pixelEject, extakeSubsystem),
+//                // This retracts the linear slide
+//                new StopPixelBoxReset(extakeSubsystem, linearSlideSubsystem),
+//                // this will park
+                new TrajectorySequenceFollowerCommand(mecanumDriveSubsystem, AutonomousPaths.Park(alliance, mecanumDriveSubsystem.getDrive(), autonomousStartLocation))
+        );
+
+        addRequirements(mecanumDriveSubsystem, linearSlideSubsystem, intakeMotorSubsystem, extakeSubsystem, visionSubsystem);
+
+    }
+
+    private PixelBoxPosition getPixelBoxPositionFromPropPosition(TeamPropPosition teamPropPosition) {
+        if(teamPropPosition == TeamPropPosition.Left) {
+            return PixelBoxPosition.Left;
+        } else if (teamPropPosition == TeamPropPosition.Center) {
+            return PixelBoxPosition.Center;
+        }
+        else {
+            return PixelBoxPosition.Right;
+        }
     }
 
     @Override
     public void initialize()
     {
-        if ( alliance == Alliance.Blue && autonomousPath == AutonomousPath.Far)
-            trajectorySequence = this.blueAllianceFar();
-        else if ( alliance == Alliance.Red && autonomousPath == AutonomousPath.Far)
-            trajectorySequence = this.redAllianceFar();
-        else if ( alliance == Alliance.Blue && autonomousPath == AutonomousPath.Near)
-            trajectorySequence = this.blueAllianceNear();
-        else if ( alliance == Alliance.Red && autonomousPath == AutonomousPath.Near)
-            trajectorySequence = this.redAllianceNear();
+//        if ( alliance == Alliance.Blue && autonomousStartLocation == AutonomousStartLocation.Far)
+//            trajectorySequence = this.blueAllianceFar();
+//        else if ( alliance == Alliance.Red && autonomousStartLocation == AutonomousStartLocation.Far)
+//            trajectorySequence = this.redAllianceFar();
+//        else if ( alliance == Alliance.Blue && autonomousStartLocation == AutonomousStartLocation.Near)
+//            trajectorySequence = this.blueAllianceNear();
+//        else if ( alliance == Alliance.Red && autonomousStartLocation == AutonomousStartLocation.Near)
+//            trajectorySequence = this.redAllianceNear();
     }
     @Override
     public void execute(){
         /// TODO:
-       mecanumDriveSubsystem.getDrive().followTrajectorySequence(trajectorySequence);
+       mecanumDriveSubsystem.followTrajectorySequence(trajectorySequence);
     }
     @Override
     public boolean isFinished(){
@@ -47,47 +109,5 @@ public class AutonomousDriveCommand extends CommandBase {
 
 
     // autonomous pathing from red alliance far from the back drop
-    public TrajectorySequence redAllianceFar (){
 
-        TrajectorySequence untitled0 = mecanumDriveSubsystem.getDrive().trajectorySequenceBuilder(new Pose2d(-36.91, -61.93, Math.toRadians(450.00)))
-                .splineTo(new Vector2d(-35.87, -35.87), Math.toRadians(447.71))
-                .splineTo(new Vector2d(-37.09, -11.03), Math.toRadians(92.80))
-                .splineTo(new Vector2d(-14.68, -8.08), Math.toRadians(367.51))
-                .splineTo(new Vector2d(9.29, -9.99), Math.toRadians(355.44))
-                .splineTo(new Vector2d(34.13, -10.34), Math.toRadians(359.20))
-                .splineTo(new Vector2d(63.14, -9.81), Math.toRadians(1.15))
-                .build();
-        return untitled0;
-    }
-    // autonomous pathing from blue alliance far from the back drop
-    public TrajectorySequence blueAllianceFar (){
-        TrajectorySequence untitled0 = mecanumDriveSubsystem.getDrive().trajectorySequenceBuilder(new Pose2d(-36.91, 61.93, Math.toRadians(-90.00)))
-                .splineTo(new Vector2d(-35.87, 35.87), Math.toRadians(-87.71))
-                .splineTo(new Vector2d(-37.09, 11.03), Math.toRadians(267.20))
-                .splineTo(new Vector2d(-14.68, 8.08), Math.toRadians(-7.51))
-                .splineTo(new Vector2d(9.29, 9.99), Math.toRadians(4.56))
-                .splineTo(new Vector2d(34.13, 10.34), Math.toRadians(0.80))
-                .splineTo(new Vector2d(57.93, 11.55), Math.toRadians(2.92))
-                .build();
-
-        return untitled0;
-    }
-    //  autonomous pathing from red alliance near the back drop
-    public TrajectorySequence redAllianceNear (){
-        TrajectorySequence untitled0 = mecanumDriveSubsystem.getDrive().trajectorySequenceBuilder(new Pose2d(12.07, -61.23, Math.toRadians(0.00)))
-                .splineTo(new Vector2d(36.39, -60.88), Math.toRadians(0.82))
-                .splineTo(new Vector2d(62.10, -61.23), Math.toRadians(-0.77))
-                .build();
-
-        return untitled0;
-    }
-    // autonomous pathing from blue alliance near the back drop
-    public TrajectorySequence blueAllianceNear (){
-        TrajectorySequence untitled0 = mecanumDriveSubsystem.getDrive().trajectorySequenceBuilder(new Pose2d(11.55, 61.06, Math.toRadians(0.00)))
-                .splineTo(new Vector2d(36.22, 61.23), Math.toRadians(0.40))
-                .splineTo(new Vector2d(60.01, 61.23), Math.toRadians(0.00))
-                .build();
-
-        return untitled0;
-    }
 }

@@ -9,14 +9,13 @@ import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.checkerframework.checker.units.qual.A;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Commands.Autonomous.Alliance;
 import org.firstinspires.ftc.teamcode.Commands.Autonomous.AutonomousDriveCommand;
-import org.firstinspires.ftc.teamcode.Commands.Autonomous.AutonomousPath;
+import org.firstinspires.ftc.teamcode.Commands.Autonomous.AutonomousStartLocation;
 import org.firstinspires.ftc.teamcode.Commands.FireDroneAndClimbCommand;
+import org.firstinspires.ftc.teamcode.Commands.MovePixelBoxAndEjectSequentialCommand;
 import org.firstinspires.ftc.teamcode.Commands.MovePixelBoxArmToPositionCommand;
-import org.firstinspires.ftc.teamcode.Commands.MoveToPixelBoxPosition;
 import org.firstinspires.ftc.teamcode.Commands.PixelBoxArmPosition;
 import org.firstinspires.ftc.teamcode.Commands.PixelBoxPosition;
 import org.firstinspires.ftc.teamcode.Commands.ResetAndPrepForExchangeCommand;
@@ -29,8 +28,10 @@ import org.firstinspires.ftc.teamcode.Subsystems.IntakeMotorSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.LinearSlideSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.MecanumDriveSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.OdometryControlSubsystem;
+import org.firstinspires.ftc.teamcode.Subsystems.VisionSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.drive.FalconMecanumDrive;
 import org.firstinspires.ftc.teamcode.Utilities.Configuration;
+import org.firstinspires.ftc.teamcode.Utilities.MatchConfig;
 
 public class Callisto extends Robot {
     //region Subsystems
@@ -41,6 +42,7 @@ public class Callisto extends Robot {
     private final LinearSlideSubsystem linearSlideSubsystem;
     private final OdometryControlSubsystem odometryControlSubsystem;
     private final IntakeMotorSubsystem intakeMotorSubsystem;
+    private final VisionSubsystem visionSubsystem;
     //endregion
 
     //region Commands
@@ -55,26 +57,28 @@ public class Callisto extends Robot {
 
 
     private final Alliance alliance;
-    private final AutonomousPath autonomousPath;
+    private final AutonomousStartLocation autonomousStartLocation;
     private final RobotMode robotMode;
     //endregion
-    public Callisto(RobotMode mode, HardwareMap map, Gamepad gamepad1, Gamepad gamepad2, Telemetry tel , Alliance p_alliance , AutonomousPath path) {
+    public Callisto(RobotMode mode, HardwareMap map, Gamepad gamepad1, Gamepad gamepad2, Telemetry tel) {
         hMap = map;
         telemetry = tel;
         robotMode = mode;
-        alliance = p_alliance;
-        autonomousPath = path;
+        alliance = MatchConfig.Alliance;
+        autonomousStartLocation = MatchConfig.AutonomousStartLocation;
         FTC_driverGamepad = gamepad1;
         FTC_utilityGamepad = gamepad2;
 
         //region Initialize Subsystems
         driveBaseSubsystem = new MecanumDriveSubsystem(new FalconMecanumDrive(map),false);
-        odometryControlSubsystem = new OdometryControlSubsystem(hMap);
-        airplaneLauncherSubsystem = new AirplaneLauncherSubsystem(hMap);
-        climbSubsystem = new ClimbSubsystem(hMap);
-        extakeSubsystem = new ExtakeSubsystem(hMap);
-        linearSlideSubsystem = new LinearSlideSubsystem(hMap);
-        intakeMotorSubsystem = new IntakeMotorSubsystem(hMap);
+        odometryControlSubsystem = new OdometryControlSubsystem(hMap , telemetry);
+        airplaneLauncherSubsystem = new AirplaneLauncherSubsystem(hMap, telemetry);
+        climbSubsystem = new ClimbSubsystem(hMap, telemetry);
+        extakeSubsystem = new ExtakeSubsystem(hMap, telemetry);
+        linearSlideSubsystem = new LinearSlideSubsystem(hMap , telemetry);
+        intakeMotorSubsystem = new IntakeMotorSubsystem(hMap, telemetry);
+        //TODO: Fix the vision portal
+        visionSubsystem = new VisionSubsystem(hMap, telemetry);
         //endregion
 
         linearSlideSubsystem.resetEncoder();
@@ -83,6 +87,15 @@ public class Callisto extends Robot {
 //        odometryControlSubsystem.drop();
 
         if (mode == RobotMode.AUTO) {
+            initAuto();
+        } else {
+            initTeleOp(gamepad1, gamepad2);
+        }
+    }
+
+    public void init(Gamepad gamepad1, Gamepad gamepad2)
+    {
+        if (robotMode == RobotMode.AUTO) {
             initAuto();
         } else {
             initTeleOp(gamepad1, gamepad2);
@@ -127,15 +140,15 @@ public class Callisto extends Robot {
         // Drop the box
         utilityGamepad.getGamepadButton(GamepadKeys.Button.DPAD_UP)
                         .whenPressed(
-                                new MoveToPixelBoxPosition( extakeSubsystem, PixelBoxPosition.Center)
+                                new MovePixelBoxAndEjectSequentialCommand(linearSlideSubsystem, extakeSubsystem, PixelBoxPosition.Center)
                         );
         utilityGamepad.getGamepadButton(GamepadKeys.Button.DPAD_LEFT)
                 .whenPressed(
-                        new MoveToPixelBoxPosition( extakeSubsystem, PixelBoxPosition.Left)
+                        new MovePixelBoxAndEjectSequentialCommand(linearSlideSubsystem, extakeSubsystem, PixelBoxPosition.Left)
                 );
         utilityGamepad.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT)
                 .whenPressed(
-                        new MoveToPixelBoxPosition( extakeSubsystem, PixelBoxPosition.Right)
+                        new MovePixelBoxAndEjectSequentialCommand(linearSlideSubsystem, extakeSubsystem, PixelBoxPosition.Right)
                 );
         // Dropping the pixel
         utilityGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER)
@@ -176,6 +189,8 @@ public class Callisto extends Robot {
                         new InstantCommand(climbSubsystem::ClimbOut, climbSubsystem)
                 );
 
+        //
+
         //fire the Drone and Climb
         driverGamepad.getGamepadButton(GamepadKeys.Button.DPAD_DOWN)
                 .and(new GamepadButton(driverGamepad, GamepadKeys.Button.A))
@@ -208,7 +223,8 @@ public class Callisto extends Robot {
         //TODO: Add code for autonomous driving
         odometryControlSubsystem.drop();
 
-        schedule(new AutonomousDriveCommand(driveBaseSubsystem, alliance , autonomousPath));
+        schedule(new AutonomousDriveCommand(driveBaseSubsystem, linearSlideSubsystem, intakeMotorSubsystem, extakeSubsystem, visionSubsystem,
+                alliance, autonomousStartLocation));
     }
 
     @Override
@@ -218,7 +234,15 @@ public class Callisto extends Robot {
                 driveBaseSubsystem.drive(driverGamepad.getLeftY(), driverGamepad.getLeftX(), driverGamepad.getRightX(), Configuration.DrivePower*.3);
             else
              driveBaseSubsystem.drive(driverGamepad.getLeftY(), driverGamepad.getLeftX(), driverGamepad.getRightX());
+
+            if(FTC_utilityGamepad.left_trigger > 0)
+            {
+                linearSlideSubsystem.LinearStop();
+            }
+            extakeSubsystem.detectPixel();
         }
+
+
 
 //        telemetry.addData("x", driveBaseSubsystem.getPoseEstimate().getX());
 //        telemetry.addData("y", driveBaseSubsystem.getPoseEstimate().getY());

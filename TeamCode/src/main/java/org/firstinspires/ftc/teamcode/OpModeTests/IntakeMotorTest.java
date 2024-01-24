@@ -32,7 +32,7 @@ public class IntakeMotorTest extends OpMode {
     @Override
     public void init() {
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
-        intakeMotorSubsystem = new IntakeMotorSubsystem(hardwareMap);
+        intakeMotorSubsystem = new IntakeMotorSubsystem(hardwareMap , telemetry);
         direction = "Not Running";
     }
 

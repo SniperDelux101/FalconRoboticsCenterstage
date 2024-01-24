@@ -17,7 +17,7 @@ public class ExtakeArmTesting extends OpMode {
     @Override
     public void init() {
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
-        extakeSubsystem = new ExtakeSubsystem(hardwareMap);
+        extakeSubsystem = new ExtakeSubsystem(hardwareMap , telemetry);
     }
     @Override
     public void loop() {
@@ -54,7 +54,7 @@ public class ExtakeArmTesting extends OpMode {
         else if (gamepad1.left_trigger > 0){
             extakeSubsystem.pixelStop();
         }
-        else if (gamepad1.dpad_up){
+        else if (gamepad1.right_bumper && gamepad1.dpad_up){
             controlArmPosition+=.005;
             if (controlArmPosition > Configuration.E_MAX_ARM_ANGLE){
                 controlArmPosition = Configuration.E_MAX_ARM_ANGLE;
@@ -62,7 +62,7 @@ public class ExtakeArmTesting extends OpMode {
             telemetry.addData("Moving Arm to: ", controlArmPosition);
             extakeSubsystem.setControlArmPosition(controlArmPosition);
         }
-        else if (gamepad1.dpad_down) {
+        else if (gamepad1.right_bumper && gamepad1.dpad_down) {
             controlArmPosition-=.005;
             if (controlArmPosition< Configuration.E_MIN_ARM_ANGLE){
                 controlArmPosition = Configuration.E_MIN_ARM_ANGLE;
@@ -96,10 +96,17 @@ public class ExtakeArmTesting extends OpMode {
 
 
         telemetry.addData("Control Arm1 Position: ", extakeSubsystem.getControlArm1Position());
-        telemetry.addData("Control Arm2 Position: ", extakeSubsystem.getControlArm2Position());
+        //telemetry.addData("Control Arm2 Position: ", extakeSubsystem.getControlArm2Position());
         telemetry.addData("Pixel Box Left Position : ",Configuration.R_SERVO_LEFT);
         telemetry.addData("Pixel Box Right Position: ", Configuration.R_SERVO_RIGHT);
         telemetry.addData("Pixel Box Center Position:", Configuration.R_SERVO_CENTER);
+
+        telemetry.addLine("G1 : D_Pad Left && X Button --> Left PixelBox Pos, Move Left");
+        telemetry.addLine("G1 : D_Pad Left && B Button --> Left PixelBox Pos, Move Right");
+        telemetry.addLine("G1 : D_Pad Center && X Button --> Center PixelBox Pos, Move Left");
+        telemetry.addLine("G1 : D_Pad Center && B Button --> Center PixelBox Pos, Move Right");
+        telemetry.addLine("G1 : D_Pad Right && X Button --> Right PixelBox Pos, Move Left");
+        telemetry.addLine("G1 : D_Pad Right && B Button --> Right PixelBox Pos, Move Right");
 
         telemetry.update();
     }

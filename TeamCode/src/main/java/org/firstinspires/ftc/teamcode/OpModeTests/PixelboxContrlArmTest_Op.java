@@ -15,8 +15,8 @@ public class PixelboxContrlArmTest_Op extends OpMode {
     ExtakeSubsystem extakeSubsystem;
     @Override
     public void init() {
-        linearSlideSubsystem = new LinearSlideSubsystem(hardwareMap);
-        extakeSubsystem = new ExtakeSubsystem(hardwareMap);
+        linearSlideSubsystem = new LinearSlideSubsystem(hardwareMap, telemetry);
+        extakeSubsystem = new ExtakeSubsystem(hardwareMap, telemetry);
     }
 
     @Override
