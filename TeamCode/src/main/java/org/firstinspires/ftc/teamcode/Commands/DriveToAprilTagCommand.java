@@ -6,7 +6,6 @@ import com.arcrobotics.ftclib.command.CommandBase;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.teamcode.Commands.Autonomous.Alliance;
-import org.firstinspires.ftc.teamcode.Commands.Autonomous.TeamPropPosition;
 import org.firstinspires.ftc.teamcode.Subsystems.MecanumDriveSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.VisionSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.drive.TrajectorySequence.TrajectorySequence;
@@ -30,6 +29,10 @@ public class DriveToAprilTagCommand extends CommandBase {
     public static double MAX_AUTO_SPEED = 0.5;   //  Clip the approach speed to this max value (adjust for your robot)
     public static double MAX_AUTO_STRAFE= 0.5;   //  Clip the approach speed to this max value (adjust for your robot)
     public static double MAX_AUTO_TURN  = 0.3;   //  Clip the turn speed to this max value (adjust for your robot)
+
+    public static double DRIVE_POWER = 1;
+
+    public static int MAX_EXECUTION_COUNT = 250;
     ///endregion
     private final VisionSubsystem visionSubsystem;
     private final MecanumDriveSubsystem mecanumDriveSubsystem;
@@ -47,32 +50,36 @@ public class DriveToAprilTagCommand extends CommandBase {
 
     @Override
     public void execute() {
-        if(executeCount == 0)
-            buildAndExecuteStrafeSequence();
-        else if( executeCount >= 1 && executeCount <= 25)
-            isFinished = driveToTag(visionSubsystem.getAprilTags(), getTargetId());
-        else //we've executed this 25 times, it's time to bail out
-            isFinished = true;
+        if(!isFinished) {
+            if (executeCount == 0)
+                buildAndExecuteStrafeSequence();
+            else if (executeCount >= 1 && executeCount <= MAX_EXECUTION_COUNT)
+                isFinished = driveToTag(visionSubsystem.getAprilTags(), getTargetId());
+            else //we've executed this 25 times, it's time to bail out
+                isFinished = true;
+        }
 
         executeCount++;
     }
 
     private int getTargetId(){
         if(MatchConfig.Alliance == Alliance.Red) {
-            if(MatchConfig.TeamPropPosition == TeamPropPosition.Left)
-                return 4;
-            else if( MatchConfig.TeamPropPosition == TeamPropPosition.Center)
-                return 5;
-            else
-                return 6;
+//            if(MatchConfig.TeamPropPosition == TeamPropPosition.Left)
+//                return 4;
+//            else if( MatchConfig.TeamPropPosition == TeamPropPosition.Center)
+//                return 5;
+//            else
+//                return 6;
+            return 5;
         }
         else {
-            if(MatchConfig.TeamPropPosition == TeamPropPosition.Left)
-                return 1;
-            else if( MatchConfig.TeamPropPosition == TeamPropPosition.Center)
-                return 2;
-            else
-                return 3;
+//            if(MatchConfig.TeamPropPosition == TeamPropPosition.Left)
+//                return 1;
+//            else if( MatchConfig.TeamPropPosition == TeamPropPosition.Center)
+//                return 2;
+//            else
+//                return 3;
+            return 2;
         }
     }
 
@@ -93,38 +100,61 @@ public class DriveToAprilTagCommand extends CommandBase {
                 double rangeError = (detection.ftcPose.range - Configuration.BACKDROP_DISTANCE);
                 double headingError = detection.ftcPose.bearing;
                 double yawError = detection.ftcPose.yaw;
-                MatchConfig.telemetry.addData("DrivetoAprilTagCommand", "RangeError %5.2f, HeadingError %5.2f, Yaw Error %5.2f",
-                        rangeError, headingError, yawError);
+
+                MatchConfig.telemetry.addData("RangeError: ", rangeError);
+                MatchConfig.telemetry.addData("HeadingError: ", headingError);
+                MatchConfig.telemetry.addData("YawError: ", yawError);
+                MatchConfig.telemetry.update();
 
                 // Use the speed and turn "gains" to calculate how we want the robot to move.
-                drive = Range.clip(rangeError * SPEED_GAIN, -MAX_AUTO_SPEED, MAX_AUTO_SPEED);
-                turn = Range.clip(headingError * TURN_GAIN, -MAX_AUTO_TURN, MAX_AUTO_TURN);
-                strafe = Range.clip(yawError * STRAFE_GAIN, -MAX_AUTO_STRAFE, MAX_AUTO_STRAFE);
+                if(Math.abs(rangeError) > Configuration.BACKDROP_ERROR_DISTANCE )
+                    drive = Range.clip(rangeError * SPEED_GAIN, -MAX_AUTO_SPEED, MAX_AUTO_SPEED);
+                else
+                    drive = 0;
+
+                if(Math.abs(headingError) > Configuration.APRIL_TAG_BEARING)
+                    turn = Range.clip(headingError * TURN_GAIN, -MAX_AUTO_TURN, MAX_AUTO_TURN);
+                else
+                    turn = 0;
+
+                if(Math.abs(yawError) > Configuration.APRIL_TAG_YAW)
+                    strafe = -Range.clip(yawError * STRAFE_GAIN, -MAX_AUTO_STRAFE, MAX_AUTO_STRAFE);
+                else
+                    strafe = 0;
+
                 foundId = true;
                 break;
             }
         }
+        ///TODO: Implement function if it didn't find anything
         //we didn't find the tag we are looking for and need to try and go back to it
-        if(!foundId && detections.size() > 0){
-            int detectedID = detections.get(0).id; //just get the first one to determine where we should go
-            MatchConfig.telemetry.addData("DrivetoAprilTagCommand", "We didn't find the target tag but found %5.2f", detectedID);
-            if(detectedID > targetTagId)    //we are right of the intended target
-                strafe = -MAX_AUTO_STRAFE;
-            else
-                strafe = MAX_AUTO_STRAFE;
-        }
+//        if(!foundId && detections.size() > 0){
+//            int detectedID = detections.get(0).id; //just get the first one to determine where we should go
+//            MatchConfig.telemetry.addData("DrivetoAprilTagCommand: We didn't find the target tag but found: ", detectedID);
+//            if(detectedID > targetTagId)    //we are right of the intended target
+//                strafe = -MAX_AUTO_STRAFE;
+//            else
+//                strafe = MAX_AUTO_STRAFE;
+//        }
 
 
+        MatchConfig.telemetry.addData("DrivetoAprilTagCommand","Drive %5.2f, Strafe %5.2f, Turn %5.2f ", drive, strafe, turn);
+        MatchConfig.telemetry.addData("DrivetoAprilTagCommand Found it: ", foundId);
+        MatchConfig.telemetry.update();
 
-        if( drive != 0 || turn != 0 || strafe != 0 ){
-            MatchConfig.telemetry.addData("DrivetoAprilTagCommand","Drive %5.2f, Strafe %5.2f, Turn %5.2f ", drive, strafe, turn);
-            mecanumDriveSubsystem.drive(drive, turn, strafe, Configuration.DRIVE_FORWARD_POWER);
-            return false;
-        }
-        else if(foundId && drive == 0 && turn == 0 && strafe == 0)
+        if(foundId && isInRange(drive, .1) && isInRange(turn, .1) && isInRange(strafe, .1)) {
+            mecanumDriveSubsystem.stop();
             return true;
-        else
+        }
+        else{
+            if(!mecanumDriveSubsystem.isBusy())
+                mecanumDriveSubsystem.drive(drive, turn, strafe, DRIVE_POWER);
             return false;
+        }
+    }
+
+    private boolean isInRange(double value, double error){
+        return (value > -error && value < error);
     }
 
     private void buildAndExecuteStrafeSequence() {
@@ -146,10 +176,22 @@ public class DriveToAprilTagCommand extends CommandBase {
 
     @Override
     public boolean isFinished() {
+        MatchConfig.telemetry.addData("DriveAprilTagCommand executeCount: ", executeCount);
+        MatchConfig.telemetry.addData("DriveAprilTagCommand isFinished: ", isFinished);
+        MatchConfig.telemetry.update();
+
         return isFinished;
     }
     @Override
     public void end(boolean interrupted) {
         mecanumDriveSubsystem.stop();
+    }
+
+    private void sleep(long milliseconds) {
+        try {
+            Thread.sleep(milliseconds);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
     }
 }
