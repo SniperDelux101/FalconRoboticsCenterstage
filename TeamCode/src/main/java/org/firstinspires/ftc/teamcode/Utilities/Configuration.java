@@ -9,7 +9,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 @Config
 public class Configuration {
 
-    public static int APRIL_TAG_CAMERA_GAIN = 15;
+    public static int APRIL_TAG_CAMERA_GAIN = 200;
     public static int APRIL_TAG_CAMERA_EXPOSURE = 5;
     // TRACKWIDTH is the distance between mecanum wheels
     public static double TRACKWIDTH = DistanceUnit.INCH.fromMm(403.352); //15.88 inches
@@ -192,14 +192,14 @@ public class Configuration {
 
     //*****************************************************************
     public static int AUTO_VEL = 30;
-    public static int VISION_VEL = 10;
+//    public static int VISION_VEL = 10;
     public static int STRAFE_TO_APRIL_TAG_VEL = 7;
 
     //*****************************************************************
     public static double BACKDROP_ERROR_DISTANCE = 1.5; //inches
     public static double BACKDROP_DISTANCE = 5.0;
 
-    public static double SHAKE_DEGREES = 5;
+//    public static double SHAKE_DEGREES = 5;
     public static double VISION_STRAFE_DIS = 20;
 
     public static double APRIL_TAG_BEARING = 7.0;
