@@ -15,6 +15,7 @@ import com.arcrobotics.ftclib.command.WaitCommand;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.teamcode.Commands.AprilTagStartStopCommand;
 import org.firstinspires.ftc.teamcode.Commands.Autonomous.Alliance;
 import org.firstinspires.ftc.teamcode.Commands.Autonomous.AutonomousStartLocation;
 import org.firstinspires.ftc.teamcode.Commands.Autonomous.DriveForwardToObjectCommand;
@@ -83,9 +84,8 @@ public class AutonomousCommandTest extends CommandOpMode {
         extakeSubsystem = new ExtakeSubsystem(hardwareMap, telemetry);
         linearSlideSubsystem = new LinearSlideSubsystem(hardwareMap, telemetry);
         intakeMotorSubsystem = new IntakeMotorSubsystem(hardwareMap, telemetry);
-        visionSubsystem = new VisionSubsystem(hardwareMap, telemetry, true);
+        visionSubsystem = new VisionSubsystem(hardwareMap, telemetry, true, true);
         distanceSensorSubsystem = new DistanceSensorSubsystem(hardwareMap, telemetry);
-
 
         register(driveBaseSubsystem, airplaneLauncherSubsystem, climbSubsystem, extakeSubsystem, linearSlideSubsystem, odometryControlSubsystem, intakeMotorSubsystem, visionSubsystem, distanceSensorSubsystem);
 //        visionSubsystem.initTfod(true);
@@ -94,7 +94,8 @@ public class AutonomousCommandTest extends CommandOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         initialize();
-
+        if(useVision)
+            visionSubsystem.startTensorFlowProcessing();
 
         boolean readVision = true;
 
@@ -130,7 +131,8 @@ public class AutonomousCommandTest extends CommandOpMode {
         waitForStart();
 
         if(useVision)
-            visionSubsystem.stopTensorStreaming();
+            visionSubsystem.stopTensorFlowProcessing();
+
         TrajectorySequence phase1, phase2, phase3, park;
 
         if(startLocation == AutonomousStartLocation.Near) {
@@ -151,6 +153,7 @@ public class AutonomousCommandTest extends CommandOpMode {
 
         schedule(
                 new SequentialCommandGroup(
+                        new AprilTagStartStopCommand(visionSubsystem, AprilTagStartStopCommand.State.Start),
                         new TrajectorySequenceFollowerCommand(driveBaseSubsystem, phase1),
                         new ParallelCommandGroup(
                                 new PlacePixelOnSpikeCommand(intakeMotorSubsystem).withTimeout(2000),
@@ -178,7 +181,8 @@ public class AutonomousCommandTest extends CommandOpMode {
                         new TrajectorySequenceFollowerCommand(driveBaseSubsystem, phase3),
                         new StopPixelBoxReset(extakeSubsystem, linearSlideSubsystem),
                         new TrajectorySequenceFollowerCommand(driveBaseSubsystem, park),
-                        new InstantCommand(extakeSubsystem::pixelStop, extakeSubsystem)
+                        new InstantCommand(extakeSubsystem::pixelStop, extakeSubsystem),
+                        new AprilTagStartStopCommand(visionSubsystem, AprilTagStartStopCommand.State.Stop)
         ));
 
         // run the scheduler

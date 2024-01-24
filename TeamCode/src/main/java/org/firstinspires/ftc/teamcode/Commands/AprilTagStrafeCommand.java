@@ -11,15 +11,14 @@ import org.firstinspires.ftc.teamcode.Utilities.MatchConfig;
 public class AprilTagStrafeCommand extends CommandBase {
 
     private final MecanumDriveSubsystem mecanumDriveSubsystem;
-    private Trajectory trajectory;
     private boolean isFinished = false;
     public AprilTagStrafeCommand(MecanumDriveSubsystem mDrive) {
         mecanumDriveSubsystem = mDrive;
         addRequirements(mecanumDriveSubsystem);
     }
-
     @Override
-    public void initialize() {
+    public void execute() {
+        Trajectory trajectory = null;
         if(MatchConfig.TeamPropPosition == TeamPropPosition.Left) {
             trajectory = mecanumDriveSubsystem.trajectoryBuilder(mecanumDriveSubsystem.getPoseEstimate())
                     .strafeRight(Configuration.AUTO_STRAFE_DISTANCE)
@@ -30,12 +29,8 @@ public class AprilTagStrafeCommand extends CommandBase {
                     .strafeLeft(Configuration.AUTO_STRAFE_DISTANCE)
                     .build();
         }
-
-    }
-
-    @Override
-    public void execute() {
-        mecanumDriveSubsystem.followTrajectory(trajectory);
+        if(trajectory != null)
+            mecanumDriveSubsystem.followTrajectory(trajectory);
         isFinished = true;
     }
 
