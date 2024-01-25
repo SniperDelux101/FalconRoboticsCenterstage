@@ -403,7 +403,7 @@ public class VisionSubsystem extends FalconSubsystemBase {
         return currentDetection;
     }
 
-    private void outputDetectionToTelemetry(AprilTagDetection detection) {
+    public void outputDetectionToTelemetry(AprilTagDetection detection) {
         try {
             telemetry.addLine(String.format("\n==== (ID %d)", detection.id));
             telemetry.addLine(String.format("XYZ %6.1f %6.1f %6.1f  (inch)", detection.ftcPose.x, detection.ftcPose.y, detection.ftcPose.z));
