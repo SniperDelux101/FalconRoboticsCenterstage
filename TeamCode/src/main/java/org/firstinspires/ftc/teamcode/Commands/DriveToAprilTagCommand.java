@@ -54,7 +54,7 @@ public class DriveToAprilTagCommand extends CommandBase {
             if (executeCount == 0)
                 buildAndExecuteStrafeSequence();
             else if (executeCount >= 1 && executeCount <= MAX_EXECUTION_COUNT)
-                isFinished = driveToTag(visionSubsystem.getAprilTags(), getTargetId());
+                isFinished = driveToTag(visionSubsystem.getFreshAprilTags(), getTargetId());
             else //we've executed this 25 times, it's time to bail out
                 isFinished = true;
         }

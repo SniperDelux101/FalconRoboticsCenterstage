@@ -382,6 +382,9 @@ public class VisionSubsystem extends FalconSubsystemBase {
     public List<AprilTagDetection> getAprilTags(){
         return aprilTag.getDetections();
     }
+    public List<AprilTagDetection> getFreshAprilTags(){
+        return aprilTag.getFreshDetections();
+    }
 
     public AprilTagDetection findAprilTag(int tagID) {
         AprilTagDetection currentDetection = null;
