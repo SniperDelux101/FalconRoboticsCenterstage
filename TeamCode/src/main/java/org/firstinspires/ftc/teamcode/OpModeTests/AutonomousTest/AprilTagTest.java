@@ -19,6 +19,7 @@ import org.firstinspires.ftc.teamcode.Commands.Autonomous.DriveForwardToObjectCo
 import org.firstinspires.ftc.teamcode.Commands.Autonomous.FindAprilTagCommand;
 import org.firstinspires.ftc.teamcode.Commands.Autonomous.TeamPropPosition;
 import org.firstinspires.ftc.teamcode.Commands.DriveToAprilTagCommand;
+import org.firstinspires.ftc.teamcode.Commands.DriveToAprilTagSynchronousCommand;
 import org.firstinspires.ftc.teamcode.Commands.StrafeToFindAprilTagCommand;
 import org.firstinspires.ftc.teamcode.Commands.YawTurnCommand;
 import org.firstinspires.ftc.teamcode.Subsystems.DistanceSensorSubsystem;
@@ -53,7 +54,8 @@ public class AprilTagTest extends CommandOpMode {
         schedule(new SequentialCommandGroup(
                 //new AprilTagStartStopCommand(visionSubsystem, AprilTagStartStopCommand.State.Start),
                 //new StrafeToFindAprilTagCommand(mecanumDriveSubsystem, visionSubsystem),
-                new DriveToAprilTagCommand(visionSubsystem, mecanumDriveSubsystem)
+                //new DriveToAprilTagCommand(visionSubsystem, mecanumDriveSubsystem)
+                new DriveToAprilTagSynchronousCommand(visionSubsystem, mecanumDriveSubsystem)
                 //new DriveForwardToObjectCommand(mecanumDriveSubsystem, distanceSensorSubsystem, GyroSubsystem.getInstance(hardwareMap, telemetry), Configuration.BACKDROP_DISTANCE),
                 //new AprilTagStartStopCommand(visionSubsystem, AprilTagStartStopCommand.State.ClosePortal)
                 ));

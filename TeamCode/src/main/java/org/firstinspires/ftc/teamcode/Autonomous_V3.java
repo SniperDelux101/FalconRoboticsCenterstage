@@ -24,6 +24,7 @@ import org.firstinspires.ftc.teamcode.Commands.Autonomous.Paths.V3.BuildFarPaths
 import org.firstinspires.ftc.teamcode.Commands.Autonomous.Paths.V3.BuildNearPaths;
 import org.firstinspires.ftc.teamcode.Commands.Autonomous.TeamPropPosition;
 import org.firstinspires.ftc.teamcode.Commands.DriveToAprilTagCommand;
+import org.firstinspires.ftc.teamcode.Commands.DriveToAprilTagSynchronousCommand;
 import org.firstinspires.ftc.teamcode.Commands.GyroSquareCommand;
 import org.firstinspires.ftc.teamcode.Commands.MovePixelBoxArmToPositionCommand;
 import org.firstinspires.ftc.teamcode.Commands.PixelBoxArmPosition;
@@ -157,7 +158,8 @@ public class Autonomous_V3 extends CommandOpMode {
                                 new TrajectorySequenceFollowerCommand(driveBaseSubsystem, phase2)
                         ),
                         //new StrafeToFindAprilTagCommand(driveBaseSubsystem, visionSubsystem),
-                        new DriveToAprilTagCommand(visionSubsystem, driveBaseSubsystem),
+                        //new DriveToAprilTagCommand(visionSubsystem, driveBaseSubsystem),
+                        new DriveToAprilTagSynchronousCommand(visionSubsystem, driveBaseSubsystem),
                         new DriveForwardToObjectCommand(driveBaseSubsystem, distanceSensorSubsystem, GyroSubsystem.getInstance(hardwareMap, telemetry), Configuration.BACKDROP_DISTANCE),
                         //offset if we are dropping left or right
 //                        new SelectCommand(
