@@ -60,7 +60,19 @@ public class LinearSlideSubsystem extends FalconSubsystemBase {
         }
     }
 
+    public void runPlusPosition(int slideAddition, boolean runSynchronous) {
+        int newPos = getCurrentPosition() + slideAddition;
+        linearSlideMotor.setRunMode(Motor.RunMode.PositionControl);
+        linearSlideMotor.setTargetPosition(newPos);
+        linearSlideMotor.set(1.0);
+        if(runSynchronous) {
+            while(LinearCurPos() < newPos){}
+            stop();
+        }
+    }
+
     public boolean isSlideAtTargetPosition(){
+
         boolean flag = false;
         try{
             flag = linearSlideMotor.atTargetPosition();

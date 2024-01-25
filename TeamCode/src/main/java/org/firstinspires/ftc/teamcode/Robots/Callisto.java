@@ -1,8 +1,10 @@
 package org.firstinspires.ftc.teamcode.Robots;
 
 import com.arcrobotics.ftclib.command.InstantCommand;
+import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.Robot;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
+import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.command.button.GamepadButton;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
@@ -19,6 +21,7 @@ import org.firstinspires.ftc.teamcode.Commands.MovePixelBoxArmToPositionCommand;
 import org.firstinspires.ftc.teamcode.Commands.PixelBoxArmPosition;
 import org.firstinspires.ftc.teamcode.Commands.PixelBoxPosition;
 import org.firstinspires.ftc.teamcode.Commands.ResetAndPrepForExchangeCommand;
+import org.firstinspires.ftc.teamcode.Commands.RunLinearSlideAddition;
 import org.firstinspires.ftc.teamcode.Commands.RunLinearSlideAndCenterPixelBoxCommand;
 import org.firstinspires.ftc.teamcode.Commands.StopPixelBoxReset;
 import org.firstinspires.ftc.teamcode.Subsystems.AirplaneLauncherSubsystem;
@@ -108,54 +111,9 @@ public class Callisto extends Robot {
 
         odometryControlSubsystem.retract();
 
-        // linear slide extends to high position
-        utilityGamepad.getGamepadButton(GamepadKeys.Button.B)
-                        .whenPressed(
-                                new SequentialCommandGroup(
-                                    new RunLinearSlideAndCenterPixelBoxCommand( extakeSubsystem,linearSlideSubsystem, Configuration.LINEAR_SLIDE_POS_HI),
-                                        new MovePixelBoxArmToPositionCommand(extakeSubsystem, PixelBoxArmPosition.Extake)
-                                )
-                        );
-        // linear slide extends to med position
-        utilityGamepad.getGamepadButton(GamepadKeys.Button.Y)
-                        .whenPressed(
-                                new SequentialCommandGroup(
-                                    new RunLinearSlideAndCenterPixelBoxCommand(extakeSubsystem,linearSlideSubsystem, Configuration.LINEAR_SLIDE_POS_MED),
-                                        new MovePixelBoxArmToPositionCommand(extakeSubsystem, PixelBoxArmPosition.Extake)
-                                )
-                        );
-        //linear slide extends to low position
-        utilityGamepad.getGamepadButton(GamepadKeys.Button.X)
-                        .whenPressed(
-                                new SequentialCommandGroup(
-                                    new RunLinearSlideAndCenterPixelBoxCommand(extakeSubsystem,linearSlideSubsystem, Configuration.LINEAR_SLIDE_POS_LO),
-                                        new MovePixelBoxArmToPositionCommand(extakeSubsystem, PixelBoxArmPosition.Extake)
-                                )
-                        );
-        //linear slide extends to transfer position
-        utilityGamepad.getGamepadButton(GamepadKeys.Button.A)
-                        .whenPressed(
-                                new ResetAndPrepForExchangeCommand(extakeSubsystem, linearSlideSubsystem)
-                        );
-        // Drop the box
-        utilityGamepad.getGamepadButton(GamepadKeys.Button.DPAD_UP)
-                        .whenPressed(
-                                new MovePixelBoxAndEjectSequentialCommand(linearSlideSubsystem, extakeSubsystem, PixelBoxPosition.Center)
-                        );
-        utilityGamepad.getGamepadButton(GamepadKeys.Button.DPAD_LEFT)
-                .whenPressed(
-                        new MovePixelBoxAndEjectSequentialCommand(linearSlideSubsystem, extakeSubsystem, PixelBoxPosition.Left)
-                );
-        utilityGamepad.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT)
-                .whenPressed(
-                        new MovePixelBoxAndEjectSequentialCommand(linearSlideSubsystem, extakeSubsystem, PixelBoxPosition.Right)
-                );
-        // Dropping the pixel
-        utilityGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER)
-                .whenHeld(
-                        new InstantCommand(extakeSubsystem::pixelEject, extakeSubsystem)
-                )
-                .whenReleased(new StopPixelBoxReset(extakeSubsystem, linearSlideSubsystem));
+
+
+
 
         // Stop the Intake motor
         driverGamepad.getGamepadButton(GamepadKeys.Button.B)
@@ -182,12 +140,7 @@ public class Callisto extends Robot {
         driverGamepad.getGamepadButton(GamepadKeys.Button.X)
                         .whenPressed(new InstantCommand(extakeSubsystem::pixelStop, extakeSubsystem));
 
-        //Send climb arms out command
-        utilityGamepad.getGamepadButton(GamepadKeys.Button.DPAD_DOWN)
-                .and(new GamepadButton(utilityGamepad, GamepadKeys.Button.RIGHT_BUMPER))
-                .whenActive(
-                        new InstantCommand(climbSubsystem::ClimbOut, climbSubsystem)
-                );
+
 
         //
 
@@ -217,6 +170,90 @@ public class Callisto extends Robot {
                     intakeMotorSubsystem.stop();
                 }));
 */
+
+
+
+        //region Utility Button B
+        // linear slide extends to high position
+        utilityGamepad.getGamepadButton(GamepadKeys.Button.B)
+                .whenPressed(
+                        new SequentialCommandGroup(
+                                new RunLinearSlideAndCenterPixelBoxCommand( extakeSubsystem,linearSlideSubsystem, Configuration.LINEAR_SLIDE_POS_HI),
+                                new MovePixelBoxArmToPositionCommand(extakeSubsystem, PixelBoxArmPosition.Extake)
+                        )
+                );
+        //endregion
+
+        //region Utility Button Y
+        // linear slide extends to med position
+        utilityGamepad.getGamepadButton(GamepadKeys.Button.Y)
+                .whenPressed(
+                        new SequentialCommandGroup(
+                                new RunLinearSlideAndCenterPixelBoxCommand(extakeSubsystem,linearSlideSubsystem, Configuration.LINEAR_SLIDE_POS_MED),
+                                new MovePixelBoxArmToPositionCommand(extakeSubsystem, PixelBoxArmPosition.Extake)
+                        )
+                );
+        //endregion
+
+        //region Utility Button X
+        //linear slide extends to low position
+        utilityGamepad.getGamepadButton(GamepadKeys.Button.X)
+                .whenPressed(
+                        new SequentialCommandGroup(
+                                new RunLinearSlideAndCenterPixelBoxCommand(extakeSubsystem,linearSlideSubsystem, Configuration.LINEAR_SLIDE_POS_LO),
+                                new MovePixelBoxArmToPositionCommand(extakeSubsystem, PixelBoxArmPosition.Extake)
+                        )
+                );
+        //endregion
+
+        //region Utility D-Pad Left
+        utilityGamepad.getGamepadButton(GamepadKeys.Button.DPAD_LEFT)
+                .whenPressed(
+                        new ParallelCommandGroup (
+                               new MovePixelBoxAndEjectSequentialCommand(linearSlideSubsystem, extakeSubsystem, PixelBoxPosition.Left),
+                                    new WaitCommand(750),
+                                        new RunLinearSlideAddition(linearSlideSubsystem, Configuration.LINEAR_SLIDE_ADDITION)
+                        ));
+        //endregion
+
+        //region Utility D-Pad Up
+        // Drop the box
+        utilityGamepad.getGamepadButton(GamepadKeys.Button.DPAD_UP)
+                .whenPressed(
+                        new ParallelCommandGroup(
+                            new MovePixelBoxAndEjectSequentialCommand(linearSlideSubsystem, extakeSubsystem, PixelBoxPosition.Center),
+                                new WaitCommand(750),
+                                    new RunLinearSlideAddition(linearSlideSubsystem, Configuration.LINEAR_SLIDE_ADDITION)
+                ));
+        //endregion
+
+        //region Utility D-Pad Right
+        utilityGamepad.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT)
+                .whenPressed(
+                        new ParallelCommandGroup(
+                            new MovePixelBoxAndEjectSequentialCommand(linearSlideSubsystem, extakeSubsystem, PixelBoxPosition.Right),
+                                new WaitCommand(750),
+                                    new RunLinearSlideAddition(linearSlideSubsystem, Configuration.LINEAR_SLIDE_ADDITION)
+                        ));
+        //endregion
+
+        //region Utility D-Pad Down && Utility Button A
+        //Send climb arms out command
+        utilityGamepad.getGamepadButton(GamepadKeys.Button.DPAD_DOWN)
+                .and(new GamepadButton(utilityGamepad, GamepadKeys.Button.A))
+                .whenActive(
+                        new InstantCommand(climbSubsystem::ClimbOut, climbSubsystem)
+                );
+        //endregion
+
+        //region Utility Right Bumper
+        // Dropping the pixel
+        utilityGamepad.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER)
+                .whenHeld(
+                        new InstantCommand(extakeSubsystem::pixelEject, extakeSubsystem)
+                )
+                .whenReleased(new StopPixelBoxReset(extakeSubsystem, linearSlideSubsystem));
+        //endregion
     }
 
     private void initAuto() {

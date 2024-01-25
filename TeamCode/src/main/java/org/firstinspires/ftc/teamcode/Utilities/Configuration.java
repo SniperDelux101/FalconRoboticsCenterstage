@@ -115,6 +115,7 @@ public class Configuration {
     public static int LINEAR_SLIDE_POS_TRANSFER = -150;
     public static int LINEAR_SLIDE_POS_AUTO = -2300;
     public static int LINEAR_SLIDE_MULTIPLIER = 10;
+    public static int LINEAR_SLIDE_ADDITION = 1000;
     public static int TICK_RANGE = 50;
 
     //****************************************************************************************************************//
