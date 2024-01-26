@@ -10,233 +10,403 @@ import com.acmerobotics.roadrunner.trajectory.constraints.MecanumVelocityConstra
 import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryVelocityConstraint;
 
 import org.firstinspires.ftc.teamcode.Commands.Autonomous.Alliance;
+import org.firstinspires.ftc.teamcode.Commands.Autonomous.ParkEnding;
 import org.firstinspires.ftc.teamcode.Commands.Autonomous.TeamPropPosition;
+import org.firstinspires.ftc.teamcode.Commands.Autonomous.TravelDirection;
 import org.firstinspires.ftc.teamcode.Subsystems.drive.FalconMecanumDrive;
 import org.firstinspires.ftc.teamcode.Subsystems.drive.TrajectorySequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.Utilities.Configuration;
 
 public class BuildFarPaths {
     public static TrajectorySequence Phase1, Phase2, Phase3, Park;
-
     private static FalconMecanumDrive drive;
 
-    public static void Build(FalconMecanumDrive dr, TeamPropPosition position, Alliance alliance){
+    public static void Build(FalconMecanumDrive dr, TeamPropPosition position, Alliance alliance, TravelDirection direction, ParkEnding parkEnding){
         drive = dr;
-        if (position == TeamPropPosition.Center) {
-            if(alliance == Alliance.Blue){
-                Blue.CenterPhases();
-                drive.setPoseEstimate(Blue_Far_Start_Pose);
+
+        if(alliance == Alliance.Blue) {
+            if(position == TeamPropPosition.Center) {
+                if (direction == TravelDirection.In) {
+                    if(parkEnding == ParkEnding.In) {
+
+                    }
+                    if(parkEnding == ParkEnding.Out) {
+
+                    }
+                }
+                if (direction == TravelDirection.Out) {
+                    if(parkEnding == ParkEnding.In) {
+
+                    }
+                    if(parkEnding == ParkEnding.Out) {
+
+                    }
+                }
             }
-            else{
-                Red.CenterPhases();
-                drive.setPoseEstimate(Red_Far_Start_Pose);
+            if(position == TeamPropPosition.Left) {
+                if (direction == TravelDirection.In) {
+                    if(parkEnding == ParkEnding.In) {
+
+                    }
+                    if(parkEnding == ParkEnding.Out) {
+
+                    }
+                }
+                if (direction == TravelDirection.Out) {
+                    if(parkEnding == ParkEnding.In) {
+
+                    }
+                    if(parkEnding == ParkEnding.Out) {
+
+                    }
+                }
             }
-        } else if (position == TeamPropPosition.Left || position == TeamPropPosition.Right) {
-            if(alliance == Alliance.Blue){
-                Blue.Left_Right_Phases(position);
-                drive.setPoseEstimate(Blue_Far_Start_Pose);
+            if(position == TeamPropPosition.Right) {
+                if(direction == TravelDirection.In) {
+                    if(parkEnding == ParkEnding.In) {
+
+                    }
+                    if(parkEnding == ParkEnding.Out) {
+
+                    }
+                }
+                if(direction == TravelDirection.Out) {
+                    if(parkEnding == ParkEnding.In) {
+
+                    }
+                    if(parkEnding == ParkEnding.Out) {
+
+                    }
+                }
             }
-            else{
-                Red.Left_Right_Phases(position);
-                drive.setPoseEstimate(Red_Far_Start_Pose);
+
+        }
+        if(alliance == Alliance.Red) {
+            if (position == TeamPropPosition.Center) {
+                if (direction == TravelDirection.In) {
+                    if (parkEnding == ParkEnding.In) {
+
+                    }
+                    if (parkEnding == ParkEnding.Out) {
+
+                    }
+                }
+                if (direction == TravelDirection.Out) {
+                    if (parkEnding == ParkEnding.In) {
+
+                    }
+                    if (parkEnding == ParkEnding.Out) {
+
+                    }
+                }
+            }
+            if (position == TeamPropPosition.Left) {
+                if (direction == TravelDirection.In) {
+                    if (parkEnding == ParkEnding.In) {
+
+                    }
+                    if (parkEnding == ParkEnding.Out) {
+
+                    }
+                }
+                if (direction == TravelDirection.Out) {
+                    if (parkEnding == ParkEnding.In) {
+
+                    }
+                    if (parkEnding == ParkEnding.Out) {
+
+                    }
+                }
+            }
+            if (position == TeamPropPosition.Right) {
+                if (direction == TravelDirection.In) {
+                    if (parkEnding == ParkEnding.In) {
+
+                    }
+                    if (parkEnding == ParkEnding.Out) {
+
+                    }
+                }
+                if (direction == TravelDirection.Out) {
+                    if (parkEnding == ParkEnding.In) {
+
+                    }
+                    if (parkEnding == ParkEnding.Out) {
+
+                    }
+                }
             }
         }
     }
-    private static class Blue {
-        public static void CenterPhases() {
-            Phase1 = drive.trajectorySequenceBuilder(Blue_Far_Start_Pose)
-                    .lineTo(new Vector2d(-36, 15))
-                    .turn(BF_Center_Spike_H1)
+    private static class Blue{
+
+        //region IN - OUT
+        public static void CenterPhase1_IO() {
+            Phase1 = drive.trajectorySequenceBuilder(Blue_Near_Start_Pose)
+
                     .build();
-            Center_Phase2();
+            Center_Phase2_IO();
         }
-        public static void Center_Phase2() {
+        public static void Center_Phase2_IO() {
             Phase2 = drive.trajectorySequenceBuilder(Phase1.end())
                     .setVelConstraint(new MecanumVelocityConstraint(Configuration.AUTO_VEL, Configuration.TRACKWIDTH))
-                    .lineToConstantHeading(new Vector2d(-36, 8))
-                    .splineTo(new Vector2d(-20, 8), BF_Center_Ph2_H1)
-                    .lineToConstantHeading(new Vector2d(30, 8))
-                    .splineToConstantHeading(new Vector2d(40,Y_Mod), BF_Center_Ph2_H2)
+
                     .build();
-            Center_Phase3();
+            Center_Phase3_IO();
         }
-        public static void Center_Phase3() {
+        public static void Center_Phase3_IO(){
             Phase3 = drive.trajectorySequenceBuilder(Phase2.end())
                     .setVelConstraint(new MecanumVelocityConstraint(Configuration.AUTO_VEL, Configuration.TRACKWIDTH))
-                    .lineToConstantHeading(new Vector2d(40, 31))
+
                     .build();
-            Center_Park();
+            Center_Park_IO();
         }
-        public static void Center_Park() {
-            Park = drive.trajectorySequenceBuilder(Phase2.end())
+        public static void Center_Park_IO() {
+            Park = drive.trajectorySequenceBuilder(Phase3.end())
                     .setVelConstraint(new MecanumVelocityConstraint(Configuration.AUTO_VEL, Configuration.TRACKWIDTH))
-                    .lineToConstantHeading(new Vector2d(40, 14))
-                    .splineToConstantHeading(new Vector2d(60, 3), BF_Center_Park_H1)
+
                     .build();
         }
-        public static void Left_Right_Phases(TeamPropPosition position) {
+        public static void Left_Right_Phase1_IO(TeamPropPosition position) {
             if (position == TeamPropPosition.Left) {
-                Phase1 = drive.trajectorySequenceBuilder(Blue_Far_Start_Pose)
-                        .splineTo(new Vector2d(-33, 28), Math.toRadians(0))
+                Phase1 = drive.trajectorySequenceBuilder(Blue_Near_Start_Pose)
+
                         .build();
             } else {
-                Phase1 = drive.trajectorySequenceBuilder(Blue_Far_Start_Pose)
-                        .lineTo(new Vector2d(-42, 16))
-                        .turn(Math.toRadians(180))
+                Phase1 = drive.trajectorySequenceBuilder(Blue_Near_Start_Pose)
+
                         .build();
             }
-            Left_Right_Phase2(position);
+            Left_Right_Phase2_IO(position);
         }
-        private static void Left_Right_Phase2(TeamPropPosition position){
+        private static void Left_Right_Phase2_IO(TeamPropPosition position){
             if(position == TeamPropPosition.Left){
                 Phase2 = drive.trajectorySequenceBuilder(Phase1.end())
                         .setVelConstraint(new MecanumVelocityConstraint(Configuration.AUTO_VEL, Configuration.TRACKWIDTH))
-                        .lineTo(new Vector2d(-40, 28))
-                        .splineTo(new Vector2d(-40, 2), Math.toRadians(0))
-                        .lineToConstantHeading(new Vector2d(30, 2))
-                        .splineToConstantHeading(new Vector2d(45, Y_Mod), Math.toRadians(0))
+
                         .build();
             } else {
                 Phase2 = drive.trajectorySequenceBuilder(Phase1.end())
                         .setVelConstraint(new MecanumVelocityConstraint(Configuration.AUTO_VEL, Configuration.TRACKWIDTH))
-                        .lineToConstantHeading(new Vector2d(-46, 6))
-                        .turn(Math.toRadians(90))
-                        .lineToConstantHeading(new Vector2d(30, 6))
-                        .splineToConstantHeading(new Vector2d(45,Y_Mod), Math.toRadians(0))
+
                         .build();
             }
-            Left_Right_Phase3(position);
+            Left_Right_Phase3_IO(position);
         }
-        private static void Left_Right_Phase3(TeamPropPosition position){
+        private static void Left_Right_Phase3_IO(TeamPropPosition position) {
             if(position == TeamPropPosition.Left){
                 Phase3 = drive.trajectorySequenceBuilder(Phase2.end())
                         .setVelConstraint(new MecanumVelocityConstraint(Configuration.AUTO_VEL, Configuration.TRACKWIDTH))
-                        .lineToConstantHeading(new Vector2d(40, 42))
+
                         .build();
             } else {
                 Phase3 = drive.trajectorySequenceBuilder(Phase2.end())
                         .setVelConstraint(new MecanumVelocityConstraint(Configuration.AUTO_VEL, Configuration.TRACKWIDTH))
-                        .lineToConstantHeading(new Vector2d(40, 28))
+
                         .build();
             }
-            Left_Right_Park(position);
+            Left_Right_Park_IO(position);
         }
-        private static void Left_Right_Park(TeamPropPosition position){
+        private static void Left_Right_Park_IO(TeamPropPosition position){
             if(position == TeamPropPosition.Left){
-                Park = drive.trajectorySequenceBuilder(Phase2.end())
+                Park = drive.trajectorySequenceBuilder(Phase3.end())
                         .setVelConstraint(new MecanumVelocityConstraint(Configuration.AUTO_VEL, Configuration.TRACKWIDTH))
-                        .lineToConstantHeading(new Vector2d(40, 14))
-                        .splineToConstantHeading(new Vector2d(60, 5), Math.toRadians(0))
+
                         .build();
             } else {
-                Park = drive.trajectorySequenceBuilder(Phase2.end())
+                Park = drive.trajectorySequenceBuilder(Phase3.end())
                         .setVelConstraint(new MecanumVelocityConstraint(Configuration.AUTO_VEL, Configuration.TRACKWIDTH))
-                        .lineToConstantHeading(new Vector2d(40, 14))
-                        .splineToConstantHeading(new Vector2d(60, 5), Math.toRadians(0))
+
                         .build();
             }
         }
+        //endregion
+
+        //region IN - IN
+
+        public static void CenterPhase1_II() {
+            Phase1 = drive.trajectorySequenceBuilder(Blue_Near_Start_Pose)
+
+                    .build();
+            Center_Phase2_II();
+        }
+        public static void Center_Phase2_II() {
+            Phase2 = drive.trajectorySequenceBuilder(Phase1.end())
+                    .setVelConstraint(new MecanumVelocityConstraint(Configuration.AUTO_VEL, Configuration.TRACKWIDTH))
+
+                    .build();
+            Center_Phase3_II();
+        }
+        public static void Center_Phase3_II(){
+            Phase3 = drive.trajectorySequenceBuilder(Phase2.end())
+                    .setVelConstraint(new MecanumVelocityConstraint(Configuration.AUTO_VEL, Configuration.TRACKWIDTH))
+
+                    .build();
+            Center_Park_II();
+        }
+        public static void Center_Park_II() {
+            Park = drive.trajectorySequenceBuilder(Phase3.end())
+                    .setVelConstraint(new MecanumVelocityConstraint(Configuration.AUTO_VEL, Configuration.TRACKWIDTH))
+
+                    .build();
+        }
+        public static void Left_Right_Phase1_II(TeamPropPosition position) {
+            if (position == TeamPropPosition.Left) {
+                Phase1 = drive.trajectorySequenceBuilder(Blue_Near_Start_Pose)
+
+                        .build();
+            } else {
+                Phase1 = drive.trajectorySequenceBuilder(Blue_Near_Start_Pose)
+
+                        .build();
+            }
+            Left_Right_Phase2_II(position);
+        }
+        private static void Left_Right_Phase2_II(TeamPropPosition position){
+            if(position == TeamPropPosition.Left){
+                Phase2 = drive.trajectorySequenceBuilder(Phase1.end())
+                        .setVelConstraint(new MecanumVelocityConstraint(Configuration.AUTO_VEL, Configuration.TRACKWIDTH))
+
+                        .build();
+            } else {
+                Phase2 = drive.trajectorySequenceBuilder(Phase1.end())
+                        .setVelConstraint(new MecanumVelocityConstraint(Configuration.AUTO_VEL, Configuration.TRACKWIDTH))
+
+                        .build();
+            }
+            Left_Right_Phase3_II(position);
+        }
+        private static void Left_Right_Phase3_II(TeamPropPosition position) {
+            if(position == TeamPropPosition.Left){
+                Phase3 = drive.trajectorySequenceBuilder(Phase2.end())
+                        .setVelConstraint(new MecanumVelocityConstraint(Configuration.AUTO_VEL, Configuration.TRACKWIDTH))
+
+                        .build();
+            } else {
+                Phase3 = drive.trajectorySequenceBuilder(Phase2.end())
+                        .setVelConstraint(new MecanumVelocityConstraint(Configuration.AUTO_VEL, Configuration.TRACKWIDTH))
+
+                        .build();
+            }
+            Left_Right_Park_II(position);
+        }
+        private static void Left_Right_Park_II(TeamPropPosition position){
+            if(position == TeamPropPosition.Left){
+                Park = drive.trajectorySequenceBuilder(Phase3.end())
+                        .setVelConstraint(new MecanumVelocityConstraint(Configuration.AUTO_VEL, Configuration.TRACKWIDTH))
+
+                        .build();
+            } else {
+                Park = drive.trajectorySequenceBuilder(Phase3.end())
+                        .setVelConstraint(new MecanumVelocityConstraint(Configuration.AUTO_VEL, Configuration.TRACKWIDTH))
+
+                        .build();
+            }
+        }
+        //endregion
+
     }
 
-    private static class Red {
-        public static void CenterPhases() {
-            Phase1 = drive.trajectorySequenceBuilder(Red_Far_Start_Pose)
-                    .lineTo(new Vector2d(-36, -15))
-                    .turn(RF_Center_Spike_H1)
+    private static class Red{
+
+        //region IN - OUT
+        public static void CenterPhase1_IO() {
+            Phase1 = drive.trajectorySequenceBuilder(Red_Near_Start_Pose)
+                    .lineTo(new Vector2d(12, -29))
                     .build();
-            Center_Phase2();
+            Center_Phase2_IO();
         }
-        public static void Center_Phase2() {
+        public static void Center_Phase2_IO() {
             Phase2 = drive.trajectorySequenceBuilder(Phase1.end())
                     .setVelConstraint(new MecanumVelocityConstraint(Configuration.AUTO_VEL, Configuration.TRACKWIDTH))
-                    .lineToConstantHeading(new Vector2d(-36, -8))
-                    .splineTo(new Vector2d(-20, -8), RF_Center_Ph2_H1)
-                    .lineToConstantHeading(new Vector2d(30, -8))
-                    .splineToConstantHeading(new Vector2d(40,-Y_Mod), RF_Center_Ph2_H2)
+                    .lineTo(new Vector2d(12, -36))
+                    .splineTo(new Vector2d(30, -36), Math.toRadians(0))
+                    .lineTo(new Vector2d(40, -Y_Mod))
                     .build();
-            Center_Phase3();
+            Center_Phase3_IO();
         }
-        public static void Center_Phase3() {
+        public static void Center_Phase3_IO() {
             Phase3 = drive.trajectorySequenceBuilder(Phase2.end())
                     .setVelConstraint(new MecanumVelocityConstraint(Configuration.AUTO_VEL, Configuration.TRACKWIDTH))
-                    .lineToConstantHeading(new Vector2d(40, -35))
+                    .lineToConstantHeading(new Vector2d(40, -36))
                     .build();
-            Center_Park();
+            Center_Park_IO();
         }
-        public static void Center_Park() {
+        public static void Center_Park_IO() {
             Park = drive.trajectorySequenceBuilder(Phase2.end())
                     .setVelConstraint(new MecanumVelocityConstraint(Configuration.AUTO_VEL, Configuration.TRACKWIDTH))
-                    .lineToConstantHeading(new Vector2d(40, -14))
-                    .splineToConstantHeading(new Vector2d(50, -12), RF_Center_Park_H1)
+                    .lineToConstantHeading(new Vector2d(40, -50))
+                    .splineToConstantHeading(new Vector2d(60, -60), RN_Center_Park_H1)
                     .build();
         }
-        public static void Left_Right_Phases(TeamPropPosition position) {
+        public static void Left_Right_Phases_IO(TeamPropPosition position) {
             if (position == TeamPropPosition.Left) {
-                Phase1 = drive.trajectorySequenceBuilder(Red_Far_Start_Pose)
-                        .lineTo(new Vector2d(-49, -18))
-                        .turn(Math.toRadians(180))
+                Phase1 = drive.trajectorySequenceBuilder(Red_Near_Start_Pose)
+                        .splineTo(new Vector2d(9, -30), Math.toRadians(180))
                         .build();
             } else {
                 //RIGHT
-                Phase1 = drive.trajectorySequenceBuilder(Red_Far_Start_Pose)
-                        .splineTo(new Vector2d(-30, -30), Math.toRadians(0))
+                Phase1 = drive.trajectorySequenceBuilder(Red_Near_Start_Pose)
+                        .lineToConstantHeading(new Vector2d(30,-28))
+                        .turn(RN_Right_Spike_H1)
                         .build();
             }
-            Left_Right_Phase2(position);
+            Left_Right_Phase2_IO(position);
         }
-        private static void Left_Right_Phase2(TeamPropPosition position){
+        private static void Left_Right_Phase2_IO(TeamPropPosition position){
             if(position == TeamPropPosition.Left){
                 Phase2 = drive.trajectorySequenceBuilder(Phase1.end())
                         .setVelConstraint(new MecanumVelocityConstraint(Configuration.AUTO_VEL, Configuration.TRACKWIDTH))
-                        .lineTo(new Vector2d(-47, -6))
-                        .turn(Math.toRadians(-90))
-                        .lineToConstantHeading(new Vector2d(-34, -6))
-                        .splineToConstantHeading(new Vector2d(-20, -6), Math.toRadians(0))
-                        .lineToConstantHeading(new Vector2d(30, -6))
-                        .splineToConstantHeading(new Vector2d(40,-Y_Mod), Math.toRadians(0))
+                        .lineToConstantHeading(new Vector2d(40, -Y_Mod))
                         .build();
             } else {
                 //Right
                 Phase2 = drive.trajectorySequenceBuilder(Phase1.end())
                         .setVelConstraint(new MecanumVelocityConstraint(Configuration.AUTO_VEL, Configuration.TRACKWIDTH))
-                        .lineTo(new Vector2d(-40, -30))
-                        .splineTo(new Vector2d(-40, -6), Math.toRadians(0))
-                        .lineToConstantHeading(new Vector2d(30, -6))
-                        .splineToConstantHeading(new Vector2d(40,-Y_Mod), Math.toRadians(0))
+                        .lineToConstantHeading(new Vector2d(40, -26))
+                        .splineToConstantHeading(new Vector2d(40, -Y_Mod), Math.toRadians(0))
                         .build();
-                Left_Right_Phase3(position);
             }
+            Left_Right_Phase3_IO(position);
         }
-        private static void Left_Right_Phase3(TeamPropPosition position){
+        private static void Left_Right_Phase3_IO(TeamPropPosition position){
             if(position == TeamPropPosition.Left){
                 Phase3 = drive.trajectorySequenceBuilder(Phase2.end())
                         .setVelConstraint(new MecanumVelocityConstraint(Configuration.AUTO_VEL, Configuration.TRACKWIDTH))
-                        .lineToConstantHeading(new Vector2d(40, -42))
-                        .build();
-            } else {
-                Phase3 = drive.trajectorySequenceBuilder(Phase2.end())
-                        .setVelConstraint(new MecanumVelocityConstraint(Configuration.AUTO_VEL, Configuration.TRACKWIDTH))
-                        .lineToConstantHeading(new Vector2d(40, -42))
-                        .build();
-            }
-            Left_Right_Park(position);
-        }
-        private static void Left_Right_Park(TeamPropPosition position) {
-            if(position == TeamPropPosition.Left){
-                Park = drive.trajectorySequenceBuilder(Phase3.end())
-                        .setVelConstraint(new MecanumVelocityConstraint(Configuration.AUTO_VEL, Configuration.TRACKWIDTH))
-                        .lineToConstantHeading(new Vector2d(40, -14))
-                        .splineToConstantHeading(new Vector2d(60, -7), Math.toRadians(0))
+                        .lineToConstantHeading(new Vector2d(40, -30))
                         .build();
             } else {
                 //Right
-                Park = drive.trajectorySequenceBuilder(Phase3.end())
+                Phase3 = drive.trajectorySequenceBuilder(Phase2.end())
                         .setVelConstraint(new MecanumVelocityConstraint(Configuration.AUTO_VEL, Configuration.TRACKWIDTH))
-                        .lineToConstantHeading(new Vector2d(40, -14))
-                        .splineToConstantHeading(new Vector2d(60, -7), Math.toRadians(0))
+                        .lineToConstantHeading(new Vector2d(40, -42))
+                        .build();
+            }
+            Left_Right_Park_IO(position);
+        }
+        private static void Left_Right_Park_IO(TeamPropPosition position) {
+            if(position == TeamPropPosition.Left){
+                Park = drive.trajectorySequenceBuilder(Phase2.end())
+                        .setVelConstraint(new MecanumVelocityConstraint(Configuration.AUTO_VEL, Configuration.TRACKWIDTH))
+                        .lineToConstantHeading(new Vector2d(40, -50))
+                        .splineToConstantHeading(new Vector2d(60, -60), Math.toRadians(0))
+                        .build();
+            } else {
+                //Right
+                Park = drive.trajectorySequenceBuilder(Phase2.end())
+                        .setVelConstraint(new MecanumVelocityConstraint(Configuration.AUTO_VEL, Configuration.TRACKWIDTH))
+                        .lineToConstantHeading(new Vector2d(40, -50))
+                        .splineToConstantHeading(new Vector2d(60,-60), RN_Right_Park_H1)
                         .build();
             }
         }
+        //endregion
+
+        //region IN - IN
+
+
+
+        //endregion
 
     }
 }

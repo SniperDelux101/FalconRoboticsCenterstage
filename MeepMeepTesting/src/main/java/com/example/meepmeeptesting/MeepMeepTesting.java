@@ -3,6 +3,7 @@ package com.example.meepmeeptesting;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.constraints.MecanumVelocityConstraint;
+import com.example.meepmeeptesting.Paths.Configuration;
 import com.noahbres.meepmeep.MeepMeep;
 import com.noahbres.meepmeep.roadrunner.DefaultBotBuilder;
 import com.noahbres.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
@@ -15,7 +16,11 @@ public class MeepMeepTesting {
     public static Pose2d Red_Near_Start_Pos = new Pose2d(12, -60, Math.toRadians(90));
     public static Pose2d Blue_Far_Start_Pos = new Pose2d(-36,60, Math.toRadians(270));
     public static Pose2d Red_Far_Start_Pos = new Pose2d(-36, -60, Math.toRadians(90));
-    private static int x = 1;
+    private static int x = 4;
+    private static int forward = 10;
+
+
+
     public static void main(String[] args) {
         MeepMeep meepMeep = new MeepMeep(800);
         RoadRunnerBotEntity myBot = null;
@@ -25,6 +30,8 @@ public class MeepMeepTesting {
 
         //region Blue Near [In - Out]
 
+        // Finished
+
         // Left
         if (x == 1) {
             myBot = new DefaultBotBuilder(meepMeep)
@@ -33,16 +40,17 @@ public class MeepMeepTesting {
                             drive.trajectorySequenceBuilder(Blue_Near_Start_Pos)
 
                                     //  Phase 1
-
+                                    .lineToLinearHeading(new Pose2d(30, 30, Math.toRadians(180)))
 
                                     //  Phase 2
-
+                                    .lineToConstantHeading(new Vector2d(35, 30))
+                                    .splineToConstantHeading(new Vector2d(46, 16), Math.toRadians(270))
 
                                     //  Phase 3
-
+                                    .forward(forward)
 
                                     //  Park
-
+                                    .splineToConstantHeading(new Vector2d(50, 60), Math.toRadians(0))
 
                                     .build());
         }
@@ -55,16 +63,18 @@ public class MeepMeepTesting {
                             drive.trajectorySequenceBuilder(Blue_Near_Start_Pos)
 
                                     //  Phase 1
-
+                                    .lineToConstantHeading(new Vector2d(12, 30))
 
                                     //  Phase 2
-
+                                    .lineToConstantHeading(new Vector2d(12, 35))
+                                    .splineTo(new Vector2d(20, 40), Math.toRadians(0))
+                                    .splineToConstantHeading(new Vector2d(46, 16), Math.toRadians(270))
 
                                     //  Phase 3
-
+                                    .forward(forward)
 
                                     //  Park
-
+                                    .splineToConstantHeading(new Vector2d(50,60), Math.toRadians(0))
 
                                     .build());
         }
@@ -77,16 +87,18 @@ public class MeepMeepTesting {
                             drive.trajectorySequenceBuilder(Blue_Near_Start_Pos)
 
                                     //  Phase 1
-
+                                    .lineToLinearHeading(new Pose2d(12, 40, Math.toRadians(270)))
+                                    .splineTo(new Vector2d(8, 30), Math.toRadians(180))
 
                                     //  Phase 2
-
+                                    .lineToConstantHeading(new Vector2d(30, 30))
+                                    .splineToConstantHeading(new Vector2d(46, 16), Math.toRadians(270))
 
                                     //  Phase 3
-
+                                    .forward(forward)
 
                                     //  Park
-
+                                    .splineToConstantHeading(new Vector2d(50, 60), Math.toRadians(0))
 
                                     .build());
         }
@@ -103,16 +115,17 @@ public class MeepMeepTesting {
                             drive.trajectorySequenceBuilder(Blue_Near_Start_Pos)
 
                                     //  Phase 1
-
+                                    .lineToLinearHeading(new Pose2d(30, 30, Math.toRadians(180)))
 
                                     //  Phase 2
-
+                                    .lineToConstantHeading(new Vector2d(35, 30))
+                                    .splineToConstantHeading(new Vector2d(46, 16), Math.toRadians(270))
 
                                     //  Phase 3
-
+                                    .forward(forward)
 
                                     //  Park
-
+                                    .splineToConstantHeading(new Vector2d(50, 8), Math.toRadians(0))
 
                                     .build());
         }
@@ -125,16 +138,18 @@ public class MeepMeepTesting {
                             drive.trajectorySequenceBuilder(Blue_Near_Start_Pos)
 
                                     //  Phase 1
-
+                                    .lineToConstantHeading(new Vector2d(12, 30))
 
                                     //  Phase 2
-
+                                    .lineToConstantHeading(new Vector2d(12, 35))
+                                    .splineTo(new Vector2d(20, 40), Math.toRadians(0))
+                                    .splineToConstantHeading(new Vector2d(46, 16), Math.toRadians(270))
 
                                     //  Phase 3
-
+                                    .forward(forward)
 
                                     //  Park
-
+                                    .splineToConstantHeading(new Vector2d(50, 8), Math.toRadians(0))
 
                                     .build());
         }
@@ -147,16 +162,18 @@ public class MeepMeepTesting {
                             drive.trajectorySequenceBuilder(Blue_Near_Start_Pos)
 
                                     //  Phase 1
-
+                                    .lineToLinearHeading(new Pose2d(12, 40, Math.toRadians(270)))
+                                    .splineTo(new Vector2d(8, 30), Math.toRadians(180))
 
                                     //  Phase 2
-
+                                    .lineToConstantHeading(new Vector2d(30, 30))
+                                    .splineToConstantHeading(new Vector2d(46, 16), Math.toRadians(270))
 
                                     //  Phase 3
-
+                                    .forward(forward)
 
                                     //  Park
-
+                                    .splineToConstantHeading(new Vector2d(50, 8), Math.toRadians(0))
 
                                     .build());
         }

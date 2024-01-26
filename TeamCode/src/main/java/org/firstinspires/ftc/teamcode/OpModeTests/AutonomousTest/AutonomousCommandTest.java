@@ -20,9 +20,11 @@ import org.firstinspires.ftc.teamcode.Commands.Autonomous.Alliance;
 import org.firstinspires.ftc.teamcode.Commands.Autonomous.AutonomousStartLocation;
 import org.firstinspires.ftc.teamcode.Commands.Autonomous.DriveForwardToObjectCommand;
 import org.firstinspires.ftc.teamcode.Commands.Autonomous.FindAprilTagCommand;
+import org.firstinspires.ftc.teamcode.Commands.Autonomous.ParkEnding;
 import org.firstinspires.ftc.teamcode.Commands.Autonomous.Paths.V3.BuildFarPaths;
 import org.firstinspires.ftc.teamcode.Commands.Autonomous.Paths.V3.BuildNearPaths;
 import org.firstinspires.ftc.teamcode.Commands.Autonomous.TeamPropPosition;
+import org.firstinspires.ftc.teamcode.Commands.Autonomous.TravelDirection;
 import org.firstinspires.ftc.teamcode.Commands.GyroSquareCommand;
 import org.firstinspires.ftc.teamcode.Commands.MovePixelBoxArmToPositionCommand;
 import org.firstinspires.ftc.teamcode.Commands.PixelBoxArmPosition;
@@ -67,6 +69,8 @@ public class AutonomousCommandTest extends CommandOpMode {
     public static Alliance alliance = Alliance.Blue;
     public static AutonomousStartLocation startLocation = AutonomousStartLocation.Near;
     public static TeamPropPosition teamPropPosition = TeamPropPosition.Center;
+    public static TravelDirection travelDirection = TravelDirection.In;
+    public static ParkEnding parkEnding = ParkEnding.In;
 
     public static boolean runAutonomous = true;
     public static boolean useVision = false;
@@ -119,6 +123,8 @@ public class AutonomousCommandTest extends CommandOpMode {
             MatchConfig.Alliance = alliance;
             MatchConfig.AutonomousStartLocation = startLocation;
             MatchConfig.TeamPropPosition = teamPropPosition;
+            MatchConfig.TravelDirection = travelDirection;
+            MatchConfig.ParkEnding = parkEnding;
             MatchConfig.telemetry = telemetry;
 
             telemetry.addData("Run autonomous ; " , runAutonomous);
@@ -136,14 +142,14 @@ public class AutonomousCommandTest extends CommandOpMode {
         TrajectorySequence phase1, phase2, phase3, park;
 
         if(startLocation == AutonomousStartLocation.Near) {
-            BuildNearPaths.Build(driveBaseSubsystem.getDrive(), teamPropPosition, alliance);
+            BuildNearPaths.Build(driveBaseSubsystem.getDrive(), teamPropPosition, alliance, parkEnding);
             phase1 = BuildNearPaths.Phase1;
             phase2 = BuildNearPaths.Phase2;
 //            phase_Strafe = BuildNearPaths.Phase_Strafe;
             phase3 = BuildNearPaths.Phase3;
             park = BuildNearPaths.Park;
         } else{
-            BuildFarPaths.Build(driveBaseSubsystem.getDrive(), teamPropPosition, alliance);
+            BuildFarPaths.Build(driveBaseSubsystem.getDrive(), teamPropPosition, alliance, travelDirection, parkEnding);
             phase1 = BuildFarPaths.Phase1;
             phase2 = BuildFarPaths.Phase2;
 //            phase_Strafe = BuildFarPaths.Phase_Strafe;
