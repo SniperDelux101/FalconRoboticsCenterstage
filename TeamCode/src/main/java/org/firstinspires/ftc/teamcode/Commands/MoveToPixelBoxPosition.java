@@ -22,7 +22,6 @@ public class MoveToPixelBoxPosition extends CommandBase {
 
     @Override
     public void execute(){
-        if()
         switch (pixelBoxPosition) {
             case Left:
                 extakeSubsystem.leftRotation();
