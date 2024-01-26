@@ -6,6 +6,7 @@ import com.acmerobotics.roadrunner.trajectory.constraints.MecanumVelocityConstra
 import com.noahbres.meepmeep.MeepMeep;
 import com.noahbres.meepmeep.roadrunner.DefaultBotBuilder;
 import com.noahbres.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
+import com.noahbres.meepmeep.roadrunner.entity.TrajectorySequenceEntity;
 
 
 public class MeepMeepTesting {
@@ -14,297 +15,863 @@ public class MeepMeepTesting {
     public static Pose2d Red_Near_Start_Pos = new Pose2d(12, -60, Math.toRadians(90));
     public static Pose2d Blue_Far_Start_Pos = new Pose2d(-36,60, Math.toRadians(270));
     public static Pose2d Red_Far_Start_Pos = new Pose2d(-36, -60, Math.toRadians(90));
-
+    private static int x = 1;
     public static void main(String[] args) {
         MeepMeep meepMeep = new MeepMeep(800);
+        RoadRunnerBotEntity myBot = null;
 
-        RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
-                .setConstraints(30, 40, Math.toRadians(180), Math.toRadians(180), 15)
-                .followTrajectorySequence(drive ->
-                        drive.trajectorySequenceBuilder(Red_Far_Start_Pos)
 
-                                // Blue Near Left
-                                /*
-                                .lineToConstantHeading(new Vector2d(30,28))
-                                .turn(Math.toRadians(-90))
+//  ------------------------------------------------------------------------------------------------
 
-                                .lineToConstantHeading(new Vector2d(40, 28))
-                                .lineToConstantHeading(new Vector2d(53, 39))
+        //region Blue Near [In - Out]
 
-                                .lineToConstantHeading(new Vector2d(40, 40))
+        // Left
+        if (x == 1) {
+            myBot = new DefaultBotBuilder(meepMeep)
+                    .setConstraints(30, 40, Math.toRadians(180), Math.toRadians(180), 15)
+                    .followTrajectorySequence(drive ->
+                            drive.trajectorySequenceBuilder(Blue_Near_Start_Pos)
 
-                                .splineToConstantHeading(new Vector2d(50,60), Math.toRadians(0))
+                                    //  Phase 1
 
-                                 */
 
-                                //Blue Near Center
-                                /*
-                                .lineTo(new Vector2d(12, 30))
+                                    //  Phase 2
 
-                                .lineTo(new Vector2d(12, 32))
-                                .splineTo((new Vector2d(30, 32)), Math.toRadians(270))
-                                .splineTo(new Vector2d(40, 16), Math.toRadians(0))
 
-                                .lineToConstantHeading(new Vector2d(45, 32))
+                                    //  Phase 3
 
-                                .lineToConstantHeading(new Vector2d(45, 50))
-                                .splineToConstantHeading(new Vector2d(60, 60), Math.toRadians(0))
-                                */
 
-                                // Blue Near Right
-                                /*
-                                .splineTo(new Vector2d(9, 30), Math.toRadians(180))
+                                    //  Park
 
-                                .lineToConstantHeading(new Vector2d(53,28))
 
-                                .lineToConstantHeading(new Vector2d(40, 28))
+                                    .build());
+        }
 
-                                .lineToConstantHeading(new Vector2d(40, 50))
-                                .splineToConstantHeading(new Vector2d(60, 60), Math.toRadians(0))
+        // Center
+        if (x == 2) {
+            myBot = new DefaultBotBuilder(meepMeep)
+                    .setConstraints(30, 40, Math.toRadians(180), Math.toRadians(180), 15)
+                    .followTrajectorySequence(drive ->
+                            drive.trajectorySequenceBuilder(Blue_Near_Start_Pos)
 
-                                 */
+                                    //  Phase 1
 
-//              -------------------------------------------------------------------
 
-                                // Red Near Left
-                                /*
-                                .splineTo(new Vector2d(9, -30), Math.toRadians(180))
+                                    //  Phase 2
 
-                                .lineToConstantHeading(new Vector2d(40, -16))
 
-                                .lineToConstantHeading(new Vector2d(40, -30))
+                                    //  Phase 3
 
-                                .lineToConstantHeading(new Vector2d(40, -50))
-                                .splineToConstantHeading(new Vector2d(60, -60), Math.toRadians(0))
 
-                                 */
+                                    //  Park
 
-                                //  Red Near Center
-                                /*
-                                .lineTo(new Vector2d(12, -30))
 
-                                .lineTo(new Vector2d(12, -36))
-                                .splineTo(new Vector2d(30, -36), Math.toRadians(0))
-                                .lineTo(new Vector2d(51.5, -36))
+                                    .build());
+        }
 
-                                .lineToConstantHeading(new Vector2d(40, -36))
+        // Right
+        if (x == 3) {
+            myBot = new DefaultBotBuilder(meepMeep)
+                    .setConstraints(30, 40, Math.toRadians(180), Math.toRadians(180), 15)
+                    .followTrajectorySequence(drive ->
+                            drive.trajectorySequenceBuilder(Blue_Near_Start_Pos)
 
-                                .lineToConstantHeading(new Vector2d(40, -50))
-                                .splineToConstantHeading(new Vector2d(60, -60), Math.toRadians(0))
+                                    //  Phase 1
 
-                                 */
 
-                                //  Red Near Right
-                                /*
-                                .lineToConstantHeading(new Vector2d(30,-28))
-                                .turn(Math.toRadians(90))
+                                    //  Phase 2
 
-                                .lineToConstantHeading(new Vector2d(40, -28))
-                                .splineToConstantHeading(new Vector2d(51.5, -42), Math.toRadians(0))
 
-                                .lineToConstantHeading(new Vector2d(40, -42))
+                                    //  Phase 3
 
-                                .lineToConstantHeading(new Vector2d(40, -50))
-                                .splineToConstantHeading(new Vector2d(60,-60), Math.toRadians(0))
 
-                                 */
+                                    //  Park
 
-//              -------------------------------------------------------------------
 
-                                // Blue Far Left 1
-                                /*
-                                .splineTo(new Vector2d(-32, 30), Math.toRadians(0))
+                                    .build());
+        }
 
-                                .lineTo(new Vector2d(-40, 30))
-                                .splineTo(new Vector2d(-36,58), Math.toRadians(0))
-                                .lineToConstantHeading(new Vector2d(12, 58))
-                                .splineToConstantHeading(new Vector2d(45,40), Math.toRadians(0))
+        //endregion
 
-                                .lineToConstantHeading(new Vector2d(40, 14))
-                                .splineToConstantHeading(new Vector2d(60, 12), Math.toRadians(0))
+        //region Blue Near [In - In]
 
-                                 */
+        // Left
+        if (x == 4) {
+            myBot = new DefaultBotBuilder(meepMeep)
+                    .setConstraints(30, 40, Math.toRadians(180), Math.toRadians(180), 15)
+                    .followTrajectorySequence(drive ->
+                            drive.trajectorySequenceBuilder(Blue_Near_Start_Pos)
 
-                                // Blue Far Center 1
-                                /*
-                                .lineTo(new Vector2d(-36, 30))
+                                    //  Phase 1
 
-                                .lineTo(new Vector2d(-36, 36))
-                                .splineTo(new Vector2d(-36,58), Math.toRadians(0))
-                                .lineToConstantHeading(new Vector2d(12, 58))
-                                .splineToConstantHeading(new Vector2d(45,35), Math.toRadians(0))
 
-                                .lineToConstantHeading(new Vector2d(40, 14))
-                                .splineToConstantHeading(new Vector2d(60, 12), Math.toRadians(0))
+                                    //  Phase 2
 
-                                 */
 
-                                // Blue Far Right 1
-                                 /*
-                                .splineTo(new Vector2d(-40, 30), Math.toRadians(180))
+                                    //  Phase 3
 
-                                .lineTo(new Vector2d(-34, 30))
-                                .lineToConstantHeading(new Vector2d(-34, 54))
-                                .splineToConstantHeading(new Vector2d(-30, 58), Math.toRadians(0))
-                                .lineToConstantHeading(new Vector2d(12, 58))
-                                .splineToConstantHeading(new Vector2d(45,30), Math.toRadians(0))
 
-                                .lineToConstantHeading(new Vector2d(40, 14))
-                                .splineToConstantHeading(new Vector2d(60, 12), Math.toRadians(0))
+                                    //  Park
 
-                                */
 
-//              -------------------------------------------------------------------
+                                    .build());
+        }
 
-                                //  Blue Far Left 2
-                                /*
-                                .splineTo(new Vector2d(-33, 28), Math.toRadians(0))
+        // Center
+        if (x == 5) {
+            myBot = new DefaultBotBuilder(meepMeep)
+                    .setConstraints(30, 40, Math.toRadians(180), Math.toRadians(180), 15)
+                    .followTrajectorySequence(drive ->
+                            drive.trajectorySequenceBuilder(Blue_Near_Start_Pos)
 
-                                .lineTo(new Vector2d(-40, 28))
-                                .splineTo(new Vector2d(-40, 2), Math.toRadians(0))
-                                .lineToConstantHeading(new Vector2d(30, 2))
-                                .splineToConstantHeading(new Vector2d(40, 32), Math.toRadians(0))
+                                    //  Phase 1
 
-//                                .lineToConstantHeading(new Vector2d(40, 42))
 
-                                .lineToConstantHeading(new Vector2d(40, 14))
-                                .splineToConstantHeading(new Vector2d(60, 7), Math.toRadians(0))
+                                    //  Phase 2
 
-                                 */
 
-                                // Blue Far Center 2
-                                /*
-                                .lineTo(new Vector2d(-36, 16))
-                                .turn(Math.toRadians(180))
+                                    //  Phase 3
 
-                                .lineToConstantHeading(new Vector2d(-36, 8))
-                                .splineTo(new Vector2d(-20, 8), Math.toRadians(0))
-                                .lineToConstantHeading(new Vector2d(30, 8))
-                                .splineToConstantHeading(new Vector2d(54,35), Math.toRadians(0))
 
-                                .lineToConstantHeading(new Vector2d(40, 35))
+                                    //  Park
 
-                                .lineToConstantHeading(new Vector2d(40, 14))
-                                .splineToConstantHeading(new Vector2d(60, 9), Math.toRadians(0))
 
-                                 */
+                                    .build());
+        }
 
-                                //  Blue Far Right 2
-                                /*
-                                .lineTo(new Vector2d(-42, 16))
-                                .turn(Math.toRadians(180))
+        // Right
+        if (x == 6) {
+            myBot = new DefaultBotBuilder(meepMeep)
+                    .setConstraints(30, 40, Math.toRadians(180), Math.toRadians(180), 15)
+                    .followTrajectorySequence(drive ->
+                            drive.trajectorySequenceBuilder(Blue_Near_Start_Pos)
 
-                                .lineToConstantHeading(new Vector2d(-46, 6))
-                                .turn(Math.toRadians(90))
-                                .lineToConstantHeading(new Vector2d(30, 6))
-                                .splineToConstantHeading(new Vector2d(40,16), Math.toRadians(0))
+                                    //  Phase 1
 
-                                .strafeRight(22)
 
-                                .lineToConstantHeading(new Vector2d(40, 28))
+                                    //  Phase 2
 
-                                .lineToConstantHeading(new Vector2d(40, 14))
-                                .splineToConstantHeading(new Vector2d(60, 7), Math.toRadians(0))
-                                */
 
-//              -------------------------------------------------------------------
+                                    //  Phase 3
 
-                                //  Red Far Left 1
-                                /*
-                                .splineTo(new Vector2d(-40, -30), Math.toRadians(180))
 
-                                .lineTo(new Vector2d(-34, -30))
-                                .lineToConstantHeading(new Vector2d(-34, -54))
-                                .splineToConstantHeading(new Vector2d(-30, -58), Math.toRadians(0))
-                                .lineToConstantHeading(new Vector2d(12, -58))
-                                .splineToConstantHeading(new Vector2d(45,-30), Math.toRadians(0))
+                                    //  Park
 
-                                .lineToConstantHeading(new Vector2d(40, -14))
-                                .splineToConstantHeading(new Vector2d(60, -12), Math.toRadians(0))
-                                 */
 
-                                // Red Far Center 1
-                                /*
-                                .lineTo(new Vector2d(-36, -30))
+                                    .build());
+        }
 
-                                .lineTo(new Vector2d(-36, -36))
-                                .splineTo(new Vector2d(-36,-58), Math.toRadians(0))
-                                .lineToConstantHeading(new Vector2d(12, -58))
-                                .splineToConstantHeading(new Vector2d(45,-35), Math.toRadians(0))
+        //endregion
 
-                                .lineToConstantHeading(new Vector2d(40, -14))
-                                .splineToConstantHeading(new Vector2d(60, -12), Math.toRadians(0))
-                                 */
+//  ------------------------------------------------------------------------------------------------
 
-                                //  Red Far Right 1
-                                /*
-                                .splineTo(new Vector2d(-32, -30), Math.toRadians(0))
+        //region Red Near [In - Out]
 
-                                .lineTo(new Vector2d(-40, -30))
-                                .splineTo(new Vector2d(-36,-58), Math.toRadians(0))
-                                .lineToConstantHeading(new Vector2d(12, -58))
-                                .splineToConstantHeading(new Vector2d(45,-40), Math.toRadians(0))
+        // Left
+        if (x == 7) {
+            myBot = new DefaultBotBuilder(meepMeep)
+                    .setConstraints(30, 40, Math.toRadians(180), Math.toRadians(180), 15)
+                    .followTrajectorySequence(drive ->
+                            drive.trajectorySequenceBuilder(Red_Near_Start_Pos)
 
-                                .lineToConstantHeading(new Vector2d(40, -14))
-                                .splineToConstantHeading(new Vector2d(60, -12), Math.toRadians(0))
+                                    //  Phase 1
 
-                                */
 
-//              -------------------------------------------------------------------
+                                    //  Phase 2
 
-                                // Red Far Left 2
-//                                /*
-                                .lineTo(new Vector2d(-47, -18))
-                                .turn(Math.toRadians(180))
 
-                                .lineTo(new Vector2d(-47, -10))
-                                .turn(Math.toRadians(-90))
-                                .lineToConstantHeading(new Vector2d(-34, -10))
-                                .splineToConstantHeading(new Vector2d(-20, -10), Math.toRadians(0))
-                                .lineToConstantHeading(new Vector2d(30, -10))
-                                .splineToConstantHeading(new Vector2d(40,-16), Math.toRadians(0))
+                                    //  Phase 3
 
-                                .lineToConstantHeading(new Vector2d(40, -14))
-                                .splineToConstantHeading(new Vector2d(60, -7), Math.toRadians(0))
 
-//                                .lineToConstantHeading(new Vector2d(40, -30))
-//                                 */
+                                    //  Park
 
-                                // Red Far Center 2
-                                /*
-                                .lineTo(new Vector2d(-36, -18))
-                                .turn(Math.toRadians(180))
 
-                                .lineToConstantHeading(new Vector2d(-36, -8))
-                                .splineTo(new Vector2d(-20, -8), Math.toRadians(0))
-                                .lineToConstantHeading(new Vector2d(30, -8))
-                                .splineToConstantHeading(new Vector2d(51.5,-35), Math.toRadians(0))
+                                    .build());
+        }
 
-                                .lineToConstantHeading(new Vector2d(40, -35))
+        // Center
+        if (x == 8) {
+            myBot = new DefaultBotBuilder(meepMeep)
+                    .setConstraints(30, 40, Math.toRadians(180), Math.toRadians(180), 15)
+                    .followTrajectorySequence(drive ->
+                            drive.trajectorySequenceBuilder(Red_Near_Start_Pos)
 
-                                .lineToConstantHeading(new Vector2d(40, -14))
-                                .splineToConstantHeading(new Vector2d(50, -12), Math.toRadians(0))
+                                    //  Phase 1
 
-                                 */
 
-                                //  Red Far Right 2
-                                /*
-                                .splineTo(new Vector2d(-32, -30), Math.toRadians(0))
+                                    //  Phase 2
 
-                                .lineTo(new Vector2d(-40, -30))
-                                .splineTo(new Vector2d(-40, -12), Math.toRadians(0))
-                                .lineToConstantHeading(new Vector2d(30, -12))
-                                .splineToConstantHeading(new Vector2d(53, -40), Math.toRadians(0))
 
-                                .lineToConstantHeading(new Vector2d(40, -40))
+                                    //  Phase 3
 
-                                .lineToConstantHeading(new Vector2d(40, -14))
-                                .splineToConstantHeading(new Vector2d(50, -12), Math.toRadians(0))
 
-                                 */
+                                    //  Park
 
-                                .build()
-                );
+
+                                    .build());
+        }
+
+        // Right
+        if (x == 9) {
+            myBot = new DefaultBotBuilder(meepMeep)
+                    .setConstraints(30, 40, Math.toRadians(180), Math.toRadians(180), 15)
+                    .followTrajectorySequence(drive ->
+                            drive.trajectorySequenceBuilder(Red_Near_Start_Pos)
+
+                                    //  Phase 1
+
+
+                                    //  Phase 2
+
+
+                                    //  Phase 3
+
+
+                                    //  Park
+
+
+                                    .build());
+        }
+
+        //endregion
+
+        //region Red Near [In - In]
+
+        // Left
+        if (x == 10) {
+            myBot = new DefaultBotBuilder(meepMeep)
+                    .setConstraints(30, 40, Math.toRadians(180), Math.toRadians(180), 15)
+                    .followTrajectorySequence(drive ->
+                            drive.trajectorySequenceBuilder(Red_Near_Start_Pos)
+
+                                    //  Phase 1
+
+
+                                    //  Phase 2
+
+
+                                    //  Phase 3
+
+
+                                    //  Park
+
+
+                                    .build());
+        }
+
+        // Center
+        if (x == 11) {
+            myBot = new DefaultBotBuilder(meepMeep)
+                    .setConstraints(30, 40, Math.toRadians(180), Math.toRadians(180), 15)
+                    .followTrajectorySequence(drive ->
+                            drive.trajectorySequenceBuilder(Red_Near_Start_Pos)
+
+                                    //  Phase 1
+
+
+                                    //  Phase 2
+
+
+                                    //  Phase 3
+
+
+                                    //  Park
+
+
+                                    .build());
+        }
+
+        // Right
+        if (x == 12) {
+            myBot = new DefaultBotBuilder(meepMeep)
+                    .setConstraints(30, 40, Math.toRadians(180), Math.toRadians(180), 15)
+                    .followTrajectorySequence(drive ->
+                            drive.trajectorySequenceBuilder(Red_Near_Start_Pos)
+
+                                    //  Phase 1
+
+
+                                    //  Phase 2
+
+
+                                    //  Phase 3
+
+
+                                    //  Park
+
+
+                                    .build());
+        }
+
+        //endregion
+
+//  ------------------------------------------------------------------------------------------------
+
+        //region Blue Far [In - In]
+
+        // Left
+        if (x == 13) {
+            myBot = new DefaultBotBuilder(meepMeep)
+                    .setConstraints(30, 40, Math.toRadians(180), Math.toRadians(180), 15)
+                    .followTrajectorySequence(drive ->
+                            drive.trajectorySequenceBuilder(Blue_Far_Start_Pos)
+
+                                    //  Phase 1
+
+
+                                    //  Phase 2
+
+
+                                    //  Phase 3
+
+
+                                    //  Park
+
+
+                                    .build());
+        }
+
+        // Center
+        if (x == 14) {
+            myBot = new DefaultBotBuilder(meepMeep)
+                    .setConstraints(30, 40, Math.toRadians(180), Math.toRadians(180), 15)
+                    .followTrajectorySequence(drive ->
+                            drive.trajectorySequenceBuilder(Blue_Far_Start_Pos)
+
+                                    //  Phase 1
+
+
+                                    //  Phase 2
+
+
+                                    //  Phase 3
+
+
+                                    //  Park
+
+
+                                    .build());
+        }
+
+        // Right
+        if (x == 15) {
+            myBot = new DefaultBotBuilder(meepMeep)
+                    .setConstraints(30, 40, Math.toRadians(180), Math.toRadians(180), 15)
+                    .followTrajectorySequence(drive ->
+                            drive.trajectorySequenceBuilder(Blue_Far_Start_Pos)
+
+                                    //  Phase 1
+
+
+                                    //  Phase 2
+
+
+                                    //  Phase 3
+
+
+                                    //  Park
+
+
+                                    .build());
+        }
+
+        //endregion
+
+        //region Blue Far [In - Out]
+
+        // Left
+        if (x == 16) {
+            myBot = new DefaultBotBuilder(meepMeep)
+                    .setConstraints(30, 40, Math.toRadians(180), Math.toRadians(180), 15)
+                    .followTrajectorySequence(drive ->
+                            drive.trajectorySequenceBuilder(Blue_Far_Start_Pos)
+
+                                    //  Phase 1
+
+
+                                    //  Phase 2
+
+
+                                    //  Phase 3
+
+
+                                    //  Park
+
+
+                                    .build());
+        }
+
+        // Center
+        if (x == 17) {
+            myBot = new DefaultBotBuilder(meepMeep)
+                    .setConstraints(30, 40, Math.toRadians(180), Math.toRadians(180), 15)
+                    .followTrajectorySequence(drive ->
+                            drive.trajectorySequenceBuilder(Blue_Far_Start_Pos)
+
+                                    //  Phase 1
+
+
+                                    //  Phase 2
+
+
+                                    //  Phase 3
+
+
+                                    //  Park
+
+
+                                    .build());
+        }
+
+        // Right
+        if (x == 18) {
+            myBot = new DefaultBotBuilder(meepMeep)
+                    .setConstraints(30, 40, Math.toRadians(180), Math.toRadians(180), 15)
+                    .followTrajectorySequence(drive ->
+                            drive.trajectorySequenceBuilder(Blue_Far_Start_Pos)
+
+                                    //  Phase 1
+
+
+                                    //  Phase 2
+
+
+                                    //  Phase 3
+
+
+                                    //  Park
+
+
+                                    .build());
+        }
+
+        //endregion
+
+        //region Blue Far [Out - In]
+
+        // Left
+        if (x == 19) {
+            myBot = new DefaultBotBuilder(meepMeep)
+                    .setConstraints(30, 40, Math.toRadians(180), Math.toRadians(180), 15)
+                    .followTrajectorySequence(drive ->
+                            drive.trajectorySequenceBuilder(Blue_Far_Start_Pos)
+
+                                    //  Phase 1
+
+
+                                    //  Phase 2
+
+
+                                    //  Phase 3
+
+
+                                    //  Park
+
+
+                                    .build());
+        }
+
+        // Center
+        if (x == 20) {
+            myBot = new DefaultBotBuilder(meepMeep)
+                    .setConstraints(30, 40, Math.toRadians(180), Math.toRadians(180), 15)
+                    .followTrajectorySequence(drive ->
+                            drive.trajectorySequenceBuilder(Blue_Far_Start_Pos)
+
+                                    //  Phase 1
+
+
+                                    //  Phase 2
+
+
+                                    //  Phase 3
+
+
+                                    //  Park
+
+
+                                    .build());
+        }
+
+        // Right
+        if (x == 21) {
+            myBot = new DefaultBotBuilder(meepMeep)
+                    .setConstraints(30, 40, Math.toRadians(180), Math.toRadians(180), 15)
+                    .followTrajectorySequence(drive ->
+                            drive.trajectorySequenceBuilder(Blue_Far_Start_Pos)
+
+                                    //  Phase 1
+
+
+                                    //  Phase 2
+
+
+                                    //  Phase 3
+
+
+                                    //  Park
+
+
+                                    .build());
+        }
+
+        //endregion
+
+        //region Blue Far [Out - Out]
+
+        // Left
+        if (x == 22) {
+            myBot = new DefaultBotBuilder(meepMeep)
+                    .setConstraints(30, 40, Math.toRadians(180), Math.toRadians(180), 15)
+                    .followTrajectorySequence(drive ->
+                            drive.trajectorySequenceBuilder(Blue_Far_Start_Pos)
+
+                                    //  Phase 1
+
+
+                                    //  Phase 2
+
+
+                                    //  Phase 3
+
+
+                                    //  Park
+
+
+                                    .build());
+        }
+
+        // Center
+        if (x == 23) {
+            myBot = new DefaultBotBuilder(meepMeep)
+                    .setConstraints(30, 40, Math.toRadians(180), Math.toRadians(180), 15)
+                    .followTrajectorySequence(drive ->
+                            drive.trajectorySequenceBuilder(Blue_Far_Start_Pos)
+
+                                    //  Phase 1
+
+
+                                    //  Phase 2
+
+
+                                    //  Phase 3
+
+
+                                    //  Park
+
+
+                                    .build());
+        }
+
+        // Right
+        if (x == 24) {
+            myBot = new DefaultBotBuilder(meepMeep)
+                    .setConstraints(30, 40, Math.toRadians(180), Math.toRadians(180), 15)
+                    .followTrajectorySequence(drive ->
+                            drive.trajectorySequenceBuilder(Blue_Far_Start_Pos)
+
+                                    //  Phase 1
+
+
+                                    //  Phase 2
+
+
+                                    //  Phase 3
+
+
+                                    //  Park
+
+
+                                    .build());
+        }
+
+        //endregion
+
+//  ------------------------------------------------------------------------------------------------
+
+        //region Red Far [In - In]
+
+        // Left
+        if (x == 25) {
+            myBot = new DefaultBotBuilder(meepMeep)
+                    .setConstraints(30, 40, Math.toRadians(180), Math.toRadians(180), 15)
+                    .followTrajectorySequence(drive ->
+                            drive.trajectorySequenceBuilder(Red_Far_Start_Pos)
+
+                                    //  Phase 1
+
+
+                                    //  Phase 2
+
+
+                                    //  Phase 3
+
+
+                                    //  Park
+
+
+                                    .build());
+        }
+
+        // Center
+        if (x == 26) {
+            myBot = new DefaultBotBuilder(meepMeep)
+                    .setConstraints(30, 40, Math.toRadians(180), Math.toRadians(180), 15)
+                    .followTrajectorySequence(drive ->
+                            drive.trajectorySequenceBuilder(Red_Far_Start_Pos)
+
+                                    //  Phase 1
+
+
+                                    //  Phase 2
+
+
+                                    //  Phase 3
+
+
+                                    //  Park
+
+
+                                    .build());
+        }
+
+        // Right
+        if (x == 27) {
+            myBot = new DefaultBotBuilder(meepMeep)
+                    .setConstraints(30, 40, Math.toRadians(180), Math.toRadians(180), 15)
+                    .followTrajectorySequence(drive ->
+                            drive.trajectorySequenceBuilder(Red_Far_Start_Pos)
+
+                                    //  Phase 1
+
+
+                                    //  Phase 2
+
+
+                                    //  Phase 3
+
+
+                                    //  Park
+
+
+                                    .build());
+        }
+
+        //endregion
+
+        //region Red Far [In - Out]
+
+        // Left
+        if (x == 28) {
+            myBot = new DefaultBotBuilder(meepMeep)
+                    .setConstraints(30, 40, Math.toRadians(180), Math.toRadians(180), 15)
+                    .followTrajectorySequence(drive ->
+                            drive.trajectorySequenceBuilder(Red_Far_Start_Pos)
+
+                                    //  Phase 1
+
+
+                                    //  Phase 2
+
+
+                                    //  Phase 3
+
+
+                                    //  Park
+
+
+                                    .build());
+        }
+
+        // Center
+        if (x == 29) {
+            myBot = new DefaultBotBuilder(meepMeep)
+                    .setConstraints(30, 40, Math.toRadians(180), Math.toRadians(180), 15)
+                    .followTrajectorySequence(drive ->
+                            drive.trajectorySequenceBuilder(Red_Far_Start_Pos)
+
+                                    //  Phase 1
+
+
+                                    //  Phase 2
+
+
+                                    //  Phase 3
+
+
+                                    //  Park
+
+
+                                    .build());
+        }
+
+        // Right
+        if (x == 30) {
+            myBot = new DefaultBotBuilder(meepMeep)
+                    .setConstraints(30, 40, Math.toRadians(180), Math.toRadians(180), 15)
+                    .followTrajectorySequence(drive ->
+                            drive.trajectorySequenceBuilder(Red_Far_Start_Pos)
+
+                                    //  Phase 1
+
+
+                                    //  Phase 2
+
+
+                                    //  Phase 3
+
+
+                                    //  Park
+
+
+                                    .build());
+        }
+
+        //endregion
+
+        //region Red Far [Out - In]
+
+        // Left
+        if (x == 31) {
+            myBot = new DefaultBotBuilder(meepMeep)
+                    .setConstraints(30, 40, Math.toRadians(180), Math.toRadians(180), 15)
+                    .followTrajectorySequence(drive ->
+                            drive.trajectorySequenceBuilder(Red_Far_Start_Pos)
+
+                                    //  Phase 1
+
+
+                                    //  Phase 2
+
+
+                                    //  Phase 3
+
+
+                                    //  Park
+
+
+                                    .build());
+        }
+
+        // Center
+        if (x == 32) {
+            myBot = new DefaultBotBuilder(meepMeep)
+                    .setConstraints(30, 40, Math.toRadians(180), Math.toRadians(180), 15)
+                    .followTrajectorySequence(drive ->
+                            drive.trajectorySequenceBuilder(Red_Far_Start_Pos)
+
+                                    //  Phase 1
+
+
+                                    //  Phase 2
+
+
+                                    //  Phase 3
+
+
+                                    //  Park
+
+
+                                    .build());
+        }
+
+        // Right
+        if (x == 33) {
+            myBot = new DefaultBotBuilder(meepMeep)
+                    .setConstraints(30, 40, Math.toRadians(180), Math.toRadians(180), 15)
+                    .followTrajectorySequence(drive ->
+                            drive.trajectorySequenceBuilder(Red_Far_Start_Pos)
+
+                                    //  Phase 1
+
+
+                                    //  Phase 2
+
+
+                                    //  Phase 3
+
+
+                                    //  Park
+
+
+                                    .build());
+        }
+
+        //endregion
+
+        //region Red Far [Out - Out]
+
+        // Left
+        if (x == 34) {
+            myBot = new DefaultBotBuilder(meepMeep)
+                    .setConstraints(30, 40, Math.toRadians(180), Math.toRadians(180), 15)
+                    .followTrajectorySequence(drive ->
+                            drive.trajectorySequenceBuilder(Red_Far_Start_Pos)
+
+                                    //  Phase 1
+
+
+                                    //  Phase 2
+
+
+                                    //  Phase 3
+
+
+                                    //  Park
+
+
+                                    .build());
+        }
+
+        // Center
+        if (x == 35) {
+            myBot = new DefaultBotBuilder(meepMeep)
+                    .setConstraints(30, 40, Math.toRadians(180), Math.toRadians(180), 15)
+                    .followTrajectorySequence(drive ->
+                            drive.trajectorySequenceBuilder(Red_Far_Start_Pos)
+
+                                    //  Phase 1
+
+
+                                    //  Phase 2
+
+
+                                    //  Phase 3
+
+
+                                    //  Park
+
+
+                                    .build());
+        }
+
+        // Right
+        if (x == 36) {
+            myBot = new DefaultBotBuilder(meepMeep)
+                    .setConstraints(30, 40, Math.toRadians(180), Math.toRadians(180), 15)
+                    .followTrajectorySequence(drive ->
+                            drive.trajectorySequenceBuilder(Red_Far_Start_Pos)
+
+                                    //  Phase 1
+
+
+                                    //  Phase 2
+
+
+                                    //  Phase 3
+
+
+                                    //  Park
+
+
+                                    .build());
+        }
+
+        //endregion
+
+//  ------------------------------------------------------------------------------------------------
+
+
 
         meepMeep.setBackground(MeepMeep.Background.FIELD_CENTERSTAGE_JUICE_DARK)
                 .setDarkMode(true)
