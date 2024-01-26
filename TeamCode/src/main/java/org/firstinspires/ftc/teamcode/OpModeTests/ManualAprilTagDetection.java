@@ -39,25 +39,27 @@ public class ManualAprilTagDetection extends OpMode {
     @Override
     public void loop() {
         List<AprilTagDetection> detections = visionSubsystem.getFreshAprilTags();
-        for(AprilTagDetection detection : detections) {
-           visionSubsystem.outputDetectionToTelemetry(detection);
-           MatchConfig.telemetry.update();
+        if(detections != null) {
+            for (AprilTagDetection detection : detections) {
+                visionSubsystem.outputDetectionToTelemetry(detection);
+                MatchConfig.telemetry.update();
 
-           if(detection.id == getTargetId()){
-               double rangeError = (detection.ftcPose.range - Configuration.BACKDROP_DISTANCE);
-               double headingError = detection.ftcPose.bearing;
-               double yawError = detection.ftcPose.yaw;
+                if (detection.id == getTargetId()) {
+                    double rangeError = (detection.ftcPose.range - Configuration.BACKDROP_DISTANCE);
+                    double headingError = detection.ftcPose.bearing;
+                    double yawError = detection.ftcPose.yaw;
 
-               MatchConfig.telemetry.addData("RangeError: ", rangeError);
-               MatchConfig.telemetry.addData("HeadingError: ", headingError);
-               MatchConfig.telemetry.addData("YawError: ", yawError);
-               MatchConfig.telemetry.update();
+                    MatchConfig.telemetry.addData("RangeError: ", rangeError);
+                    MatchConfig.telemetry.addData("HeadingError: ", headingError);
+                    MatchConfig.telemetry.addData("YawError: ", yawError);
+                    MatchConfig.telemetry.update();
 
-               MatchConfig.telemetry.addData("Drive: ", Range.clip(rangeError * SPEED_GAIN, -MAX_AUTO_SPEED, MAX_AUTO_SPEED));
-               MatchConfig.telemetry.addData("Turn: ", Range.clip(headingError * TURN_GAIN, -MAX_AUTO_TURN, MAX_AUTO_TURN));
-               MatchConfig.telemetry.addData("Strafe: ", -Range.clip(yawError * STRAFE_GAIN, -MAX_AUTO_STRAFE, MAX_AUTO_STRAFE));
-               MatchConfig.telemetry.update();
-           }
+                    MatchConfig.telemetry.addData("Drive: ", Range.clip(rangeError * SPEED_GAIN, -MAX_AUTO_SPEED, MAX_AUTO_SPEED));
+                    MatchConfig.telemetry.addData("Turn: ", Range.clip(headingError * TURN_GAIN, -MAX_AUTO_TURN, MAX_AUTO_TURN));
+                    MatchConfig.telemetry.addData("Strafe: ", -Range.clip(yawError * STRAFE_GAIN, -MAX_AUTO_STRAFE, MAX_AUTO_STRAFE));
+                    MatchConfig.telemetry.update();
+                }
+            }
         }
         sleep(50);
     }

@@ -202,7 +202,7 @@ public class Configuration {
 //    public static double SHAKE_DEGREES = 5;
     public static double VISION_STRAFE_DIS = 20;
 
-    public static double APRIL_TAG_BEARING = 7.0;
+    public static double APRIL_TAG_BEARING = 10.0;
     public static double APRIL_TAG_YAW = 2.0;
     public static double MAX_DISTANCE = 36;
     public static double DRIVE_FORWARD_SPEED = .05;
