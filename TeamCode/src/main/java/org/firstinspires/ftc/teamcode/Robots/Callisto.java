@@ -18,12 +18,15 @@ import org.firstinspires.ftc.teamcode.Commands.Autonomous.AutonomousStartLocatio
 import org.firstinspires.ftc.teamcode.Commands.FireDroneAndClimbCommand;
 import org.firstinspires.ftc.teamcode.Commands.MovePixelBoxAndEjectSequentialCommand;
 import org.firstinspires.ftc.teamcode.Commands.MovePixelBoxArmToPositionCommand;
+import org.firstinspires.ftc.teamcode.Commands.MoveToPixelBoxPosition;
 import org.firstinspires.ftc.teamcode.Commands.PixelBoxArmPosition;
 import org.firstinspires.ftc.teamcode.Commands.PixelBoxPosition;
 import org.firstinspires.ftc.teamcode.Commands.ResetAndPrepForExchangeCommand;
 import org.firstinspires.ftc.teamcode.Commands.RunLinearSlideAddition;
 import org.firstinspires.ftc.teamcode.Commands.RunLinearSlideAndCenterPixelBoxCommand;
+import org.firstinspires.ftc.teamcode.Commands.RunLinearSlideToPosition;
 import org.firstinspires.ftc.teamcode.Commands.StopPixelBoxReset;
+import org.firstinspires.ftc.teamcode.R;
 import org.firstinspires.ftc.teamcode.Subsystems.AirplaneLauncherSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.ClimbSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.ExtakeSubsystem;
@@ -209,32 +212,41 @@ public class Callisto extends Robot {
         //region Utility D-Pad Left
         utilityGamepad.getGamepadButton(GamepadKeys.Button.DPAD_LEFT)
                 .whenPressed(
-                        new ParallelCommandGroup (
-                               new MovePixelBoxAndEjectSequentialCommand(linearSlideSubsystem, extakeSubsystem, PixelBoxPosition.Left),
-                                    new WaitCommand(750),
+                        new SequentialCommandGroup(
+                                new RunLinearSlideToPosition(linearSlideSubsystem, Configuration.LINEAR_SLIDE_POS_LO),
+
+                                new ParallelCommandGroup(
+                                        new MoveToPixelBoxPosition(extakeSubsystem, PixelBoxPosition.Left),
+                                        new WaitCommand(500),
                                         new RunLinearSlideAddition(linearSlideSubsystem, Configuration.LINEAR_SLIDE_ADDITION)
-                        ));
+                                )));
         //endregion
 
         //region Utility D-Pad Up
         // Drop the box
         utilityGamepad.getGamepadButton(GamepadKeys.Button.DPAD_UP)
                 .whenPressed(
-                        new ParallelCommandGroup(
-                            new MovePixelBoxAndEjectSequentialCommand(linearSlideSubsystem, extakeSubsystem, PixelBoxPosition.Center),
-                                new WaitCommand(750),
+                        new SequentialCommandGroup(
+                                new RunLinearSlideToPosition(linearSlideSubsystem, Configuration.LINEAR_SLIDE_POS_LO),
+
+                            new ParallelCommandGroup(
+                                new MoveToPixelBoxPosition(extakeSubsystem, PixelBoxPosition.Center),
+                                        new WaitCommand(500),
                                     new RunLinearSlideAddition(linearSlideSubsystem, Configuration.LINEAR_SLIDE_ADDITION)
-                ));
+                )));
         //endregion
 
         //region Utility D-Pad Right
         utilityGamepad.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT)
                 .whenPressed(
-                        new ParallelCommandGroup(
-                            new MovePixelBoxAndEjectSequentialCommand(linearSlideSubsystem, extakeSubsystem, PixelBoxPosition.Right),
-                                new WaitCommand(750),
-                                    new RunLinearSlideAddition(linearSlideSubsystem, Configuration.LINEAR_SLIDE_ADDITION)
-                        ));
+                        new SequentialCommandGroup(
+                                new RunLinearSlideToPosition(linearSlideSubsystem, Configuration.LINEAR_SLIDE_POS_LO),
+
+                                new ParallelCommandGroup(
+                                        new MoveToPixelBoxPosition(extakeSubsystem, PixelBoxPosition.Right),
+                                        new WaitCommand(500),
+                                        new RunLinearSlideAddition(linearSlideSubsystem, Configuration.LINEAR_SLIDE_ADDITION)
+                                )));
         //endregion
 
         //region Utility D-Pad Down && Utility Button A
@@ -248,12 +260,19 @@ public class Callisto extends Robot {
 
         //region Utility Right Bumper
         // Dropping the pixel
-        utilityGamepad.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER)
-                .whenHeld(
+        utilityGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER)
+                .whenPressed(
                         new InstantCommand(extakeSubsystem::pixelEject, extakeSubsystem)
-                )
-                .whenReleased(new StopPixelBoxReset(extakeSubsystem, linearSlideSubsystem));
+                );
         //endregion
+
+        //region Utility Left Bumper
+        utilityGamepad.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER)
+                .whenPressed(
+                        new InstantCommand(extakeSubsystem::ejectSinglePixel, extakeSubsystem)
+                );
+        //endregion
+
     }
 
     private void initAuto() {
@@ -272,11 +291,19 @@ public class Callisto extends Robot {
             else
              driveBaseSubsystem.drive(driverGamepad.getLeftY(), driverGamepad.getLeftX(), driverGamepad.getRightX());
 
-            if(FTC_utilityGamepad.left_trigger > 0)
-            {
-                linearSlideSubsystem.LinearStop();
+
+            if(FTC_utilityGamepad.left_stick_x > 0) {
+                extakeSubsystem.leftAddRotation();
             }
-            extakeSubsystem.detectPixel();
+            if(FTC_utilityGamepad.left_stick_x < 0) {
+                extakeSubsystem.rightAddRotation();
+            }
+            if(FTC_utilityGamepad.left_trigger > 0) {
+                new RunLinearSlideAddition(linearSlideSubsystem, Configuration.LINEAR_SLIDE_TELEOP_MULTIPLIER);
+            }
+            if(FTC_utilityGamepad.right_trigger > 0) {
+                new RunLinearSlideAddition(linearSlideSubsystem, Configuration.LINEAR_SLIDE_TELEOP_MULTIPLIER);
+            }
         }
 
 

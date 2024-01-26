@@ -106,8 +106,6 @@ public class Configuration {
     //Linear Slide Motor Values / Percentages
 
     //public static double LINEAR_SLIDE_POWER = 0.75;
-
-
     public static int LINEAR_SLIDE_POS_HOME = 70;
     public static int LINEAR_SLIDE_POS_LO = -1900;
     public static int LINEAR_SLIDE_POS_MED = -3700;
@@ -116,6 +114,7 @@ public class Configuration {
     public static int LINEAR_SLIDE_POS_AUTO = -2300;
     public static int LINEAR_SLIDE_MULTIPLIER = 10;
     public static int LINEAR_SLIDE_ADDITION = 1000;
+    public static int LINEAR_SLIDE_TELEOP_MULTIPLIER = 50;
     public static int TICK_RANGE = 50;
 
     //****************************************************************************************************************//
@@ -148,6 +147,7 @@ public class Configuration {
     public static double R_SERVO_CENTER = .3349;
     public static double R_SERVO_RIGHT = .57;
     public static double R_SERVO_MULTIPLIER = .005;
+    public static double R_SERVO_TELEOP_MULTIPLIER = 0.025;
 
     //****************************************************************************************************************//
     // Values for horizontal extake servo
