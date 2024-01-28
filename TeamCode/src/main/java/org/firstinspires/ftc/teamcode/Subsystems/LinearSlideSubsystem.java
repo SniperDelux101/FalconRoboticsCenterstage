@@ -71,6 +71,11 @@ public class LinearSlideSubsystem extends FalconSubsystemBase {
         }
     }
 
+    public void runByPower(double multiplier) {
+        linearSlideMotor.setRunMode(Motor.RunMode.RawPower);
+        linearSlideMotor.set(multiplier);
+    }
+
     public boolean isSlideAtTargetPosition(){
 
         boolean flag = false;
