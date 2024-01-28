@@ -28,6 +28,7 @@ import org.firstinspires.ftc.teamcode.Commands.Autonomous.TravelDirection;
 import org.firstinspires.ftc.teamcode.Commands.DriveToAprilTagCommand;
 import org.firstinspires.ftc.teamcode.Commands.GyroSquareCommand;
 import org.firstinspires.ftc.teamcode.Commands.MovePixelBoxArmToPositionCommand;
+import org.firstinspires.ftc.teamcode.Commands.OneCycle;
 import org.firstinspires.ftc.teamcode.Commands.PixelBoxArmPosition;
 import org.firstinspires.ftc.teamcode.Commands.PlacePixelOnSpikeCommand;
 import org.firstinspires.ftc.teamcode.Commands.RunLinearSlideAndCenterPixelBoxCommand;
@@ -74,6 +75,7 @@ public class Autonomous_V3 extends CommandOpMode {
     public static TeamPropPosition teamPropPosition = TeamPropPosition.Center;
     public static TravelDirection direction = TravelDirection.In;
     public static ParkEnding parkEnding = ParkEnding.In;
+    public static OneCycle oneCycle = OneCycle.False;
 
     @Override
     public void initialize() {
@@ -102,6 +104,7 @@ public class Autonomous_V3 extends CommandOpMode {
         MatchConfig.TeamPropPosition = TeamPropPosition.NoDetection;
         MatchConfig.TravelDirection = TravelDirection.In;
         MatchConfig.ParkEnding = ParkEnding.In;
+        MatchConfig.OneCycle = OneCycle.False;
         MatchConfig.telemetry = telemetry;
         initialize();
 
@@ -119,6 +122,18 @@ public class Autonomous_V3 extends CommandOpMode {
                 startLocation = AutonomousStartLocation.Far;
             else if (gamepad1.dpad_down)
                 startLocation = AutonomousStartLocation.Near;
+            else if(gamepad1.a) {
+                parkEnding = ParkEnding.In;
+            }
+            else if(gamepad1.y) {
+                parkEnding = ParkEnding.Out;
+            }
+            else if(gamepad1.x) {
+                direction = TravelDirection.In;
+            }
+            else if(gamepad1.b) {
+                direction = TravelDirection.Out;
+            }
 
             teamPropPosition = visionSubsystem.getTeamPropPosition();
 
@@ -127,11 +142,14 @@ public class Autonomous_V3 extends CommandOpMode {
             MatchConfig.TeamPropPosition = teamPropPosition;
             MatchConfig.TravelDirection = direction;
             MatchConfig.ParkEnding = parkEnding;
+            MatchConfig.OneCycle = oneCycle;
             MatchConfig.telemetry = telemetry;
 
             telemetry.addData("Team Prop Position: ", teamPropPosition);
             telemetry.addData("Alliance: ", alliance);
             telemetry.addData("Auto Start Location: ", startLocation);
+            telemetry.addData("Auto Travel Direction : ", direction);
+            telemetry.addData("Auto Park Location : ", parkEnding);
             telemetry.update();
         }
 
@@ -140,19 +158,21 @@ public class Autonomous_V3 extends CommandOpMode {
         visionSubsystem.stopTensorFlowProcessing();
         visionSubsystem.shutDownTensorFlowProcessor();
 
-        TrajectorySequence phase1, phase2, phase3, park;
+        TrajectorySequence phase1, phase2, phase3, phase_cycle, park;
 
         if(startLocation == AutonomousStartLocation.Near) {
-            BuildNearPaths.Build(driveBaseSubsystem.getDrive(), teamPropPosition, alliance, parkEnding);
+            BuildNearPaths.Build(driveBaseSubsystem.getDrive(), teamPropPosition, alliance, parkEnding, oneCycle);
             phase1 = BuildNearPaths.Phase1;
             phase2 = BuildNearPaths.Phase2;
             phase3 = BuildNearPaths.Phase3;
+            phase_cycle = BuildNearPaths.Phase_Cycle;
             park = BuildNearPaths.Park;
         } else{
             BuildFarPaths.Build(driveBaseSubsystem.getDrive(), teamPropPosition, alliance, direction, parkEnding);
             phase1 = BuildFarPaths.Phase1;
             phase2 = BuildFarPaths.Phase2;
             phase3 = BuildFarPaths.Phase3;
+            phase_cycle = BuildFarPaths.Phase_Cycle;
             park = BuildFarPaths.Park;
         }
 

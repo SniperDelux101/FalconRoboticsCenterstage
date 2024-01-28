@@ -10,15 +10,16 @@ import com.acmerobotics.roadrunner.trajectory.constraints.MecanumVelocityConstra
 import org.firstinspires.ftc.teamcode.Commands.Autonomous.Alliance;
 import org.firstinspires.ftc.teamcode.Commands.Autonomous.ParkEnding;
 import org.firstinspires.ftc.teamcode.Commands.Autonomous.TeamPropPosition;
+import org.firstinspires.ftc.teamcode.Commands.OneCycle;
 import org.firstinspires.ftc.teamcode.Subsystems.drive.FalconMecanumDrive;
 import org.firstinspires.ftc.teamcode.Subsystems.drive.TrajectorySequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.Utilities.Configuration;
 
 public class BuildNearPaths {
-    public static TrajectorySequence Phase1, Phase2, Phase3, Park;
+    public static TrajectorySequence Phase1, Phase2, Phase3, Phase_Cycle, Park;
     private static FalconMecanumDrive drive;
 
-    public static void Build(FalconMecanumDrive dr, TeamPropPosition position, Alliance alliance, ParkEnding parkEnding){
+    public static void Build(FalconMecanumDrive dr, TeamPropPosition position, Alliance alliance, ParkEnding parkEnding, OneCycle oneCycle){
         drive = dr;
 
         if(alliance == Alliance.Blue) {

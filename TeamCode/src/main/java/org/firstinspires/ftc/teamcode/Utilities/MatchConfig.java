@@ -8,6 +8,7 @@ import org.firstinspires.ftc.teamcode.Commands.Autonomous.AutonomousStartLocatio
 import org.firstinspires.ftc.teamcode.Commands.Autonomous.ParkEnding;
 import org.firstinspires.ftc.teamcode.Commands.Autonomous.TeamPropPosition;
 import org.firstinspires.ftc.teamcode.Commands.Autonomous.TravelDirection;
+import org.firstinspires.ftc.teamcode.Commands.OneCycle;
 
 /**
  * This class holds the configuration values for the match.  These values are static so they can be
@@ -20,6 +21,7 @@ public class MatchConfig {
     public static TeamPropPosition TeamPropPosition;
     public static TravelDirection TravelDirection;
     public static ParkEnding ParkEnding;
+    public static OneCycle OneCycle;
 
     //holds a reference to the telemetry object to make is easier to access from all commands
     public static Telemetry telemetry;

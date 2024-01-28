@@ -20,7 +20,7 @@ import org.firstinspires.ftc.teamcode.Subsystems.drive.TrajectorySequence.Trajec
 import org.firstinspires.ftc.teamcode.Utilities.Configuration;
 
 public class BuildFarPaths {
-    public static TrajectorySequence Phase1, Phase2, Phase3, Park;
+    public static TrajectorySequence Phase1, Phase2, Phase3, Phase_Cycle, Park;
     private static FalconMecanumDrive drive;
 
     public static void Build(FalconMecanumDrive dr, TeamPropPosition position, Alliance alliance, TravelDirection direction, ParkEnding parkEnding){

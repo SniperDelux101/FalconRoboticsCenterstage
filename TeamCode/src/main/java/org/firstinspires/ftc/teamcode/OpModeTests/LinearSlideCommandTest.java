@@ -1,11 +1,13 @@
 package org.firstinspires.ftc.teamcode.OpModeTests;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.Subsystems.LinearSlideSubsystem;
 import org.firstinspires.ftc.teamcode.Utilities.Configuration;
 import org.firstinspires.ftc.teamcode.Utilities.MatchConfig;
 
+@TeleOp(group = "subsystems test")
 public class LinearSlideCommandTest extends OpMode {
 
     private LinearSlideSubsystem linearSlideSubsystem;

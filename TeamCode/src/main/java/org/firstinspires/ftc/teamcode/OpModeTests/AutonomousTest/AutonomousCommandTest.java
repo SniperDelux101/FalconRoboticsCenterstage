@@ -27,6 +27,7 @@ import org.firstinspires.ftc.teamcode.Commands.Autonomous.TeamPropPosition;
 import org.firstinspires.ftc.teamcode.Commands.Autonomous.TravelDirection;
 import org.firstinspires.ftc.teamcode.Commands.GyroSquareCommand;
 import org.firstinspires.ftc.teamcode.Commands.MovePixelBoxArmToPositionCommand;
+import org.firstinspires.ftc.teamcode.Commands.OneCycle;
 import org.firstinspires.ftc.teamcode.Commands.PixelBoxArmPosition;
 import org.firstinspires.ftc.teamcode.Commands.PlacePixelOnSpikeCommand;
 import org.firstinspires.ftc.teamcode.Commands.RunLinearSlideAndCenterPixelBoxCommand;
@@ -74,6 +75,7 @@ public class AutonomousCommandTest extends CommandOpMode {
 
     public static boolean runAutonomous = true;
     public static boolean useVision = false;
+    public static OneCycle oneCycle = OneCycle.False;
 
 
     @Override
@@ -139,14 +141,15 @@ public class AutonomousCommandTest extends CommandOpMode {
         if(useVision)
             visionSubsystem.stopTensorFlowProcessing();
 
-        TrajectorySequence phase1, phase2, phase3, park;
+        TrajectorySequence phase1, phase2, phase3, phase_cycle, park;
 
         if(startLocation == AutonomousStartLocation.Near) {
-            BuildNearPaths.Build(driveBaseSubsystem.getDrive(), teamPropPosition, alliance, parkEnding);
+            BuildNearPaths.Build(driveBaseSubsystem.getDrive(), teamPropPosition, alliance, parkEnding, oneCycle);
             phase1 = BuildNearPaths.Phase1;
             phase2 = BuildNearPaths.Phase2;
 //            phase_Strafe = BuildNearPaths.Phase_Strafe;
             phase3 = BuildNearPaths.Phase3;
+            phase_cycle = BuildNearPaths.Phase_Cycle;
             park = BuildNearPaths.Park;
         } else{
             BuildFarPaths.Build(driveBaseSubsystem.getDrive(), teamPropPosition, alliance, travelDirection, parkEnding);
