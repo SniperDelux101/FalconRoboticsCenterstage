@@ -1,11 +1,8 @@
 package org.firstinspires.ftc.teamcode.Robots;
 
-import com.arcrobotics.ftclib.command.ConditionalCommand;
 import com.arcrobotics.ftclib.command.InstantCommand;
-import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.Robot;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
-import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.command.button.GamepadButton;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
@@ -16,19 +13,15 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Commands.Autonomous.Alliance;
 import org.firstinspires.ftc.teamcode.Commands.Autonomous.AutonomousDriveCommand;
 import org.firstinspires.ftc.teamcode.Commands.Autonomous.AutonomousStartLocation;
+import org.firstinspires.ftc.teamcode.Commands.EjectSinglePixelAndResetIfEmptyCommand;
 import org.firstinspires.ftc.teamcode.Commands.EjectPixelCommand;
 import org.firstinspires.ftc.teamcode.Commands.FireDroneAndClimbCommand;
-import org.firstinspires.ftc.teamcode.Commands.MovePixelBoxAndEjectSequentialCommand;
 import org.firstinspires.ftc.teamcode.Commands.MovePixelBoxArmToPositionCommand;
 import org.firstinspires.ftc.teamcode.Commands.MoveToPixelBoxPosition;
 import org.firstinspires.ftc.teamcode.Commands.PixelBoxArmPosition;
 import org.firstinspires.ftc.teamcode.Commands.PixelBoxPosition;
-import org.firstinspires.ftc.teamcode.Commands.ResetAndPrepForExchangeCommand;
-import org.firstinspires.ftc.teamcode.Commands.RunLinearSlideAddition;
 import org.firstinspires.ftc.teamcode.Commands.RunLinearSlideAndCenterPixelBoxCommand;
-import org.firstinspires.ftc.teamcode.Commands.RunLinearSlideToPosition;
 import org.firstinspires.ftc.teamcode.Commands.StopPixelBoxReset;
-import org.firstinspires.ftc.teamcode.R;
 import org.firstinspires.ftc.teamcode.Subsystems.AirplaneLauncherSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.ClimbSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.ExtakeSubsystem;
@@ -253,13 +246,7 @@ public class Callisto extends Robot {
         //region Utility Left Bumper
         utilityGamepad.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER)
                 .whenPressed(
-                        new ConditionalCommand(
-                                new EjectPixelCommand(extakeSubsystem, EjectPixelCommand.EjectPixelState.One),
-                                new StopPixelBoxReset(extakeSubsystem, linearSlideSubsystem),
-                                () -> {
-                                    return extakeSubsystem.getPixelCount() == 2;
-                                }
-                        )
+                        new EjectSinglePixelAndResetIfEmptyCommand(extakeSubsystem, linearSlideSubsystem)
                 );
         //endregion
 
