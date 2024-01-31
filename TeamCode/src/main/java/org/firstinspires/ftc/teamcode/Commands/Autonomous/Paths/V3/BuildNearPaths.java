@@ -26,25 +26,31 @@ public class BuildNearPaths {
             if(position == TeamPropPosition.Center) {
                 if (parkEnding == ParkEnding.Out) {
                     Blue.CenterPhase1_IO();
+                    drive.setPoseEstimate(Blue_Near_Start_Pose);
                 }
                 if (parkEnding == ParkEnding.In) {
                     Blue.CenterPhase1_II();
+                    drive.setPoseEstimate(Blue_Near_Start_Pose);
                 }
             }
             if(position == TeamPropPosition.Left) {
                 if (parkEnding == ParkEnding.Out) {
                     Blue.Left_Right_Phase1_IO(position);
+                    drive.setPoseEstimate(Blue_Near_Start_Pose);
                 }
                 if (parkEnding == ParkEnding.In) {
                     Blue.Left_Right_Phase1_II(position);
+                    drive.setPoseEstimate(Blue_Near_Start_Pose);
                 }
             }
             if(position == TeamPropPosition.Right) {
                 if(parkEnding == ParkEnding.Out) {
                     Blue.Left_Right_Phase1_IO(position);
+                    drive.setPoseEstimate(Blue_Near_Start_Pose);
                 }
                 if(parkEnding == ParkEnding.In) {
                     Blue.Left_Right_Phase1_II(position);
+                    drive.setPoseEstimate(Blue_Near_Start_Pose);
                 }
             }
 
@@ -53,25 +59,31 @@ public class BuildNearPaths {
             if(position == TeamPropPosition.Center) {
                 if (parkEnding == ParkEnding.Out) {
                     Red.CenterPhase1_IO();
+                    drive.setPoseEstimate(Red_Near_Start_Pose);
                 }
                 if (parkEnding == ParkEnding.In) {
                     Red.CenterPhase1_II();
+                    drive.setPoseEstimate(Red_Near_Start_Pose);
                 }
             }
             if(position == TeamPropPosition.Left) {
                 if (parkEnding == ParkEnding.Out) {
                     Red.Left_Right_Phase1_IO(position);
+                    drive.setPoseEstimate(Red_Near_Start_Pose);
                 }
                 if (parkEnding == ParkEnding.In) {
                     Red.Left_Right_Phase1_II(position);
+                    drive.setPoseEstimate(Red_Near_Start_Pose);
                 }
             }
             if(position == TeamPropPosition.Right) {
                 if(parkEnding == ParkEnding.Out) {
                     Red.Left_Right_Phase1_IO(position);
+                    drive.setPoseEstimate(Red_Near_Start_Pose);
                 }
                 if(parkEnding == ParkEnding.In) {
                     Red.Left_Right_Phase1_II(position);
+                    drive.setPoseEstimate(Red_Near_Start_Pose);
                 }
             }
 

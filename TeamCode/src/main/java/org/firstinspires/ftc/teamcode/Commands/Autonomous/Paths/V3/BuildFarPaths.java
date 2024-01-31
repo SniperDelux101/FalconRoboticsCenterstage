@@ -27,117 +27,153 @@ public class BuildFarPaths {
         drive = dr;
 
         if(alliance == Alliance.Blue) {
+            //region Center
             if(position == TeamPropPosition.Center) {
                 if (direction == TravelDirection.In) {
                     if(parkEnding == ParkEnding.In) {
-
+                        Blue.CenterPhase1_II();
+                        drive.setPoseEstimate(Blue_Far_Start_Pose);
                     }
                     if(parkEnding == ParkEnding.Out) {
-
+                        Blue.CenterPhase1_IO();
+                        drive.setPoseEstimate(Blue_Far_Start_Pose);
                     }
                 }
                 if (direction == TravelDirection.Out) {
                     if(parkEnding == ParkEnding.In) {
-
+                        Blue.CenterPhase1_OI();
+                        drive.setPoseEstimate(Blue_Far_Start_Pose);
                     }
                     if(parkEnding == ParkEnding.Out) {
-
+                        Blue.CenterPhase1_OO();
+                        drive.setPoseEstimate(Blue_Far_Start_Pose);
                     }
                 }
             }
+            //endregion
+            //region Left
             if(position == TeamPropPosition.Left) {
                 if (direction == TravelDirection.In) {
                     if(parkEnding == ParkEnding.In) {
-
+                        Blue.Left_Right_Phase1_II(position);
+                        drive.setPoseEstimate(Blue_Far_Start_Pose);
                     }
                     if(parkEnding == ParkEnding.Out) {
-
+                        Blue.Left_Right_Phase1_IO(position);
+                        drive.setPoseEstimate(Blue_Far_Start_Pose);
                     }
                 }
                 if (direction == TravelDirection.Out) {
                     if(parkEnding == ParkEnding.In) {
-
+                        Blue.Left_Right_Phase1_OI(position);
+                        drive.setPoseEstimate(Blue_Far_Start_Pose);
                     }
                     if(parkEnding == ParkEnding.Out) {
-
+                        Blue.Left_Right_Phase1_OO(position);
+                        drive.setPoseEstimate(Blue_Far_Start_Pose);
                     }
                 }
             }
+            //endregion
+            //region Right
             if(position == TeamPropPosition.Right) {
                 if(direction == TravelDirection.In) {
                     if(parkEnding == ParkEnding.In) {
-
+                        Blue.Left_Right_Phase1_II(position);
+                        drive.setPoseEstimate(Blue_Far_Start_Pose);
                     }
                     if(parkEnding == ParkEnding.Out) {
-
+                        Blue.Left_Right_Phase1_IO(position);
+                        drive.setPoseEstimate(Blue_Far_Start_Pose);
                     }
                 }
                 if(direction == TravelDirection.Out) {
                     if(parkEnding == ParkEnding.In) {
-
+                        Blue.Left_Right_Phase1_OI(position);
+                        drive.setPoseEstimate(Blue_Far_Start_Pose);
                     }
                     if(parkEnding == ParkEnding.Out) {
-
+                        Blue.Left_Right_Phase1_OO(position);
+                        drive.setPoseEstimate(Blue_Far_Start_Pose);
                     }
                 }
             }
-
+                //endregion
         }
+
         if(alliance == Alliance.Red) {
+            //region Center
             if (position == TeamPropPosition.Center) {
                 if (direction == TravelDirection.In) {
                     if (parkEnding == ParkEnding.In) {
-
+                        Red.CenterPhase1_II();
+                        drive.setPoseEstimate(Red_Far_Start_Pose);
                     }
                     if (parkEnding == ParkEnding.Out) {
-
+                        Red.CenterPhase1_IO();
+                        drive.setPoseEstimate(Red_Far_Start_Pose);
                     }
                 }
                 if (direction == TravelDirection.Out) {
                     if (parkEnding == ParkEnding.In) {
-
+                        Red.CenterPhase1_OI();
+                        drive.setPoseEstimate(Red_Far_Start_Pose);
                     }
                     if (parkEnding == ParkEnding.Out) {
-
+                        Red.CenterPhase1_OO();
+                        drive.setPoseEstimate(Red_Far_Start_Pose);
                     }
                 }
             }
+            //endregion
+            //region Left
             if (position == TeamPropPosition.Left) {
                 if (direction == TravelDirection.In) {
                     if (parkEnding == ParkEnding.In) {
-
+                        Red.Left_Right_Phase1_II(position);
+                        drive.setPoseEstimate(Red_Far_Start_Pose);
                     }
                     if (parkEnding == ParkEnding.Out) {
-
+                        Red.Left_Right_Phases_IO(position);
+                        drive.setPoseEstimate(Red_Far_Start_Pose);
                     }
                 }
                 if (direction == TravelDirection.Out) {
                     if (parkEnding == ParkEnding.In) {
-
+                        Red.Left_Right_Phase1_OI(position);
+                        drive.setPoseEstimate(Red_Far_Start_Pose);
                     }
                     if (parkEnding == ParkEnding.Out) {
-
+                        Red.Left_Right_Phase1_OO(position);
+                        drive.setPoseEstimate(Red_Far_Start_Pose);
                     }
                 }
             }
+            //endregion
+            //region Right
             if (position == TeamPropPosition.Right) {
                 if (direction == TravelDirection.In) {
                     if (parkEnding == ParkEnding.In) {
-
+                        Red.Left_Right_Phase1_II(position);
+                        drive.setPoseEstimate(Red_Far_Start_Pose);
                     }
                     if (parkEnding == ParkEnding.Out) {
-
+                        Red.Left_Right_Phases_IO(position);
+                        drive.setPoseEstimate(Red_Far_Start_Pose);
                     }
                 }
                 if (direction == TravelDirection.Out) {
                     if (parkEnding == ParkEnding.In) {
-
+                        Red.Left_Right_Phase1_OI(position);
+                        drive.setPoseEstimate(Red_Far_Start_Pose);
                     }
                     if (parkEnding == ParkEnding.Out) {
-
+                        Red.Left_Right_Phase1_OO(position);
+                        drive.setPoseEstimate(Red_Far_Start_Pose);
                     }
                 }
             }
+            //endregion
         }
     }
     private static class Blue{

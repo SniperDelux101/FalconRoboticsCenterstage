@@ -187,6 +187,7 @@ public class Autonomous_V3 extends CommandOpMode {
                         //new StrafeToFindAprilTagCommand(driveBaseSubsystem, visionSubsystem),
                         new DriveToAprilTagCommand(visionSubsystem, driveBaseSubsystem),
                         new DriveForwardToObjectCommand(driveBaseSubsystem, distanceSensorSubsystem, GyroSubsystem.getInstance(hardwareMap, telemetry), Configuration.BACKDROP_DISTANCE),
+
                         //offset if we are dropping left or right
 //                        new SelectCommand(
 //                                new HashMap<Object, Command>(){{
@@ -195,6 +196,7 @@ public class Autonomous_V3 extends CommandOpMode {
 //                                }},
 //                                this::getTeamPropPosition
 //                        ),
+
                         new SequentialCommandGroup(
                                 new RunLinearSlideAndCenterPixelBoxCommand(extakeSubsystem,linearSlideSubsystem, Configuration.LINEAR_SLIDE_POS_AUTO),
                                 new MovePixelBoxArmToPositionCommand(extakeSubsystem, PixelBoxArmPosition.Extake)
@@ -233,7 +235,7 @@ public class Autonomous_V3 extends CommandOpMode {
     }
 
 
-
+    //region Gyro
     private double getSquareDegree() {
         if(MatchConfig.Alliance == Alliance.Blue) {
             return 270;
@@ -242,6 +244,7 @@ public class Autonomous_V3 extends CommandOpMode {
             return 90;
         }
     }
+    //endregion
     private TeamPropPosition getTeamPropPosition(){
         return teamPropPosition;
     }

@@ -207,13 +207,13 @@ public class Callisto extends Robot {
         //endregion
 
         //region Utility D-Pad Left
-        utilityGamepad.getGamepadButton(GamepadKeys.Button.DPAD_LEFT)
-                .whenPressed(
-                        new ParallelCommandGroup (
-                               new MovePixelBoxAndEjectSequentialCommand(linearSlideSubsystem, extakeSubsystem, PixelBoxPosition.Left),
-                                    new WaitCommand(750),
-                                        new RunLinearSlideAddition(linearSlideSubsystem, Configuration.LINEAR_SLIDE_ADDITION)
-                        ));
+//        utilityGamepad.getGamepadButton(GamepadKeys.Button.DPAD_LEFT)
+//                .whenPressed(
+//                        new ParallelCommandGroup (
+//                               new MovePixelBoxAndEjectSequentialCommand(linearSlideSubsystem, extakeSubsystem, PixelBoxPosition.Left),
+//                                    new WaitCommand(750),
+//                                        new RunLinearSlideAddition(linearSlideSubsystem, Configuration.LINEAR_SLIDE_ADDITION)
+//                        ));
         //endregion
 
         //region Utility D-Pad Up
