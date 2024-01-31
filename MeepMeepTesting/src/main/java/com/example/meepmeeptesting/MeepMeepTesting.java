@@ -308,7 +308,7 @@ public class MeepMeepTesting {
 
         //endregion
 
-        //region Blue Near One Cycle [In - Out]
+        //region Blue Near One Cycle [In - In]
 
         if (x == 10) {
             myBot = new DefaultBotBuilder(meepMeep)

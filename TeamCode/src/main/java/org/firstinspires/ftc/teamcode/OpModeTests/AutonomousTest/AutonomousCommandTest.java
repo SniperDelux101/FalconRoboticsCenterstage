@@ -141,7 +141,7 @@ public class AutonomousCommandTest extends CommandOpMode {
         if(useVision)
             visionSubsystem.stopTensorFlowProcessing();
 
-        TrajectorySequence phase1, phase2, phase3, phase_cycle, park;
+        TrajectorySequence phase1, phase2, phase3, phase1_cycle, phase2_cycle, park;
 
         if(startLocation == AutonomousStartLocation.Near) {
             BuildNearPaths.Build(driveBaseSubsystem.getDrive(), teamPropPosition, alliance, parkEnding, oneCycle);
@@ -149,7 +149,8 @@ public class AutonomousCommandTest extends CommandOpMode {
             phase2 = BuildNearPaths.Phase2;
 //            phase_Strafe = BuildNearPaths.Phase_Strafe;
             phase3 = BuildNearPaths.Phase3;
-            phase_cycle = BuildNearPaths.Phase_Cycle;
+            phase1_cycle = BuildNearPaths.Phase1_Cycle;
+            phase2_cycle = BuildNearPaths.Phase2_Cycle;
             park = BuildNearPaths.Park;
         } else{
             BuildFarPaths.Build(driveBaseSubsystem.getDrive(), teamPropPosition, alliance, travelDirection, parkEnding);

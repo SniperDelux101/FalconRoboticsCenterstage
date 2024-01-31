@@ -8,6 +8,7 @@ import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
+import com.arcrobotics.ftclib.command.ParallelRaceGroup;
 import com.arcrobotics.ftclib.command.SelectCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
@@ -134,6 +135,12 @@ public class Autonomous_V3 extends CommandOpMode {
             else if(gamepad1.b) {
                 direction = TravelDirection.Out;
             }
+            else if(gamepad1.left_bumper) {
+                oneCycle = OneCycle.True;
+            }
+            else if(gamepad1.right_bumper) {
+                oneCycle = OneCycle.False;
+            }
 
             teamPropPosition = visionSubsystem.getTeamPropPosition();
 
@@ -150,6 +157,7 @@ public class Autonomous_V3 extends CommandOpMode {
             telemetry.addData("Auto Start Location: ", startLocation);
             telemetry.addData("Auto Travel Direction : ", direction);
             telemetry.addData("Auto Park Location : ", parkEnding);
+            telemetry.addData("Auto Cycle : ", oneCycle);
             telemetry.update();
         }
 
@@ -158,21 +166,27 @@ public class Autonomous_V3 extends CommandOpMode {
         visionSubsystem.stopTensorFlowProcessing();
         visionSubsystem.shutDownTensorFlowProcessor();
 
-        TrajectorySequence phase1, phase2, phase3, phase_cycle, park;
+        TrajectorySequence phase1, phase2, phase3, phase1_cycle, phaseF_cycle, phase2_cycle, phase3_cycle, park;
 
         if(startLocation == AutonomousStartLocation.Near) {
             BuildNearPaths.Build(driveBaseSubsystem.getDrive(), teamPropPosition, alliance, parkEnding, oneCycle);
             phase1 = BuildNearPaths.Phase1;
             phase2 = BuildNearPaths.Phase2;
             phase3 = BuildNearPaths.Phase3;
-            phase_cycle = BuildNearPaths.Phase_Cycle;
+            phase1_cycle = BuildNearPaths.Phase1_Cycle;
+            phaseF_cycle = BuildNearPaths.PhaseF_Cycle;
+            phase2_cycle = BuildNearPaths.Phase2_Cycle;
+            phase3_cycle = BuildNearPaths.Phase3_Cycle;
             park = BuildNearPaths.Park;
         } else{
             BuildFarPaths.Build(driveBaseSubsystem.getDrive(), teamPropPosition, alliance, direction, parkEnding);
             phase1 = BuildFarPaths.Phase1;
             phase2 = BuildFarPaths.Phase2;
             phase3 = BuildFarPaths.Phase3;
-            phase_cycle = BuildFarPaths.Phase_Cycle;
+            phase1_cycle = BuildFarPaths.Phase1_Cycle;
+            phaseF_cycle = BuildFarPaths.PhaseF_Cycle;
+            phase2_cycle = BuildFarPaths.Phase2_Cycle;
+            phase3_cycle = BuildFarPaths.Phase3_Cycle;
             park = BuildFarPaths.Park;
         }
 
@@ -187,15 +201,6 @@ public class Autonomous_V3 extends CommandOpMode {
                         //new StrafeToFindAprilTagCommand(driveBaseSubsystem, visionSubsystem),
                         new DriveToAprilTagCommand(visionSubsystem, driveBaseSubsystem),
                         new DriveForwardToObjectCommand(driveBaseSubsystem, distanceSensorSubsystem, GyroSubsystem.getInstance(hardwareMap, telemetry), Configuration.BACKDROP_DISTANCE),
-
-                        //offset if we are dropping left or right
-//                        new SelectCommand(
-//                                new HashMap<Object, Command>(){{
-//                                    put(TeamPropPosition.Left, new AprilTagStrafeCommand(driveBaseSubsystem));
-//                                    put(TeamPropPosition.Right, new AprilTagStrafeCommand(driveBaseSubsystem));
-//                                }},
-//                                this::getTeamPropPosition
-//                        ),
 
                         new SequentialCommandGroup(
                                 new RunLinearSlideAndCenterPixelBoxCommand(extakeSubsystem,linearSlideSubsystem, Configuration.LINEAR_SLIDE_POS_AUTO),
@@ -214,6 +219,54 @@ public class Autonomous_V3 extends CommandOpMode {
                         new WaitCommand(1000),
                         new TrajectorySequenceFollowerCommand(driveBaseSubsystem, phase3),
                         new StopPixelBoxReset(extakeSubsystem, linearSlideSubsystem),
+
+
+
+
+
+
+                        //region Cycle
+                        new TrajectorySequenceFollowerCommand(driveBaseSubsystem, phase1_cycle),
+
+                        new ParallelCommandGroup(
+                                new TrajectorySequenceFollowerCommand(driveBaseSubsystem, phaseF_cycle),
+                                new InstantCommand(intakeMotorSubsystem::intake, intakeMotorSubsystem)
+                                ),
+
+                        new WaitCommand(1000),
+                        new InstantCommand(intakeMotorSubsystem::stop, intakeMotorSubsystem),
+                        new TrajectorySequenceFollowerCommand(driveBaseSubsystem, phase2_cycle),
+
+                        new DriveToAprilTagCommand(visionSubsystem, driveBaseSubsystem),
+                        new DriveForwardToObjectCommand(driveBaseSubsystem, distanceSensorSubsystem, GyroSubsystem.getInstance(hardwareMap, telemetry), Configuration.BACKDROP_DISTANCE),
+
+
+                        new SequentialCommandGroup(
+                                new RunLinearSlideAndCenterPixelBoxCommand(extakeSubsystem,linearSlideSubsystem, Configuration.LINEAR_SLIDE_POS_AUTO),
+                                new MovePixelBoxArmToPositionCommand(extakeSubsystem, PixelBoxArmPosition.Extake)
+                        ).withTimeout(1500),
+                        new WaitCommand(1000),
+                        new SelectCommand(
+                                new HashMap<Object, Command>(){{
+                                    put(TeamPropPosition.Left, new InstantCommand(extakeSubsystem::rightRotation, extakeSubsystem));
+                                    put(teamPropPosition.Center, new InstantCommand(extakeSubsystem::leftRotation, extakeSubsystem));
+                                    put(teamPropPosition.Right, new InstantCommand(extakeSubsystem::leftRotation, extakeSubsystem));
+                                }},
+                                this::getTeamPropPosition
+                        ),
+                        new InstantCommand(extakeSubsystem::pixelEject, extakeSubsystem),
+                        new WaitCommand(1000),
+                        //endregion
+
+
+
+
+
+
+
+                        new TrajectorySequenceFollowerCommand(driveBaseSubsystem, phase3_cycle),
+                        new StopPixelBoxReset(extakeSubsystem, linearSlideSubsystem),
+
                         new TrajectorySequenceFollowerCommand(driveBaseSubsystem, park),
                         new InstantCommand(extakeSubsystem::pixelStop, extakeSubsystem),
                         new AprilTagStartStopCommand(visionSubsystem, AprilTagStartStopCommand.State.Stop)

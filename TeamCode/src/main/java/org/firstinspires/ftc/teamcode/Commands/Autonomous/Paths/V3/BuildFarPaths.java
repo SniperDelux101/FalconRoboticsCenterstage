@@ -20,7 +20,7 @@ import org.firstinspires.ftc.teamcode.Subsystems.drive.TrajectorySequence.Trajec
 import org.firstinspires.ftc.teamcode.Utilities.Configuration;
 
 public class BuildFarPaths {
-    public static TrajectorySequence Phase1, Phase2, Phase3, Phase_Cycle, Park;
+    public static TrajectorySequence Phase1, Phase2, Phase3, Phase1_Cycle, PhaseF_Cycle, Phase2_Cycle, Phase3_Cycle, Park;
     private static FalconMecanumDrive drive;
 
     public static void Build(FalconMecanumDrive dr, TeamPropPosition position, Alliance alliance, TravelDirection direction, ParkEnding parkEnding){
@@ -549,12 +549,53 @@ public class BuildFarPaths {
         }
         //endregion
 
+        // TODO Change Coordinates
+        //region Cycle One
+        public static void Phase1_OneCycle() {
+            Phase1_Cycle = drive.trajectorySequenceBuilder(Phase3.end())
+
+                    //  Cycle Phase 1
+                    .splineToConstantHeading(new Vector2d(33, 58), Math.toRadians(180))
+                    .lineToConstantHeading(new Vector2d(-40, 58))
+                    .splineToConstantHeading(new Vector2d(-57, 35), Math.toRadians(270))
+                    .build();
+            PhaseF_OneCycle();
+        }
+        public static void PhaseF_OneCycle() {
+            PhaseF_Cycle = drive.trajectorySequenceBuilder(Phase1.end())
+                    //  Cycle Phase Forward
+                    .lineToConstantHeading(new Vector2d(-60, 35))
+                    .build();
+            Phase2_OneCycle();
+        }
+        public static void Phase2_OneCycle() {
+            Phase2_Cycle = drive.trajectorySequenceBuilder(PhaseF_Cycle.end())
+
+                    //  Cycle Phase 2
+                    .lineToConstantHeading(new Vector2d(-57, 35))
+                    .lineToConstantHeading(new Vector2d(-57, 12))
+                    .splineToConstantHeading(new Vector2d(-54, 8), Math.toRadians(0))
+                    .lineToConstantHeading(new Vector2d(40, 8))
+                    .splineToConstantHeading(new Vector2d(46, 16), Math.toRadians(90))
+                    .build();
+            Phase3_OneCycle();
+        }
+        public static void Phase3_OneCycle() {
+            Phase3_Cycle = drive.trajectorySequenceBuilder(Phase2_Cycle.end())
+
+                    //  Cycle Phase 3
+                    .forward(Configuration.BACKDROP_DISTANCE)
+
+                    .build();
+
+        }
+        //endregion
+
     }
 
     private static class Red{
 
         //region IN - IN
-
         public static void CenterPhase1_II() {
             Phase1 = drive.trajectorySequenceBuilder(Red_Far_Start_Pose)
                     .lineTo(new Vector2d(-36, -30))
@@ -925,6 +966,48 @@ public class BuildFarPaths {
                         .splineToConstantHeading(new Vector2d(55, -60), Math.toRadians(0))
                         .build();
             }
+        }
+        //endregion
+
+        // TODO Change Coordinates
+        //region Cycle One
+        public static void Phase1_OneCycle() {
+            Phase1_Cycle = drive.trajectorySequenceBuilder(Phase3.end())
+
+                    //  Cycle Phase 1
+                    .splineToConstantHeading(new Vector2d(33, 58), Math.toRadians(180))
+                    .lineToConstantHeading(new Vector2d(-40, 58))
+                    .splineToConstantHeading(new Vector2d(-57, 35), Math.toRadians(270))
+                    .build();
+            PhaseF_OneCycle();
+        }
+        public static void PhaseF_OneCycle() {
+            PhaseF_Cycle = drive.trajectorySequenceBuilder(Phase1.end())
+                    //  Cycle Phase Forward
+                    .lineToConstantHeading(new Vector2d(-60, 35))
+                    .build();
+            Phase2_OneCycle();
+        }
+        public static void Phase2_OneCycle() {
+            Phase2_Cycle = drive.trajectorySequenceBuilder(PhaseF_Cycle.end())
+
+                    //  Cycle Phase 2
+                    .lineToConstantHeading(new Vector2d(-57, 35))
+                    .lineToConstantHeading(new Vector2d(-57, 12))
+                    .splineToConstantHeading(new Vector2d(-54, 8), Math.toRadians(0))
+                    .lineToConstantHeading(new Vector2d(40, 8))
+                    .splineToConstantHeading(new Vector2d(46, 16), Math.toRadians(90))
+                    .build();
+            Phase3_OneCycle();
+        }
+        public static void Phase3_OneCycle() {
+            Phase3_Cycle = drive.trajectorySequenceBuilder(Phase2_Cycle.end())
+
+                    //  Cycle Phase 3
+                    .forward(Configuration.BACKDROP_DISTANCE)
+
+                    .build();
+
         }
         //endregion
 
