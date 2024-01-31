@@ -305,15 +305,15 @@ public class BuildNearPaths {
                     .setVelConstraint(new MecanumVelocityConstraint(Configuration.AUTO_VEL, Configuration.TRACKWIDTH))
                     .splineToConstantHeading(new Vector2d(33, 58), Math.toRadians(180))
                     .lineToConstantHeading(new Vector2d(-40, 58))
-                    .splineToConstantHeading(new Vector2d(-57, 35), Math.toRadians(270))
+                    .splineToConstantHeading(new Vector2d(-57, 31), Math.toRadians(270))
                     .build();
             PhaseF_OneCycle();
         }
         public static void PhaseF_OneCycle() {
-            PhaseF_Cycle = drive.trajectorySequenceBuilder(Phase1.end())
+            PhaseF_Cycle = drive.trajectorySequenceBuilder(Phase1_Cycle.end())
                     //  Cycle Phase Forward
                     .setVelConstraint(new MecanumVelocityConstraint(Configuration.AUTO_VEL, Configuration.TRACKWIDTH))
-                    .lineToConstantHeading(new Vector2d(-60, 35))
+                    .lineToConstantHeading(new Vector2d(-60, 31))
                     .build();
             Phase2_OneCycle();
         }
@@ -321,7 +321,7 @@ public class BuildNearPaths {
             Phase2_Cycle = drive.trajectorySequenceBuilder(PhaseF_Cycle.end())
                     //  Cycle Phase 2
                     .setVelConstraint(new MecanumVelocityConstraint(Configuration.AUTO_VEL, Configuration.TRACKWIDTH))
-                    .lineToConstantHeading(new Vector2d(-57, 35))
+                    .lineToConstantHeading(new Vector2d(-57, 31))
                     .lineToConstantHeading(new Vector2d(-57, 12))
                     .splineToConstantHeading(new Vector2d(-54, 8), Math.toRadians(0))
                     .lineToConstantHeading(new Vector2d(40, 8))
@@ -533,7 +533,7 @@ public class BuildNearPaths {
                     .setVelConstraint(new MecanumVelocityConstraint(Configuration.AUTO_VEL, Configuration.TRACKWIDTH))
                     .splineToConstantHeading(new Vector2d(33, -58), Math.toRadians(180))
                     .lineToConstantHeading(new Vector2d(-40, -58))
-                    .splineToConstantHeading(new Vector2d(-57, -35), Math.toRadians(90))
+                    .splineToConstantHeading(new Vector2d(-57, -31), Math.toRadians(90))
                     .build();
             PhaseF_OneCycle();
         }
@@ -541,7 +541,7 @@ public class BuildNearPaths {
             PhaseF_Cycle = drive.trajectorySequenceBuilder(Phase1.end())
                     //  Cycle Phase Forward
                     .setVelConstraint(new MecanumVelocityConstraint(Configuration.AUTO_VEL, Configuration.TRACKWIDTH))
-                    .lineToConstantHeading(new Vector2d(-60, -35))
+                    .lineToConstantHeading(new Vector2d(-60, -31))
                     .build();
             Phase2_OneCycle();
         }
@@ -549,7 +549,7 @@ public class BuildNearPaths {
             Phase2_Cycle = drive.trajectorySequenceBuilder(PhaseF_Cycle.end())
                     //  Cycle Phase 2
                     .setVelConstraint(new MecanumVelocityConstraint(Configuration.AUTO_VEL, Configuration.TRACKWIDTH))
-                    .lineToConstantHeading(new Vector2d(-57, -35))
+                    .lineToConstantHeading(new Vector2d(-57, -31))
                     .lineToConstantHeading(new Vector2d(-57, -12))
                     .splineToConstantHeading(new Vector2d(-54, -8), Math.toRadians(0))
                     .lineToConstantHeading(new Vector2d(40, -8))

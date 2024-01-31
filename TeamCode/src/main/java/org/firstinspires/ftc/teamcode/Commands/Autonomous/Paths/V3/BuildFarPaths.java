@@ -179,7 +179,6 @@ public class BuildFarPaths {
     private static class Blue{
 
         //region IN - IN
-
         public static void CenterPhase1_II() {
             Phase1 = drive.trajectorySequenceBuilder(Blue_Far_Start_Pose)
                     .lineTo(new Vector2d(-36, 30))

@@ -16,7 +16,7 @@ public class MeepMeepTesting {
     public static Pose2d Red_Near_Start_Pos = new Pose2d(12, -60, Math.toRadians(90));
     public static Pose2d Blue_Far_Start_Pos = new Pose2d(-36,60, Math.toRadians(270));
     public static Pose2d Red_Far_Start_Pos = new Pose2d(-36, -60, Math.toRadians(90));
-    private static int x = 61;
+    private static int x = 8;
     private static int forward = 2;
 
 
@@ -243,13 +243,13 @@ public class MeepMeepTesting {
                                     //  Cycle Phase 1
                                     .splineToConstantHeading(new Vector2d(33, 58), Math.toRadians(180))
                                     .lineToConstantHeading(new Vector2d(-40, 58))
-                                    .splineToConstantHeading(new Vector2d(-57, 35), Math.toRadians(270))
+                                    .splineToConstantHeading(new Vector2d(-57, 31), Math.toRadians(270))
 
                                     //  Cycle Phase 2
-                                    .lineToConstantHeading(new Vector2d(-60, 35))
+                                    .lineToConstantHeading(new Vector2d(-60, 31))
 
                                     //  Cycle Phase 3
-                                    .lineToConstantHeading(new Vector2d(-57, 35))
+                                    .lineToConstantHeading(new Vector2d(-57, 31))
                                     .lineToConstantHeading(new Vector2d(-57, 12))
                                     .splineToConstantHeading(new Vector2d(-54, 8), Math.toRadians(0))
                                     .lineToConstantHeading(new Vector2d(40, 8))
