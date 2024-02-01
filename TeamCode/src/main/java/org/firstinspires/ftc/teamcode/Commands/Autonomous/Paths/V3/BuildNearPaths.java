@@ -24,6 +24,7 @@ public class BuildNearPaths {
         drive = dr;
 
         if(alliance == Alliance.Blue) {
+
             //region Center
             if(position == TeamPropPosition.Center) {
                 if (parkEnding == ParkEnding.Out) {
@@ -63,6 +64,7 @@ public class BuildNearPaths {
         }
 
         if(alliance == Alliance.Red) {
+
             //region Center
             if(position == TeamPropPosition.Center) {
                 if (parkEnding == ParkEnding.Out) {
@@ -101,7 +103,7 @@ public class BuildNearPaths {
             //endregion
         }
     }
-    private static class Blue{
+    private static class Blue {
 
         //region IN - OUT
         public static void CenterPhase1_IO(OneCycle oneCycle) {
@@ -115,7 +117,7 @@ public class BuildNearPaths {
                     .setVelConstraint(new MecanumVelocityConstraint(Configuration.AUTO_VEL, Configuration.TRACKWIDTH))
                     .lineToConstantHeading(new Vector2d(12, 35))
                     .splineTo(new Vector2d(20, 40), Math.toRadians(0))
-                    .splineToConstantHeading(new Vector2d(46, 16), Math.toRadians(270))
+                    .splineToConstantHeading(new Vector2d(46, Configuration.BACKDROP_Y), Math.toRadians(270))
                     .build();
             Center_Phase3_IO(oneCycle);
         }
@@ -155,13 +157,13 @@ public class BuildNearPaths {
                 Phase2 = drive.trajectorySequenceBuilder(Phase1.end())
                         .setVelConstraint(new MecanumVelocityConstraint(Configuration.AUTO_VEL, Configuration.TRACKWIDTH))
                         .lineToConstantHeading(new Vector2d(35, 30))
-                        .splineToConstantHeading(new Vector2d(46, 16), Math.toRadians(270))
+                        .splineToConstantHeading(new Vector2d(46, Configuration.BACKDROP_Y), Math.toRadians(270))
                         .build();
             } else {
                 Phase2 = drive.trajectorySequenceBuilder(Phase1.end())
                         .setVelConstraint(new MecanumVelocityConstraint(Configuration.AUTO_VEL, Configuration.TRACKWIDTH))
                         .lineToConstantHeading(new Vector2d(30, 30))
-                        .splineToConstantHeading(new Vector2d(46, 16), Math.toRadians(270))
+                        .splineToConstantHeading(new Vector2d(46, Configuration.BACKDROP_Y), Math.toRadians(270))
                         .build();
             }
             Left_Right_Phase3_IO(position, oneCycle);
@@ -212,7 +214,7 @@ public class BuildNearPaths {
                     .setVelConstraint(new MecanumVelocityConstraint(Configuration.AUTO_VEL, Configuration.TRACKWIDTH))
                     .lineToConstantHeading(new Vector2d(12, 35))
                     .splineTo(new Vector2d(20, 40), Math.toRadians(0))
-                    .splineToConstantHeading(new Vector2d(46, 16), Math.toRadians(270))
+                    .splineToConstantHeading(new Vector2d(46, Configuration.BACKDROP_Y), Math.toRadians(270))
                     .build();
             Center_Phase3_II(oneCycle);
         }
@@ -253,13 +255,13 @@ public class BuildNearPaths {
                 Phase2 = drive.trajectorySequenceBuilder(Phase1.end())
                         .setVelConstraint(new MecanumVelocityConstraint(Configuration.AUTO_VEL, Configuration.TRACKWIDTH))
                         .lineToConstantHeading(new Vector2d(35, 30))
-                        .splineToConstantHeading(new Vector2d(46, 16), Math.toRadians(270))
+                        .splineToConstantHeading(new Vector2d(46, Configuration.BACKDROP_Y), Math.toRadians(270))
                         .build();
             } else {
                 Phase2 = drive.trajectorySequenceBuilder(Phase1.end())
                         .setVelConstraint(new MecanumVelocityConstraint(Configuration.AUTO_VEL, Configuration.TRACKWIDTH))
                         .lineToConstantHeading(new Vector2d(30, 30))
-                        .splineToConstantHeading(new Vector2d(46, 16), Math.toRadians(270))
+                        .splineToConstantHeading(new Vector2d(46, Configuration.BACKDROP_Y), Math.toRadians(270))
                         .build();
             }
             Left_Right_Phase3_II(position, oneCycle);
@@ -339,9 +341,10 @@ public class BuildNearPaths {
 
         }
         //endregion
+
     }
 
-    private static class Red{
+    private static class Red {
 
         //region IN - OUT
         public static void CenterPhase1_IO(OneCycle oneCycle) {
@@ -355,7 +358,7 @@ public class BuildNearPaths {
                     .setVelConstraint(new MecanumVelocityConstraint(Configuration.AUTO_VEL, Configuration.TRACKWIDTH))
                     .lineToConstantHeading(new Vector2d(12, -35))
                     .splineTo(new Vector2d(20, -40), Math.toRadians(0))
-                    .splineToConstantHeading(new Vector2d(46, -16), Math.toRadians(0))
+                    .splineToConstantHeading(new Vector2d(46, -Configuration.BACKDROP_Y), Math.toRadians(0))
                     .build();
             Center_Phase3_IO(oneCycle);
         }
@@ -396,14 +399,14 @@ public class BuildNearPaths {
                 Phase2 = drive.trajectorySequenceBuilder(Phase1.end())
                         .setVelConstraint(new MecanumVelocityConstraint(Configuration.AUTO_VEL, Configuration.TRACKWIDTH))
                         .lineToConstantHeading(new Vector2d(30, -30))
-                        .splineToConstantHeading(new Vector2d(46, -16), Math.toRadians(90))
+                        .splineToConstantHeading(new Vector2d(46, -Configuration.BACKDROP_Y), Math.toRadians(90))
                         .build();
             } else {
                 //Right
                 Phase2 = drive.trajectorySequenceBuilder(Phase1.end())
                         .setVelConstraint(new MecanumVelocityConstraint(Configuration.AUTO_VEL, Configuration.TRACKWIDTH))
                         .lineToConstantHeading(new Vector2d(35, -30))
-                        .splineToConstantHeading(new Vector2d(46, -16), Math.toRadians(90))
+                        .splineToConstantHeading(new Vector2d(46, -Configuration.BACKDROP_Y), Math.toRadians(90))
                         .build();
             }
             Left_Right_Phase3_IO(position);
@@ -451,7 +454,7 @@ public class BuildNearPaths {
                     .setVelConstraint(new MecanumVelocityConstraint(Configuration.AUTO_VEL, Configuration.TRACKWIDTH))
                     .lineToConstantHeading(new Vector2d(12, -35))
                     .splineTo(new Vector2d(20, -40), Math.toRadians(0))
-                    .splineToConstantHeading(new Vector2d(46, -16), Math.toRadians(0))
+                    .splineToConstantHeading(new Vector2d(46, -Configuration.BACKDROP_Y), Math.toRadians(0))
                     .build();
             Center_Phase3_II();
         }
@@ -486,13 +489,13 @@ public class BuildNearPaths {
                 Phase2 = drive.trajectorySequenceBuilder(Phase1.end())
                         .setVelConstraint(new MecanumVelocityConstraint(Configuration.AUTO_VEL, Configuration.TRACKWIDTH))
                         .lineToConstantHeading(new Vector2d(30, -30))
-                        .splineToConstantHeading(new Vector2d(46, -16), Math.toRadians(90))
+                        .splineToConstantHeading(new Vector2d(46, -Configuration.BACKDROP_Y), Math.toRadians(90))
                         .build();
             } else {
                 Phase2 = drive.trajectorySequenceBuilder(Phase1.end())
                         .setVelConstraint(new MecanumVelocityConstraint(Configuration.AUTO_VEL, Configuration.TRACKWIDTH))
                         .lineToConstantHeading(new Vector2d(35, -30))
-                        .splineToConstantHeading(new Vector2d(46, -16), Math.toRadians(90))
+                        .splineToConstantHeading(new Vector2d(46, -Configuration.BACKDROP_Y), Math.toRadians(90))
                         .build();
             }
             Left_Right_Phase3_II(position);
@@ -567,5 +570,6 @@ public class BuildNearPaths {
 
         }
         //endregion
+
     }
 }

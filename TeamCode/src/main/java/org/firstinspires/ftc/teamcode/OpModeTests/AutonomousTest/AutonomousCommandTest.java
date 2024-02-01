@@ -153,7 +153,7 @@ public class AutonomousCommandTest extends CommandOpMode {
             phase2_cycle = BuildNearPaths.Phase2_Cycle;
             park = BuildNearPaths.Park;
         } else{
-            BuildFarPaths.Build(driveBaseSubsystem.getDrive(), teamPropPosition, alliance, travelDirection, parkEnding);
+            BuildFarPaths.Build(driveBaseSubsystem.getDrive(), teamPropPosition, alliance, travelDirection, parkEnding, oneCycle);
             phase1 = BuildFarPaths.Phase1;
             phase2 = BuildFarPaths.Phase2;
 //            phase_Strafe = BuildFarPaths.Phase_Strafe;

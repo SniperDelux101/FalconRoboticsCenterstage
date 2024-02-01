@@ -179,7 +179,7 @@ public class Autonomous_V3 extends CommandOpMode {
             phase3_cycle = BuildNearPaths.Phase3_Cycle;
             park = BuildNearPaths.Park;
         } else{
-            BuildFarPaths.Build(driveBaseSubsystem.getDrive(), teamPropPosition, alliance, direction, parkEnding);
+            BuildFarPaths.Build(driveBaseSubsystem.getDrive(), teamPropPosition, alliance, direction, parkEnding, oneCycle);
             phase1 = BuildFarPaths.Phase1;
             phase2 = BuildFarPaths.Phase2;
             phase3 = BuildFarPaths.Phase3;
