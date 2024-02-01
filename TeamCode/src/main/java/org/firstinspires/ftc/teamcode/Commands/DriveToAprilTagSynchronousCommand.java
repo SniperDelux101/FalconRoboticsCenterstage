@@ -66,10 +66,21 @@ public class DriveToAprilTagSynchronousCommand extends CommandBase {
         if(targetTag == null)
             strafeToTag((strafeDirection == StrafeDirection.Left)? StrafeDirection.Right : StrafeDirection.Left);
 
-        TrajectorySequence sequence = mecanumDriveSubsystem.trajectorySequenceBuilder(mecanumDriveSubsystem.getPoseEstimate())
-                .strafeLeft(targetTag.ftcPose.x)
-                .turn(Math.toRadians(targetTag.ftcPose.yaw))
-                .build();
+        TrajectorySequence sequence;
+
+        if (strafeDirection == StrafeDirection.Right) {
+            sequence = mecanumDriveSubsystem.trajectorySequenceBuilder(mecanumDriveSubsystem.getPoseEstimate())
+                    .strafeLeft(targetTag.ftcPose.x)
+                    .turn(Math.toRadians(targetTag.ftcPose.yaw))
+                    .build();
+        }
+        else {
+            sequence = mecanumDriveSubsystem.trajectorySequenceBuilder(mecanumDriveSubsystem.getPoseEstimate())
+                    .strafeRight(targetTag.ftcPose.x)
+                    .turn(Math.toRadians(targetTag.ftcPose.yaw))
+                    .build();
+        }
+
         mecanumDriveSubsystem.followTrajectorySequence(sequence);
     }
 
