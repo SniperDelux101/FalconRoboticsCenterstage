@@ -177,11 +177,11 @@ public class VisionSubsystem extends FalconSubsystemBase {
                 .setTagFamily(AprilTagProcessor.TagFamily.TAG_36h11)
                 .setTagLibrary(AprilTagGameDatabase.getCenterStageTagLibrary())
                 .setOutputUnits(DistanceUnit.INCH, AngleUnit.DEGREES)
-                // == CAMERA CALIBRATION ==
-                // If you do not manually specify calibration parameters, the SDK will attempt
-                // to load a predefined calibration for your camera.
-                //.setLensIntrinsics(578.272, 578.272, 402.145, 221.506)
+
+                // == CAMERA CALIBRATION for Nexigo N908P
                 // ... these parameters are fx, fy, cx, cy.
+                //.setLensIntrinsics(987.209523731, 987.209523731, 955.764808635, 526.844251567)
+
                 .build();
 
         // Adjust Image Decimation to trade-off detection-range for detection-rate.
@@ -209,7 +209,9 @@ public class VisionSubsystem extends FalconSubsystemBase {
 
         VisionPortal.Builder builder = new VisionPortal.Builder();
         builder.setCamera(hardwareMap.get(WebcamName.class, "Webcam 2"));
-        builder.setCameraResolution(new Size(640, 480));
+        // use 1920 x 1080 for the N908P
+        //builder.setCameraResolution(new Size(1920, 1080));
+        builder.setCameraResolution(new Size(640,480));
         builder.enableLiveView(allowStreaming);
         // Set the stream format; MJPEG uses less bandwidth than default YUY2./builder.setStreamFormat(VisionPortal.StreamFormat.YUY2);
         builder.setStreamFormat(VisionPortal.StreamFormat.YUY2);
