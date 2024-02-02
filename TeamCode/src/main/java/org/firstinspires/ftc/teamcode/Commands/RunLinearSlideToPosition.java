@@ -4,7 +4,6 @@ import com.arcrobotics.ftclib.command.CommandBase;
 
 import org.firstinspires.ftc.teamcode.Subsystems.LinearSlideSubsystem;
 import org.firstinspires.ftc.teamcode.Utilities.Configuration;
-import org.firstinspires.ftc.teamcode.Utilities.MatchConfig;
 
 public class RunLinearSlideToPosition extends CommandBase {
     private final LinearSlideSubsystem linearSlideSubsystem;
@@ -33,8 +32,6 @@ public class RunLinearSlideToPosition extends CommandBase {
                 flag = true;
         }
         catch (Exception ex){
-            MatchConfig.telemetry.addData("Linear Slide Exception: ", ex.getMessage());
-            MatchConfig.telemetry.update();
             flag = false;
         }
         return flag;

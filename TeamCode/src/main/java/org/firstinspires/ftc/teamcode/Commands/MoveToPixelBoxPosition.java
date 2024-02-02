@@ -3,11 +3,11 @@ package org.firstinspires.ftc.teamcode.Commands;
 import com.arcrobotics.ftclib.command.CommandBase;
 
 import org.firstinspires.ftc.teamcode.Subsystems.ExtakeSubsystem;
-import org.firstinspires.ftc.teamcode.Subsystems.LinearSlideSubsystem;
 
 
 public class MoveToPixelBoxPosition extends CommandBase {
     private final ExtakeSubsystem extakeSubsystem;
+
     private final PixelBoxPosition pixelBoxPosition;
 
     public MoveToPixelBoxPosition (ExtakeSubsystem subsystem , PixelBoxPosition position) {

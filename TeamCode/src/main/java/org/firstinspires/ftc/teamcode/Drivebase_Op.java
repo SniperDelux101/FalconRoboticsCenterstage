@@ -29,7 +29,6 @@ public class Drivebase_Op extends OpMode {
         MatchConfig.AutonomousStartLocation = AutonomousStartLocation.Far;
 
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
-        MatchConfig.telemetry = telemetry;
         robot = new Callisto(RobotMode.TELEOP, hardwareMap, gamepad1, gamepad2, telemetry);
         //simpleRobot = new SimpleRobot(RobotMode.TELEOP, hardwareMap, gamepad1, gamepad2, telemetry);
     }
