@@ -195,6 +195,7 @@ public class Configuration {
     public static int AUTO_VEL = 30;
 //    public static int VISION_VEL = 10;
     public static int STRAFE_TO_APRIL_TAG_VEL = 7;
+    public static double BACKDROP_Y = 30;
 
     //*****************************************************************
     public static double BACKDROP_ERROR_DISTANCE = 1.5; //inches
