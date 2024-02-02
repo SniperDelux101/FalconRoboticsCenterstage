@@ -183,15 +183,4 @@ public class ExtakeSubsystem extends FalconSubsystemBase {
         r_Servo.setPosition(Configuration.R_SERVO_RIGHT);
     }
 
-
-    public void leftAddRotation() {
-        double servoPos = r_Servo.getPosition();
-        r_Servo.setPosition(servoPos - Configuration.R_SERVO_TELEOP_MULTIPLIER);
-    }
-
-    public void rightAddRotation() {
-        double servoPos = r_Servo.getPosition();
-        r_Servo.setPosition(servoPos + Configuration.R_SERVO_TELEOP_MULTIPLIER);
-    }
-
 }

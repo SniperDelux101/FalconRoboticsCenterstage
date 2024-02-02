@@ -10,9 +10,9 @@ public class RunLinearSlideAddition extends CommandBase {
     private final LinearSlideSubsystem linearSlideSubsystem;
     private final int targetPosition;
 
-    public RunLinearSlideAddition(LinearSlideSubsystem subsystem, int tPosition) {
+    public RunLinearSlideAddition(LinearSlideSubsystem subsystem, int position) {
         linearSlideSubsystem = subsystem;
-        targetPosition = tPosition;
+        targetPosition = position;
         addRequirements(linearSlideSubsystem);
     }
 
@@ -22,8 +22,7 @@ public class RunLinearSlideAddition extends CommandBase {
 
     @Override
     public void execute() {
-        int additionPlacement = linearSlideSubsystem.getCurrentPosition() + targetPosition;
-        linearSlideSubsystem.runToPosition(additionPlacement);
+        linearSlideSubsystem.runToPosition(targetPosition);
     }
 
     @Override
