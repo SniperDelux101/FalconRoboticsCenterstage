@@ -46,6 +46,7 @@ public class ExtakeSubsystem extends FalconSubsystemBase {
     }
 
     public int getPixelCount(){
+        detectPixel();
         return pixelCount;
     }
 
@@ -158,13 +159,18 @@ public class ExtakeSubsystem extends FalconSubsystemBase {
         pixelCount = getPixelCount();
         if(pixelCount == 0)
             pixelStop();
-        else{
-            int newPixelCount = pixelCount--;
-            while(newPixelCount != pixelCount){
-                pixelEject();
-                pixelCount = getPixelCount();
-            }
-            pixelStop();
+        else {
+            this.pixelEject();
+            sleep(Configuration.EXTAKE_DELAY);
+        }
+        pixelStop();
+    }
+
+    private void sleep(int mils) {
+        try {
+            Thread.sleep(mils);
+        } catch(Exception ex) {
+            telemetry.addLine(ex.getMessage());
         }
     }
 

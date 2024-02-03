@@ -9,6 +9,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 @Config
 public class Configuration {
 
+    public static int EXTAKE_DELAY = 350;
     public static int APRIL_TAG_CAMERA_GAIN = 200;
     public static int APRIL_TAG_CAMERA_EXPOSURE = 5;
     // TRACKWIDTH is the distance between mecanum wheels
