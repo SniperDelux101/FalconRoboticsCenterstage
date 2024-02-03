@@ -247,13 +247,7 @@ public class Callisto extends Robot {
         //region Utility Left Bumper
         utilityGamepad.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER)
                 .whenPressed(
-//                        new EjectSinglePixelAndResetIfEmptyCommand(extakeSubsystem, linearSlideSubsystem)
-                        new Runnable() {
-                            @Override
-                            public void run() {
-                                telemetry.addLine("Congrats bitch.");
-                            }
-                        }
+                        new EjectSinglePixelAndResetIfEmptyCommand(extakeSubsystem, linearSlideSubsystem)
                 );
         //endregion
     }
