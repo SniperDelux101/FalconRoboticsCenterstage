@@ -153,6 +153,7 @@ public class Autonomous_V3 extends CommandOpMode {
             MatchConfig.OneCycle = oneCycle;
             MatchConfig.telemetry = telemetry;
 
+            telemetry.addLine("(C) Mason \"SniperDelux101\" Fouty, 2023-2024");
             telemetry.addData("Team Prop Position: ", teamPropPosition);
             telemetry.addData("Alliance: ", alliance);
             telemetry.addData("Auto Start Location: ", startLocation);

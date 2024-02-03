@@ -8,6 +8,7 @@ import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Commands.Autonomous.Alliance;
@@ -202,12 +203,10 @@ public class Callisto extends Robot {
         //endregion
 
         //region Utility D-Pad Left
-
         utilityGamepad.getGamepadButton(GamepadKeys.Button.DPAD_LEFT)
                 .whenPressed(
                         new MoveToPixelBoxPosition(extakeSubsystem, PixelBoxPosition.Left)
                 );
-
         //endregion
 
         //region Utility D-Pad Up
@@ -248,10 +247,15 @@ public class Callisto extends Robot {
         //region Utility Left Bumper
         utilityGamepad.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER)
                 .whenPressed(
-                        new EjectSinglePixelAndResetIfEmptyCommand(extakeSubsystem, linearSlideSubsystem)
+//                        new EjectSinglePixelAndResetIfEmptyCommand(extakeSubsystem, linearSlideSubsystem)
+                        new Runnable() {
+                            @Override
+                            public void run() {
+                                telemetry.addLine("Congrats bitch.");
+                            }
+                        }
                 );
         //endregion
-
     }
 
     private void initAuto() {
@@ -324,4 +328,3 @@ public class Callisto extends Robot {
 //    }
 
 }
-

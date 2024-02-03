@@ -47,116 +47,103 @@ public class LinearSlideTest extends OpMode {
     @Override
     public void loop() {
 
-//        if(gamepad1.dpad_left && gamepad1.y) {
-//            Configuration.LINEAR_SLIDE_POS_LO += Configuration.LINEAR_SLIDE_MULTIPLIER;
-//            //linearSlideSubsystem.LinearPosLo();
-//            linearSlideSubsystem.runToPosition(Configuration.LINEAR_SLIDE_POS_LO, true);
-//        }
-//        else if(gamepad1.dpad_left && gamepad1.a) {
-//            Configuration.LINEAR_SLIDE_POS_LO -= Configuration.LINEAR_SLIDE_MULTIPLIER;
-//            //linearSlideSubsystem.LinearPosLo();
-//            linearSlideSubsystem.runToPosition(Configuration.LINEAR_SLIDE_POS_LO, true);
-//        }
-//        else if(gamepad1.dpad_up && gamepad1.y) {
-//            Configuration.LINEAR_SLIDE_POS_MED += Configuration.LINEAR_SLIDE_MULTIPLIER;
-//            //linearSlideSubsystem.LinearPosMed();
-//            linearSlideSubsystem.runToPosition(Configuration.LINEAR_SLIDE_POS_MED, true);
-//        }
-//        else if(gamepad1.dpad_up && gamepad1.a) {
-//            Configuration.LINEAR_SLIDE_POS_MED -= Configuration.LINEAR_SLIDE_MULTIPLIER;
-//            //linearSlideSubsystem.LinearPosMed();
-//            linearSlideSubsystem.runToPosition(Configuration.LINEAR_SLIDE_POS_MED, true);
-//        }
-//        else if(gamepad1.dpad_right && gamepad1.y) {
-//            Configuration.LINEAR_SLIDE_POS_HI += Configuration.LINEAR_SLIDE_MULTIPLIER;
-//            //linearSlideSubsystem.LinearPosHi();
-//            linearSlideSubsystem.runToPosition(Configuration.LINEAR_SLIDE_POS_HI, true);
-//        }
-//        else if(gamepad1.dpad_right && gamepad1.a) {
-//            Configuration.LINEAR_SLIDE_POS_HI -= Configuration.LINEAR_SLIDE_MULTIPLIER;
-//            //linearSlideSubsystem.LinearPosHi();
-//            linearSlideSubsystem.runToPosition(Configuration.LINEAR_SLIDE_POS_HI, true);
-//        }
-//        else if(gamepad1.dpad_down && gamepad1.y) {
-//            Configuration.LINEAR_SLIDE_POS_TRANSFER += Configuration.LINEAR_SLIDE_MULTIPLIER;
-//            //linearSlideSubsystem.LinearPosTransfer();
-//            linearSlideSubsystem.runToPosition(Configuration.LINEAR_SLIDE_POS_TRANSFER, true);
-//        }
-//        else if(gamepad1.dpad_down && gamepad1.a) {
-//            Configuration.LINEAR_SLIDE_POS_TRANSFER -= Configuration.LINEAR_SLIDE_MULTIPLIER;
-//            //linearSlideSubsystem.LinearPosTransfer();
-//            linearSlideSubsystem.runToPosition(Configuration.LINEAR_SLIDE_POS_TRANSFER, true);
-//        }
-//        else if(gamepad1.dpad_left && gamepad1.right_bumper) {
-//            //linearSlideSubsystem.LinearPosLo();
-//            RunLinearSlideToPosition command = new RunLinearSlideToPosition(linearSlideSubsystem, Configuration.LINEAR_SLIDE_POS_LO);
-//            command.execute();
-//            while(!command.isFinished() && linearSlideSubsystem.LinearCurPos() < Configuration.LINEAR_SLIDE_POS_LO) {
-//                telemetry.addData("running to low position, target ", Configuration.LINEAR_SLIDE_POS_LO);
-//                telemetry.addData("Current Motor Position : ", linearSlideSubsystem.LinearCurPos());
-//                telemetry.addData("Command isFinished: ", command.isFinished() || linearSlideSubsystem.LinearCurPos() < Configuration.LINEAR_SLIDE_POS_LO);
-//                telemetry.update();
-//            }
-//            command.end(true);
-//        }
-//        else if(gamepad1.dpad_up && gamepad1.right_bumper) {
-//            //linearSlideSubsystem.LinearPosMed();
-//            new RunLinearSlideToPosition(linearSlideSubsystem, Configuration.LINEAR_SLIDE_POS_MED)
-//                    .execute();
-//            while(linearSlideSubsystem.LinearCurPos() < Configuration.LINEAR_SLIDE_POS_MED)
-//            {}
-//            linearSlideSubsystem.stop();
-//            telemetry.addData("Running to Medium Position, Target ", Configuration.LINEAR_SLIDE_POS_MED);
-//        }
-//        else if(gamepad1.dpad_right && gamepad1.right_bumper) {
-//            //linearSlideSubsystem.LinearPosHi();
-//            new RunLinearSlideToPosition(linearSlideSubsystem, Configuration.LINEAR_SLIDE_POS_HI)
-//                    .execute();
-//            while(linearSlideSubsystem.LinearCurPos() < Configuration.LINEAR_SLIDE_POS_HI)
-//            {}
-//            linearSlideSubsystem.stop();
-//            telemetry.addData("running to high position, Target", Configuration.LINEAR_SLIDE_POS_HI);
-//        }
-//        else if(gamepad1.dpad_down && gamepad1.right_bumper) {
-//            //linearSlideSubsystem.LinearPosTransfer();
-//            new RunLinearSlideToPosition(linearSlideSubsystem, Configuration.LINEAR_SLIDE_POS_TRANSFER)
-//                    .execute();
-//            while(linearSlideSubsystem.LinearCurPos() < Configuration.LINEAR_SLIDE_POS_TRANSFER)
-//            {}
-//            linearSlideSubsystem.stop();
-//            telemetry.addData("running to Transfer, target ", Configuration.LINEAR_SLIDE_POS_TRANSFER );
-//        }
-//        else if (gamepad1.dpad_down && gamepad1.left_bumper){
-//            //linearSlideSubsystem.LinearPosHome();
-//            new RunLinearSlideToPosition(linearSlideSubsystem, Configuration.LINEAR_SLIDE_POS_HOME)
-//                    .execute();
-//            while(linearSlideSubsystem.LinearCurPos() < Configuration.LINEAR_SLIDE_POS_HOME)
-//            {}
-//            linearSlideSubsystem.stop();
-//            telemetry.addData(" Running to Home Position , target ", Configuration.LINEAR_SLIDE_POS_HOME);
-//        }
-//        else if(gamepad1.left_trigger > 0 && gamepad1.right_trigger > 0){
-//            new RunLinearSlideToPosition(linearSlideSubsystem, 0)
-//                    .execute();
-//            while(linearSlideSubsystem.LinearCurPos() > 0 )
-//            {}
-//            linearSlideSubsystem.stop();
-//        }
 
-        telemetry.addData("Y-Value", gamepad1.left_stick_y);
-        if( gamepad1.left_stick_y < .05 && gamepad1.left_stick_y > -.05)
-            linearSlideSubsystem.runByPower(0);
-        else
-            linearSlideSubsystem.runByPower(gamepad1.left_stick_y);
-
-        if(gamepad1.dpad_up ) {
-            linearSlideSubsystem.runToTargetPosition(Configuration.LINEAR_SLIDE_POS_MED);
+        if(gamepad1.dpad_left && gamepad1.y) {
+            Configuration.LINEAR_SLIDE_POS_LO += Configuration.LINEAR_SLIDE_MULTIPLIER;
+            //linearSlideSubsystem.LinearPosLo();
+            linearSlideSubsystem.runToPosition(Configuration.LINEAR_SLIDE_POS_LO, true);
+        }
+        else if(gamepad1.dpad_left && gamepad1.a) {
+            Configuration.LINEAR_SLIDE_POS_LO -= Configuration.LINEAR_SLIDE_MULTIPLIER;
+            //linearSlideSubsystem.LinearPosLo();
+            linearSlideSubsystem.runToPosition(Configuration.LINEAR_SLIDE_POS_LO, true);
+        }
+        else if(gamepad1.dpad_up && gamepad1.y) {
+            Configuration.LINEAR_SLIDE_POS_MED += Configuration.LINEAR_SLIDE_MULTIPLIER;
+            //linearSlideSubsystem.LinearPosMed();
+            linearSlideSubsystem.runToPosition(Configuration.LINEAR_SLIDE_POS_MED, true);
+        }
+        else if(gamepad1.dpad_up && gamepad1.a) {
+            Configuration.LINEAR_SLIDE_POS_MED -= Configuration.LINEAR_SLIDE_MULTIPLIER;
+            //linearSlideSubsystem.LinearPosMed();
+            linearSlideSubsystem.runToPosition(Configuration.LINEAR_SLIDE_POS_MED, true);
+        }
+        else if(gamepad1.dpad_right && gamepad1.y) {
+            Configuration.LINEAR_SLIDE_POS_HI += Configuration.LINEAR_SLIDE_MULTIPLIER;
+            //linearSlideSubsystem.LinearPosHi();
+            linearSlideSubsystem.runToPosition(Configuration.LINEAR_SLIDE_POS_HI, true);
+        }
+        else if(gamepad1.dpad_right && gamepad1.a) {
+            Configuration.LINEAR_SLIDE_POS_HI -= Configuration.LINEAR_SLIDE_MULTIPLIER;
+            //linearSlideSubsystem.LinearPosHi();
+            linearSlideSubsystem.runToPosition(Configuration.LINEAR_SLIDE_POS_HI, true);
+        }
+        else if(gamepad1.dpad_down && gamepad1.y) {
+            Configuration.LINEAR_SLIDE_POS_TRANSFER += Configuration.LINEAR_SLIDE_MULTIPLIER;
+            //linearSlideSubsystem.LinearPosTransfer();
+            linearSlideSubsystem.runToPosition(Configuration.LINEAR_SLIDE_POS_TRANSFER, true);
+        }
+        else if(gamepad1.dpad_down && gamepad1.a) {
+            Configuration.LINEAR_SLIDE_POS_TRANSFER -= Configuration.LINEAR_SLIDE_MULTIPLIER;
+            //linearSlideSubsystem.LinearPosTransfer();
+            linearSlideSubsystem.runToPosition(Configuration.LINEAR_SLIDE_POS_TRANSFER, true);
+        }
+        else if(gamepad1.dpad_left && gamepad1.right_bumper) {
+            //linearSlideSubsystem.LinearPosLo();
+            RunLinearSlideToPosition command = new RunLinearSlideToPosition(linearSlideSubsystem, Configuration.LINEAR_SLIDE_POS_LO);
+            command.execute();
+            while(!command.isFinished() && linearSlideSubsystem.LinearCurPos() < Configuration.LINEAR_SLIDE_POS_LO) {
+                telemetry.addData("running to low position, target ", Configuration.LINEAR_SLIDE_POS_LO);
+                telemetry.addData("Current Motor Position : ", linearSlideSubsystem.LinearCurPos());
+                telemetry.addData("Command isFinished: ", command.isFinished() || linearSlideSubsystem.LinearCurPos() < Configuration.LINEAR_SLIDE_POS_LO);
+                telemetry.update();
+            }
+            command.end(true);
+        }
+        else if(gamepad1.dpad_up && gamepad1.right_bumper) {
+            //linearSlideSubsystem.LinearPosMed();
+            new RunLinearSlideToPosition(linearSlideSubsystem, Configuration.LINEAR_SLIDE_POS_MED)
+                    .execute();
+            while(linearSlideSubsystem.LinearCurPos() < Configuration.LINEAR_SLIDE_POS_MED)
+            {}
+            linearSlideSubsystem.stop();
             telemetry.addData("Running to Medium Position, Target ", Configuration.LINEAR_SLIDE_POS_MED);
         }
-        else if(gamepad1.dpad_down ) {
-            linearSlideSubsystem.runToTargetPosition(Configuration.LINEAR_SLIDE_POS_LO);
-            telemetry.addData("Running to Medium Position, Target ", Configuration.LINEAR_SLIDE_POS_MED);
+        else if(gamepad1.dpad_right && gamepad1.right_bumper) {
+            //linearSlideSubsystem.LinearPosHi();
+            new RunLinearSlideToPosition(linearSlideSubsystem, Configuration.LINEAR_SLIDE_POS_HI)
+                    .execute();
+            while(linearSlideSubsystem.LinearCurPos() < Configuration.LINEAR_SLIDE_POS_HI)
+            {}
+            linearSlideSubsystem.stop();
+            telemetry.addData("running to high position, Target", Configuration.LINEAR_SLIDE_POS_HI);
         }
+        else if(gamepad1.dpad_down && gamepad1.right_bumper) {
+            //linearSlideSubsystem.LinearPosTransfer();
+            new RunLinearSlideToPosition(linearSlideSubsystem, Configuration.LINEAR_SLIDE_POS_TRANSFER)
+                    .execute();
+            while(linearSlideSubsystem.LinearCurPos() < Configuration.LINEAR_SLIDE_POS_TRANSFER)
+            {}
+            linearSlideSubsystem.stop();
+            telemetry.addData("running to Transfer, target ", Configuration.LINEAR_SLIDE_POS_TRANSFER );
+        }
+        else if (gamepad1.dpad_down && gamepad1.left_bumper){
+            //linearSlideSubsystem.LinearPosHome();
+            new RunLinearSlideToPosition(linearSlideSubsystem, Configuration.LINEAR_SLIDE_POS_HOME)
+                    .execute();
+            while(linearSlideSubsystem.LinearCurPos() < Configuration.LINEAR_SLIDE_POS_HOME)
+            {}
+            linearSlideSubsystem.stop();
+            telemetry.addData(" Running to Home Position , target ", Configuration.LINEAR_SLIDE_POS_HOME);
+        }
+        else if(gamepad1.left_trigger > 0 && gamepad1.right_trigger > 0){
+            new RunLinearSlideToPosition(linearSlideSubsystem, 0)
+                    .execute();
+            while(linearSlideSubsystem.LinearCurPos() > 0 )
+            {}
+            linearSlideSubsystem.stop();
+        }
+
         pos = linearSlideSubsystem.LinearCurPos();
         telemetry.addData("Current Motor Position : ", pos);
         telemetry.addData("Linear Pos HI: ", Configuration.LINEAR_SLIDE_POS_HI);
