@@ -18,6 +18,7 @@ public class EjectSinglePixelAndResetIfEmptyCommand extends SequentialCommandGro
 
         addCommands(
                 new EjectPixelCommand(extakeSubsystem, EjectPixelCommand.EjectPixelState.One),
+                new WaitCommand(100),
                 new ConditionalCommand(
                         new StopPixelBoxReset(extakeSubsystem, linearSlideSubsystem),
                         new WaitCommand(1),
