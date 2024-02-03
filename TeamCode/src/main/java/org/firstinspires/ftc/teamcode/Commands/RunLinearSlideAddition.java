@@ -4,44 +4,43 @@ import com.arcrobotics.ftclib.command.CommandBase;
 
 import org.firstinspires.ftc.teamcode.Subsystems.LinearSlideSubsystem;
 import org.firstinspires.ftc.teamcode.Utilities.Configuration;
-import org.firstinspires.ftc.teamcode.Utilities.MatchConfig;
 
-public class RunLinearSlideToPosition extends CommandBase {
+public class RunLinearSlideAddition extends CommandBase {
+
     private final LinearSlideSubsystem linearSlideSubsystem;
     private final int targetPosition;
 
-    public RunLinearSlideToPosition(LinearSlideSubsystem subsystem, int position){
+    public RunLinearSlideAddition(LinearSlideSubsystem subsystem, int tPosition) {
         linearSlideSubsystem = subsystem;
-        targetPosition = position;
+        targetPosition = tPosition;
         addRequirements(linearSlideSubsystem);
     }
 
     @Override
-    public void initialize(){
+    public void initialize() {
     }
 
     @Override
-    public void execute(){
-        linearSlideSubsystem.runToPosition(targetPosition);
+    public void execute() {
+        int additionPlacement = linearSlideSubsystem.getCurrentPosition() + targetPosition;
+        linearSlideSubsystem.runToPosition(additionPlacement);
     }
+
     @Override
-    public boolean isFinished(){
+    public boolean isFinished() {
         boolean flag = false;
         try {
             int currentPosition = linearSlideSubsystem.getCurrentPosition();
             if ((currentPosition < targetPosition + Configuration.TICK_RANGE) && (currentPosition > targetPosition - Configuration.TICK_RANGE))
                 flag = true;
-        }
-        catch (Exception ex){
-            MatchConfig.telemetry.addData("Linear Slide Exception: ", ex.getMessage());
-            MatchConfig.telemetry.update();
+        } catch (Exception ex) {
             flag = false;
         }
         return flag;
     }
 
     @Override
-    public void end(boolean interrupted){
+    public void end(boolean interrupted) {
         linearSlideSubsystem.stop();
     }
 }

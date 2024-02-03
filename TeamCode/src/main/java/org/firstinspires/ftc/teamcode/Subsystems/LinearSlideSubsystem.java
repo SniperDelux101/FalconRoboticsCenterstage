@@ -4,6 +4,7 @@ import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Utilities.Configuration;
@@ -60,7 +61,24 @@ public class LinearSlideSubsystem extends FalconSubsystemBase {
         }
     }
 
+    public void runPlusPosition(int slideAddition, boolean runSynchronous) {
+        int newPos = getCurrentPosition() + slideAddition;
+        linearSlideMotor.setRunMode(Motor.RunMode.PositionControl);
+        linearSlideMotor.setTargetPosition(newPos);
+        linearSlideMotor.set(1.0);
+        if(runSynchronous) {
+            while(LinearCurPos() < newPos){}
+            stop();
+        }
+    }
+
+    public void runByPower(double multiplier) {
+        linearSlideMotor.setRunMode(Motor.RunMode.RawPower);
+        linearSlideMotor.set(multiplier);
+    }
+
     public boolean isSlideAtTargetPosition(){
+
         boolean flag = false;
         try{
             flag = linearSlideMotor.atTargetPosition();
